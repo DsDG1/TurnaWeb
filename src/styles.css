@@ -148,6 +148,14 @@ a:focus-visible {
   flex: 0 0 auto;
 }
 
+.bird-mark rect {
+  transition: opacity 260ms ease;
+}
+
+.is-compact .bird-mark rect {
+  opacity: 0;
+}
+
 .bird-mark svg {
   width: 100%;
   height: 100%;
