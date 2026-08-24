@@ -98,11 +98,9 @@ a:focus-visible {
   align-items: center;
   min-height: 62px;
   color: rgba(255, 255, 255, 0.94);
-  /* 保留 layout containment 提升滚动时布局性能；
-     去掉 paint containment 以免裁剪溢出的 .mobile-nav。*/
-  contain: layout;
+  contain: none;
+  overflow: visible;
   will-change: transform, opacity;
-  transform: translateZ(0);
   transition:
     top 420ms cubic-bezier(.2,.75,.25,1),
     left 420ms cubic-bezier(.2,.75,.25,1),
@@ -1915,8 +1913,17 @@ footer > p:not(.credits) {
     transform: none;
   }
 
-  .glow-card {
+  .glow-card:not(.open-source-card):not(.curriculum-status-card) {
     background: rgba(255,255,255,.68);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .open-source-card,
+  .curriculum-status-card {
+    background:
+      linear-gradient(120deg, rgba(31,83,81,.92), rgba(48,106,101,.86)),
+      rgba(33,82,80,.94);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
