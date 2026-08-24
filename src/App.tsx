@@ -6,6 +6,7 @@ import {
   SiteHeader,
   useCompactHeader,
   useEscapeKey,
+  useLockBodyScroll,
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
@@ -175,6 +176,7 @@ function App() {
 
   useRevealOnScroll()
   useEscapeKey(() => setMenuOpen(false))
+  useLockBodyScroll(menuOpen)
 
   useEffect(() => () => window.clearTimeout(noticeTimer.current), [])
 
@@ -296,7 +298,18 @@ function App() {
           </div>
           <div className="preview-stage" data-reveal>
             <div className="mascot-halo" />
-            <img className="turna-mascot" src="./assets/turna-waving.png" alt="挥手的 Turna 鸟吉祥物" />
+            <picture>
+              <source srcSet="./assets/turna-waving.webp" type="image/webp" />
+              <img
+                className="turna-mascot"
+                src="./assets/turna-waving.png"
+                width="1024"
+                height="1024"
+                loading="lazy"
+                decoding="async"
+                alt="挥手的 Turna 鸟吉祥物"
+              />
+            </picture>
             <PhonePreview preview={preview} />
           </div>
         </section>

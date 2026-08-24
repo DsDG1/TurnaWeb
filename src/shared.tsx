@@ -136,21 +136,75 @@ export function useRevealOnScroll() {
   }, [])
 }
 
-export function useCompactHeader(heroRef: RefObject<HTMLElement | null>): boolean {
+export function useCompactHeader(
+  heroRef: RefObject<HTMLElement | null>,
+  ratio = 0.82,
+  hysteresis = 24,
+): boolean {
   const [compact, setCompact] = useState(false)
 
   useEffect(() => {
     const hero = heroRef.current
-    if (!hero || !('IntersectionObserver' in window)) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setCompact(!entry.isIntersecting || entry.intersectionRatio < 0.18),
-      { threshold: [0, 0.18] },
-    )
-    observer.observe(hero)
-    return () => observer.disconnect()
-  }, [heroRef])
+    if (!hero) return
+
+    let heroHeight = hero.offsetHeight
+    let last = false
+    let ticking = false
+    let raf = 0
+    let ro: ResizeObserver | null = null
+
+    const calc = () => {
+      ticking = false
+      const threshold = heroHeight * ratio
+      const next = last ? window.scrollY > threshold - hysteresis : window.scrollY > threshold
+      if (next !== last) {
+        last = next
+        setCompact(next)
+      }
+    }
+
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      raf = requestAnimationFrame(calc)
+    }
+
+    const onResize = () => {
+      heroHeight = hero.offsetHeight
+      onScroll()
+    }
+
+    calc()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize)
+    if ('ResizeObserver' in window) {
+      ro = new ResizeObserver(() => {
+        heroHeight = hero.offsetHeight
+        onScroll()
+      })
+      ro.observe(hero)
+    }
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+      ro?.disconnect()
+    }
+  }, [heroRef, ratio, hysteresis])
 
   return compact
+}
+
+export function useLockBodyScroll(locked: boolean) {
+  useEffect(() => {
+    if (!locked) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [locked])
 }
 
 export function useEscapeKey(handler: () => void) {

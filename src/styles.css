@@ -91,32 +91,34 @@ a:focus-visible {
   position: fixed;
   z-index: 40;
   top: clamp(50px, 7.45vh, 74px);
-  left: max(5.65vw, 48px);
-  right: max(5.65vw, 48px);
+  left: max(5.65vw, 48px, env(safe-area-inset-left));
+  right: max(5.65vw, 48px, env(safe-area-inset-right));
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
   min-height: 62px;
   color: rgba(255, 255, 255, 0.94);
+  contain: layout paint;
+  will-change: transform, opacity;
+  transform: translateZ(0);
   transition:
     top 420ms cubic-bezier(.2,.75,.25,1),
     left 420ms cubic-bezier(.2,.75,.25,1),
     right 420ms cubic-bezier(.2,.75,.25,1),
     width 420ms cubic-bezier(.2,.75,.25,1),
-    min-height 420ms ease,
-    padding 420ms ease,
+    min-height 320ms ease,
+    padding 320ms ease,
     color 320ms ease,
     background 320ms ease,
     border-color 320ms ease,
-    box-shadow 320ms ease,
-    backdrop-filter 320ms ease;
+    box-shadow 320ms ease;
 }
 
 .site-header.is-compact {
-  top: 18px;
+  top: max(18px, env(safe-area-inset-top));
   left: 50%;
   right: auto;
-  width: min(720px, calc(100vw - 32px));
+  width: min(720px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));
   min-height: 64px;
   padding: 7px 12px 7px 10px;
   color: #24494a;
@@ -323,6 +325,8 @@ a:focus-visible {
 .hero-frame {
   z-index: 1;
   inset: clamp(18px, 1.95vw, 31px);
+  left: max(clamp(18px, 1.95vw, 31px), env(safe-area-inset-left));
+  right: max(clamp(18px, 1.95vw, 31px), env(safe-area-inset-right));
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .58);
   border-radius: clamp(26px, 2.5vw, 40px);
@@ -393,7 +397,7 @@ a:focus-visible {
   position: absolute;
   z-index: 3;
   left: 50%;
-  bottom: 24px;
+  bottom: max(24px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1367,6 +1371,8 @@ footer {
   width: min(1180px, calc(100% - 64px));
   min-height: 150px;
   margin: 0 auto;
+  padding-right: env(safe-area-inset-right);
+  padding-left: env(safe-area-inset-left);
   color: #55716f;
   border-top: 1px solid rgba(42,79,76,.12);
   font-size: 12px;
@@ -1443,9 +1449,9 @@ footer > p:not(.credits) {
 
   .site-header,
   .site-header.is-compact {
-    top: 30px;
-    left: 30px;
-    right: 30px;
+    top: max(30px, env(safe-area-inset-top));
+    left: max(30px, env(safe-area-inset-left));
+    right: max(30px, env(safe-area-inset-right));
     width: auto;
     min-height: 54px;
     padding: 0;
@@ -1453,9 +1459,9 @@ footer > p:not(.credits) {
   }
 
   .site-header.is-compact {
-    top: 14px;
-    left: 16px;
-    right: 16px;
+    top: max(14px, env(safe-area-inset-top));
+    left: max(16px, env(safe-area-inset-left));
+    right: max(16px, env(safe-area-inset-right));
     padding: 6px 8px 6px 7px;
   }
 
@@ -1518,7 +1524,9 @@ footer > p:not(.credits) {
     right: 0;
     left: 0;
     display: grid;
+    max-height: calc(100dvh - 80px);
     padding: 9px;
+    overflow-y: auto;
     color: #244a49;
     border: 1px solid rgba(255,255,255,.7);
     border-radius: 22px;
@@ -1527,16 +1535,19 @@ footer > p:not(.credits) {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
     transform: translateY(-8px) scale(.98);
     transform-origin: top;
-    transition: opacity 180ms ease, transform 180ms ease;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms;
   }
 
   .menu-open .mobile-nav {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
     transform: none;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s;
   }
 
   .mobile-nav a {
@@ -1581,8 +1592,16 @@ footer > p:not(.credits) {
     min-height: 620px;
   }
 
+  .hero-background {
+    background-image: url('/assets/misty-wetland-800.jpg');
+    background-image: -webkit-image-set(url('/assets/misty-wetland-800.jpg') 1x, url('/assets/misty-wetland.jpg') 2x);
+    background-image: image-set(url('/assets/misty-wetland-800.jpg') 1x, url('/assets/misty-wetland.jpg') 2x);
+  }
+
   .hero-frame {
     inset: 15px;
+    left: max(15px, env(safe-area-inset-left));
+    right: max(15px, env(safe-area-inset-right));
   }
 
   .hero-copy {
@@ -1604,6 +1623,10 @@ footer > p:not(.credits) {
 
   .feature-grid {
     grid-template-columns: 1fr;
+  }
+
+  .anki-feature-grid > div:last-child {
+    grid-column: auto;
   }
 
   .feature-card {
@@ -1652,11 +1675,15 @@ footer > p:not(.credits) {
     width: 100%;
   }
 
+  .tech-stack span {
+    transform: none;
+  }
+
   footer {
     grid-template-columns: 1fr;
     gap: 16px;
     width: min(100% - 38px, 700px);
-    padding: 34px 0;
+    padding: 34px env(safe-area-inset-right) 34px env(safe-area-inset-left);
     text-align: left;
   }
 
@@ -1670,23 +1697,25 @@ footer > p:not(.credits) {
 @media (max-width: 520px) {
   .site-header,
   .site-header.is-compact {
-    top: 25px;
-    left: 25px;
-    right: 25px;
+    top: max(25px, env(safe-area-inset-top));
+    left: max(25px, env(safe-area-inset-left));
+    right: max(25px, env(safe-area-inset-right));
   }
 
   .site-header.is-compact {
-    top: 10px;
-    left: 12px;
-    right: 12px;
+    top: max(10px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
   }
 
   .hero {
-    min-height: 640px;
+    min-height: min(640px, 100svh);
   }
 
   .hero-frame {
     inset: 10px;
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
     border-radius: 26px;
   }
 
@@ -1717,7 +1746,7 @@ footer > p:not(.credits) {
   }
 
   .scroll-cue {
-    bottom: 20px;
+    bottom: max(20px, env(safe-area-inset-bottom));
   }
 
   .content-section {
@@ -1735,7 +1764,7 @@ footer > p:not(.credits) {
   .section-heading h2,
   .preview-copy h2,
   .source-copy h2 {
-    font-size: 38px;
+    font-size: clamp(28px, 7vw, 38px);
   }
 
   .feature-card {
@@ -1762,7 +1791,7 @@ footer > p:not(.credits) {
 
   .preview-tabs button {
     min-width: 0;
-    padding: 10px 8px;
+    padding: 14px 8px;
     font-size: 13px;
   }
 
@@ -1772,8 +1801,8 @@ footer > p:not(.credits) {
   }
 
   .preview-stage::before {
-    width: 430px;
-    height: 430px;
+    width: min(430px, 94vw);
+    height: min(430px, 94vw);
   }
 
   .phone-perspective {
@@ -1795,11 +1824,17 @@ footer > p:not(.credits) {
     min-height: 274px;
   }
 
+  .mascot-halo {
+    right: -20px;
+    width: 190px;
+    height: 150px;
+  }
+
   .turna-mascot {
-    right: -52px;
+    right: -20px;
     bottom: -25px;
-    width: 210px;
-    height: 210px;
+    width: 150px;
+    height: 150px;
   }
 
   .audience-section {
@@ -1832,17 +1867,87 @@ footer > p:not(.credits) {
   }
 }
 
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+/* 触屏设备：去掉指针跟随装饰与高开销的滤镜，只禁用装饰动画，保留 header 过渡 */
+@media (pointer: coarse) {
   html {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  .hero-background,
+  .scroll-cue i,
+  .phone-screen,
+  [data-reveal] {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .site-header,
+  .site-header.is-compact,
+  .mobile-nav {
+    animation-duration: initial !important;
+    transition-duration: 260ms !important;
+  }
+
+  .hero-background {
+    transform: scale(1.015);
+  }
+
+  .hero-light {
+    opacity: .68;
+    background: radial-gradient(circle 430px at 68% 28%, rgba(255,231,183,.18), transparent 72%);
+  }
+
+  .glow-card::before {
+    display: none;
+  }
+
+  .phone-perspective {
+    transform: none;
+  }
+
+  .glow-card {
+    background: rgba(255,255,255,.68);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .fsrs-chart,
+  .config-card {
+    background: rgba(255,255,255,.78);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mobile-nav {
+    background: rgba(240,247,243,.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .site-header.is-compact {
+    background: rgba(239,246,242,.94);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-background,
+  .scroll-cue i,
+  .phone-screen,
+  [data-reveal] {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+
+  .site-header {
+    transition-duration: 180ms !important;
+    animation-duration: initial !important;
   }
 
   .hero-background {
@@ -1868,6 +1973,7 @@ footer > p:not(.credits) {
   display: inline-flex;
   align-items: center;
   gap: 9px;
+  min-height: 44px;
   margin-top: 20px;
   color: #2b7777;
   font-size: 13px;
@@ -2054,8 +2160,10 @@ footer > p:not(.credits) {
   }
 
   .anki-flow-copy h2,
-  .anki-cta-card h2 {
-    font-size: 38px;
+  .anki-cta-card h2,
+  .anki-fsrs-copy h2,
+  .curriculum-status-card h2 {
+    font-size: clamp(28px, 7vw, 38px);
   }
 
   .flow-step {
@@ -2079,8 +2187,8 @@ footer > p:not(.credits) {
   }
 
   .anki-stage::before {
-    width: 430px;
-    height: 430px;
+    width: min(430px, 94vw);
+    height: min(430px, 94vw);
   }
 
   .anki-cta-card {
@@ -2707,6 +2815,7 @@ footer > p:not(.credits) {
 .param-array code,
 .config-card code {
   display: block;
+  overflow-wrap: anywhere;
   color: #7a6a55;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12.5px;
@@ -2757,6 +2866,7 @@ footer > p:not(.credits) {
 
 .formula {
   margin: 0 0 8px;
+  overflow-x: auto;
   color: #17383a;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 21px;
@@ -2968,6 +3078,14 @@ footer > p:not(.credits) {
 @media (max-width: 520px) {
   .fsrs-what-section {
     padding: 90px 0 70px;
+  }
+
+  .fsrs-label {
+    font-size: 22px;
+  }
+
+  .fsrs-label-y {
+    display: none;
   }
 
   .param-group {

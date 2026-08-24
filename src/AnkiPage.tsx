@@ -5,6 +5,7 @@ import {
   SiteHeader,
   useCompactHeader,
   useEscapeKey,
+  useLockBodyScroll,
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
@@ -169,6 +170,7 @@ function AnkiPage() {
 
   useRevealOnScroll()
   useEscapeKey(() => setMenuOpen(false))
+  useLockBodyScroll(menuOpen)
 
   return (
     <div className={`app theme-${theme}`} data-theme={theme}>

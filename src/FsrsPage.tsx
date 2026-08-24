@@ -5,6 +5,7 @@ import {
   SiteHeader,
   useCompactHeader,
   useEscapeKey,
+  useLockBodyScroll,
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
@@ -106,8 +107,8 @@ function RetentionCurves() {
       <text x="568" y="58" className="fsrs-label fsrs-label-start">S = 50</text>
       <text x="50" y="272" className="fsrs-label fsrs-label-start">0 天</text>
       <text x="560" y="272" className="fsrs-label fsrs-label-end">30 天</text>
-      <text x="42" y="34" className="fsrs-label fsrs-label-end">100%</text>
-      <text x="42" y="71" className="fsrs-label fsrs-label-end">90%</text>
+      <text x="58" y="22" className="fsrs-label fsrs-label-start">100%</text>
+      <text x="42" y="71" className="fsrs-label fsrs-label-end fsrs-label-y">90%</text>
     </svg>
   )
 }
@@ -120,6 +121,7 @@ function FsrsPage() {
 
   useRevealOnScroll()
   useEscapeKey(() => setMenuOpen(false))
+  useLockBodyScroll(menuOpen)
 
   return (
     <div className={`app theme-${theme}`} data-theme={theme}>
