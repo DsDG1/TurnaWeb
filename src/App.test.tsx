@@ -2,6 +2,9 @@ import { Profiler } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
+// Vite 的 ?raw 导入：把 CSS 文件当字符串读入，绕开 node:fs 的类型依赖。
+// vitest 使用 vite 解析器，所以这里同样可用。
+import stylesCss from './styles.css?raw'
 import App from './App'
 import { getTimeBasedTheme } from './shared'
 
@@ -44,12 +47,41 @@ describe('Turna homepage', () => {
     render(<App />)
 
     const menuButton = screen.getByRole('button', { name: '打开导航菜单' })
+    const mobileNav = document.getElementById('mobile-nav') as HTMLElement
+    expect(mobileNav).toHaveAttribute('aria-hidden', 'true')
+
     await user.click(menuButton)
     expect(screen.getByRole('button', { name: '关闭导航菜单' })).toHaveAttribute('aria-expanded', 'true')
-    expect(document.getElementById('mobile-nav')).toHaveAttribute('aria-hidden', 'false')
+    expect(mobileNav).toHaveAttribute('aria-hidden', 'false')
+    // 展开后菜单必须在视觉上真正可见：opacity、visibility 都要到位。
+    // jsdom 不解析外部 CSS，所以更严格的视觉测试在下面通过源码扫描完成。
+    const styles = getComputedStyle(mobileNav)
+    expect(styles.opacity).toBe('1')
+    expect(styles.visibility).toBe('visible')
 
     await user.keyboard('{Escape}')
     expect(screen.getByRole('button', { name: '打开导航菜单' })).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('keeps .site-header free of contain: paint so the dropdown is not clipped', () => {
+    // 回归测试：.site-header 不能带 contain: paint，否则溢出 header 边界的
+    // .mobile-nav（position: absolute; top: 64px）会被裁掉，看起来"无法展开"。
+    // jsdom 不解析外部 CSS，因此直接扫描源码。
+    const css = String(stylesCss)
+    const blocks = css
+      .split('}')
+      .map((chunk) => chunk.trim())
+      .filter((chunk) => chunk.length > 0)
+
+    const offenders: string[] = []
+    for (const block of blocks) {
+      const selectorPart = block.split('{')[0]
+      if (!/site-header\b/.test(selectorPart)) continue
+      if (!/contain\s*:[^;]*\bpaint\b/.test(block)) continue
+      offenders.push(selectorPart)
+    }
+
+    expect(offenders).toEqual([])
   })
 
   it('updates pointer CSS variables without committing a React render', () => {

@@ -98,7 +98,9 @@ a:focus-visible {
   align-items: center;
   min-height: 62px;
   color: rgba(255, 255, 255, 0.94);
-  contain: layout paint;
+  /* 保留 layout containment 提升滚动时布局性能；
+     去掉 paint containment 以免裁剪溢出的 .mobile-nav。*/
+  contain: layout;
   will-change: transform, opacity;
   transform: translateZ(0);
   transition:
