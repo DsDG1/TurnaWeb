@@ -12,13 +12,13 @@ describe('Anki feature page', () => {
     render(<AnkiPage />)
 
     expect(screen.getByTestId('anki-hero')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1, name: '你的 Anki 积累，长成一门课程。' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '把 Anki 牌组，导入 Turna。' })).toBeInTheDocument()
 
-    expect(screen.getByText('官方 Anki 内核')).toBeInTheDocument()
-    expect(screen.getByText('牌组变成课程')).toBeInTheDocument()
-    expect(screen.getByText('一张卡，一份记忆')).toBeInTheDocument()
-    expect(screen.getByText('原卡保真渲染')).toBeInTheDocument()
-    expect(screen.getByText('本地优先')).toBeInTheDocument()
+    expect(screen.getByText('使用官方 Anki 内核')).toBeInTheDocument()
+    expect(screen.getByText('导入后加入课程')).toBeInTheDocument()
+    expect(screen.getByText('课程与复习共享记录')).toBeInTheDocument()
+    expect(screen.getByText('保留原卡样式')).toBeInTheDocument()
+    expect(screen.getByText('数据保存在本地')).toBeInTheDocument()
   })
 
   it('lists the four import-to-review flow steps', () => {
@@ -33,10 +33,10 @@ describe('Anki feature page', () => {
   it('explains the FSRS scheduling with a forgetting-curve chart', () => {
     render(<AnkiPage />)
 
-    expect(screen.getByRole('heading', { name: '复习，交给 FSRS。' })).toBeInTheDocument()
-    expect(screen.getByText('记忆有模型')).toBeInTheDocument()
-    expect(screen.getByText('评分即数据')).toBeInTheDocument()
-    expect(screen.getByText('越复习越省力')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'FSRS 会安排下一次复习。' })).toBeInTheDocument()
+    expect(screen.getByText('记录三个变量')).toBeInTheDocument()
+    expect(screen.getByText('评分会更新排期')).toBeInTheDocument()
+    expect(screen.getByText('复习间隔逐步增加')).toBeInTheDocument()
     expect(screen.getByRole('img', { name: /遗忘曲线示意图/ })).toBeInTheDocument()
   })
 

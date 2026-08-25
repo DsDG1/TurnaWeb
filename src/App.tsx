@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import {
+  EditorialHero,
   FeatureIcon,
   GlowCard,
   SiteFooter,
@@ -58,8 +59,8 @@ const features: HomepageFeature[] = [
   {
     icon: 'ai',
     index: '04',
-    title: '理解学习进度的 AI 助手',
-    description: '结合当前课程、错题与偏好提供讲解；不开启也不影响核心学习功能。',
+    title: '按当前进度提供 AI 答疑',
+    description: '根据当前课程和错题提供讲解；关闭 AI 也不影响学习和复习。',
   },
 ]
 
@@ -72,12 +73,12 @@ const audiences = [
   {
     number: '二',
     title: '已经在用 Anki 的人',
-    description: '保留已有积累，同时获得课程树、错题回顾与更连贯的语言学习路径。',
+    description: '保留已有牌组和学习记录，并使用课程树与错题回顾继续学习。',
   },
   {
     number: '三',
-    title: '在意安静与隐私的人',
-    description: '无需账号，没有广告、排行榜或付费压力。学习数据默认只属于你。',
+    title: '不想被广告和排行打扰的人',
+    description: '无需账号，没有广告、排行榜或付费提示。学习数据默认只保存在你的设备上。',
   },
 ] as const
 
@@ -219,31 +220,25 @@ function App() {
         onNavigate={() => setMenuOpen(false)}
       />
 
-      <section id="top" ref={heroRef} className="hero" data-testid="hero" aria-labelledby="hero-title">
-        <div className="hero-background" />
-        <div className="hero-overlay" />
-        <div className="hero-frame">
-          <div className="hero-light" />
-          <div className="hero-copy">
-            <h1 id="hero-title">
-              关掉干扰，<br />
-              <span>学会</span>一门语言。
-            </h1>
-            <i className="hero-dash" aria-hidden="true" />
-          </div>
-          <a className="scroll-cue" href="#features">
-            <span>向下滚动</span>
-            <i aria-hidden="true">↓</i>
-          </a>
-        </div>
-      </section>
+      <EditorialHero
+        ref={heroRef}
+        testId="hero"
+        titleId="hero-title"
+        eyebrow="本地优先的语言学习应用"
+        title={<>离线学习，<br /><span>按时复习。</span></>}
+        description="Turna 提供土耳其语课程、FSRS 复习和可选的 AI 答疑。"
+        primaryAction={{ label: '查看功能', href: '#features' }}
+        secondaryAction={{ label: '查看课程', href: './curriculum.html' }}
+        scrollTarget="#features"
+        art="wetland"
+      />
 
       <main>
         <section id="features" className="content-section features-section" aria-labelledby="features-title">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">核心功能</p>
-            <h2 id="features-title">专注于语言学习本身。</h2>
-            <p>当前支持土耳其语，后续会加入更多语言。</p>
+            <h2 id="features-title">学习、复习和答疑都在一个应用里。</h2>
+            <p>目前支持土耳其语，后续会增加更多语言。</p>
           </div>
           <div className="feature-grid">
             {features.map((feature, index) => (
@@ -271,8 +266,8 @@ function App() {
         <section id="preview" className="content-section preview-section" aria-labelledby="preview-title">
           <div className="preview-copy" data-reveal>
             <p className="eyebrow">应用界面预览</p>
-            <h2 id="preview-title">从学习，<br />到真正记住。</h2>
-            <p className="preview-description">短课程建立语感，FSRS 安排复习计划，AI 随时解答疑问。</p>
+            <h2 id="preview-title">看看实际的学习界面。</h2>
+            <p className="preview-description">短课程负责学习新内容，FSRS 安排复习，AI 可以按需答疑。</p>
             <div className="preview-tabs" role="tablist" aria-label="应用预览场景">
               {([
                 ['course', '课程'],
@@ -317,7 +312,7 @@ function App() {
         <section id="audience" className="content-section audience-section" aria-labelledby="audience-title">
           <div className="section-heading audience-heading" data-reveal>
             <p className="eyebrow">适合谁</p>
-            <h2 id="audience-title">适合这些学习者。</h2>
+            <h2 id="audience-title">这些用户会更适合 Turna。</h2>
           </div>
           <div className="audience-grid">
             {audiences.map((audience, index) => (
@@ -333,11 +328,11 @@ function App() {
         <section className="content-section open-source-section" aria-labelledby="open-source-title">
           <GlowCard className="open-source-card">
             <div className="source-copy" data-reveal>
-              <p className="eyebrow">持续开发中的开源项目</p>
-              <h2 id="open-source-title">开源项目，<br />欢迎参与。</h2>
-              <p>Turna 仍在持续开发，欢迎阅读代码、运行体验或参与贡献。</p>
+              <p className="eyebrow">项目状态</p>
+              <h2 id="open-source-title">Turna 仍在持续开发。</h2>
+              <p>代码仓库上线后，你可以查看实现、运行项目或参与贡献。</p>
               <button className="source-button" type="button" onClick={showSourceNotice}>
-                <span>查看 Gitee 源码</span><span aria-hidden="true">↗</span>
+                <span>查看项目状态</span><span aria-hidden="true">↗</span>
               </button>
               {sourceNotice && (
                 <p className="source-notice" role="status">Gitee 仓库近期上线</p>

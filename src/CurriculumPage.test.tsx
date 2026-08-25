@@ -12,7 +12,7 @@ describe('Curriculum page', () => {
     render(<CurriculumPage />)
 
     expect(screen.getByTestId('curriculum-hero')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1, name: '一门正在生长的，土耳其语课程。' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '课程按级别组织，从 A1 学到 B2。' })).toBeInTheDocument()
 
     expect(screen.getByText('A1')).toBeInTheDocument()
     expect(screen.getByText('B2')).toBeInTheDocument()
@@ -55,10 +55,10 @@ describe('Curriculum page', () => {
     expect(screen.getByRole('button', { name: /早上好/ })).toHaveAttribute('aria-selected', 'false')
   })
 
-  it('states that content is under very slow development with current stats', () => {
+  it('states that content is still in development with current stats', () => {
     render(<CurriculumPage />)
 
-    expect(screen.getByRole('heading', { name: '课程内容超缓慢开发中。' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '课程内容仍在开发。' })).toBeInTheDocument()
     expect(screen.getByText('分级 Section')).toBeInTheDocument()
     expect(screen.getByText('课时')).toBeInTheDocument()
   })

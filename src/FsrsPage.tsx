@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import {
+  EditorialHero,
   GlowCard,
   SiteFooter,
   SiteHeader,
@@ -138,33 +139,23 @@ function FsrsPage() {
         onNavigate={() => setMenuOpen(false)}
       />
 
-      <section id="top" ref={heroRef} className="hero fsrs-hero" data-testid="fsrs-hero" aria-labelledby="fsrs-hero-title">
-        <div className="hero-overlay" />
-        <div className="hero-frame">
-          <div className="hero-light" />
-          <div className="hero-copy">
-            <p className="anki-eyebrow">FSRS 算法详解</p>
-            <h1 id="fsrs-hero-title">
-              每张卡片，<br />
-              <span>都有自己的记忆模型。</span>
-            </h1>
-            <p className="anki-hero-sub">
-              FSRS（Free Spaced Repetition Scheduler）用三个变量刻画记忆，在遗忘发生前安排下一次复习。这是它在 Turna 工程里的真实实现。
-            </p>
-            <i className="hero-dash" aria-hidden="true" />
-          </div>
-          <a className="scroll-cue" href="#fsrs-what">
-            <span>向下滚动</span>
-            <i aria-hidden="true">↓</i>
-          </a>
-        </div>
-      </section>
+      <EditorialHero
+        ref={heroRef}
+        className="fsrs-hero content-hero"
+        testId="fsrs-hero"
+        titleId="fsrs-hero-title"
+        eyebrow="FSRS 算法"
+        title={<>Turna 如何，<br /><span>安排复习。</span></>}
+        description="FSRS 根据卡片难度、记忆稳定度和当前记忆概率，计算下一次复习时间。"
+        primaryAction={{ label: '查看算法说明', href: '#fsrs-what' }}
+        scrollTarget="#fsrs-what"
+      />
 
       <main>
         <section id="fsrs-what" className="content-section fsrs-what-section" aria-labelledby="fsrs-what-title">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">它是什么</p>
-            <h2 id="fsrs-what-title">一个开源的间隔重复调度算法。</h2>
+            <h2 id="fsrs-what-title">FSRS 是开源的间隔重复算法。</h2>
             <p>
               FSRS 出自 open-spaced-repetition 开源社区，基于数千名学习者的真实复习数据训练。Turna 没有自造调度器，而是在两条链路上各接入一套官方实现——都是 21 参数的 FSRS-6。
             </p>
@@ -186,7 +177,7 @@ function FsrsPage() {
         <section id="fsrs-model" className="content-section anki-fsrs-section" aria-labelledby="fsrs-model-title">
           <div className="anki-fsrs-copy" data-reveal>
             <p className="eyebrow">记忆模型</p>
-            <h2 id="fsrs-model-title">三个变量，一条曲线。</h2>
+            <h2 id="fsrs-model-title">三个变量决定复习时间。</h2>
             <div className="fsrs-points">
               {memoryVariables.map((item) => (
                 <div key={item.symbol} className="fsrs-point variable-point">
@@ -222,20 +213,21 @@ function FsrsPage() {
         <section id="fsrs-params" className="content-section fsrs-params-section" aria-labelledby="fsrs-params-title">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">21 个参数</p>
-            <h2 id="fsrs-params-title">权重从哪里来。</h2>
+            <h2 id="fsrs-params-title">21 个权重控制计算结果。</h2>
             <p>
               21 个权重（w0 – w20）刻画整条记忆曲线与每次复习的更新规则。默认值来自社区的训练结果；Turna 还内置了一个轻量优化器，用你自己的复习历史微调它们。
             </p>
           </div>
           <div className="param-group-grid">
             {parameterGroups.map((group, index) => (
-              <div key={group.range} className="param-group" data-reveal style={{ '--delay': `${index * 50}ms` } as CSSProperties}>
-                <span>{group.range}</span>
-                <div>
+              <details key={group.range} className="param-group" data-reveal style={{ '--delay': `${index * 50}ms` } as CSSProperties} open={index === 0}>
+                <summary>
+                  <span>{group.range}</span>
                   <h3>{group.name}</h3>
-                  <p>{group.description}</p>
-                </div>
-              </div>
+                  <i aria-hidden="true">＋</i>
+                </summary>
+                <p>{group.description}</p>
+              </details>
             ))}
           </div>
           <div className="param-array" data-reveal>
@@ -248,14 +240,14 @@ function FsrsPage() {
           </div>
           <div className="quiet-promise" data-reveal>
             <span aria-hidden="true">○</span>
-            <p><strong>参数可以个性化。</strong>FsrsLiteOptimizer 用你的课程练习记录做带约束的梯度下降，只有训练损失真正改善时才替换默认权重，随时可恢复。</p>
+            <p><strong>参数可以个性化。</strong>FsrsLiteOptimizer 使用课程练习记录做带约束的梯度下降，只有训练损失降低时才替换默认权重，并且可以随时恢复。</p>
           </div>
         </section>
 
         <section id="fsrs-engine" className="content-section fsrs-engine-section" aria-labelledby="fsrs-engine-title">
           <div className="anki-flow-copy" data-reveal>
             <p className="eyebrow">工程映射</p>
-            <h2 id="fsrs-engine-title">落在代码里，<br />长这个样子。</h2>
+            <h2 id="fsrs-engine-title">Turna 中的具体配置。</h2>
             <p className="curriculum-lead">
               应用内的 FsrsEngine 包装 fsrs-dart：课程练习的二选一结果（对 / 错）会映射成 FSRS 的四档评分，其余配置如下。
             </p>
@@ -288,8 +280,8 @@ function FsrsPage() {
           <GlowCard className="anki-cta-card">
             <div data-reveal>
               <p className="eyebrow">继续探索</p>
-              <h2 id="fsrs-cta-title">算法之外，<br />是课程与牌组。</h2>
-              <p>FSRS 负责长期记忆；课程建立语感，Anki 牌组带着积累直接加入。</p>
+              <h2 id="fsrs-cta-title">继续查看课程和 Anki 集成。</h2>
+              <p>FSRS 负责安排复习；课程用于学习新内容，也可以导入已有的 Anki 牌组。</p>
               <div className="anki-cta-actions">
                 <a className="source-button" href="./index.html">
                   <span>返回 Turna 首页</span><span aria-hidden="true">↗</span>

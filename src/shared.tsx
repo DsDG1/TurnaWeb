@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   useEffect,
   useRef,
   useState,
@@ -14,6 +15,26 @@ export type NavItem = {
   id: string
   label: string
   href: string
+}
+
+export type HeroAction = {
+  label: string
+  href: string
+}
+
+export type EditorialHeroProps = {
+  id?: string
+  className?: string
+  testId?: string
+  titleId: string
+  eyebrow?: string
+  title: ReactNode
+  description?: string
+  primaryAction?: HeroAction
+  secondaryAction?: HeroAction
+  scrollTarget: string
+  scrollLabel?: string
+  art?: 'wetland' | 'none'
 }
 
 export function getTimeBasedTheme(hour = new Date().getHours()): ThemeMode {
@@ -283,6 +304,77 @@ export function FeatureIcon({ name }: { name: string }) {
   )
 }
 
+export const EditorialHero = forwardRef<HTMLElement, EditorialHeroProps>(function EditorialHero(
+  {
+    id = 'top',
+    className = '',
+    testId,
+    titleId,
+    eyebrow,
+    title,
+    description,
+    primaryAction,
+    secondaryAction,
+    scrollTarget,
+    scrollLabel = '继续查看',
+    art = 'none',
+  },
+  ref,
+) {
+  return (
+    <section
+      id={id}
+      ref={ref}
+      className={`hero editorial-hero${className ? ` ${className}` : ''}`}
+      data-testid={testId}
+      aria-labelledby={titleId}
+    >
+      {art === 'wetland' && (
+        <picture className="hero-media" aria-hidden="true">
+          <source media="(max-width: 520px)" srcSet="./assets/misty-wetland-mobile.webp" type="image/webp" />
+          <img
+            src="./assets/misty-wetland.jpg"
+            width="1586"
+            height="992"
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
+      )}
+      {art === 'none' && (
+        <svg className="hero-motif" viewBox="0 0 720 720" fill="none" aria-hidden="true">
+          <circle cx="430" cy="315" r="224" />
+          <path d="M288 548c31-112 80-201 163-274 42-37 62-91 43-135" />
+          <path d="M311 526c79-47 137-105 171-181 17-39 18-80-2-116" />
+          <path d="M476 216c47-15 89-2 126 34l-90 18" />
+          <path d="M344 441c7 75 4 132-10 170M371 431c21 71 30 127 24 171" />
+          <path d="M235 596c49-26 101-29 156-10M438 594c48-25 94-29 139-12" />
+        </svg>
+      )}
+      <div className="hero-overlay" />
+      <div className="hero-frame">
+        <div className="hero-light" />
+        <div className="hero-copy">
+          {eyebrow && <p className="hero-eyebrow">{eyebrow}</p>}
+          <h1 id={titleId}>{title}</h1>
+          {description && <p className="hero-description">{description}</p>}
+          {(primaryAction || secondaryAction) && (
+            <div className="hero-actions">
+              {primaryAction && <a className="hero-action primary" href={primaryAction.href}>{primaryAction.label}</a>}
+              {secondaryAction && <a className="hero-action secondary" href={secondaryAction.href}>{secondaryAction.label}</a>}
+            </div>
+          )}
+        </div>
+        <a className="scroll-cue" href={scrollTarget}>
+          <span>{scrollLabel}</span>
+          <i aria-hidden="true">↓</i>
+        </a>
+      </div>
+    </section>
+  )
+})
+
 export function SiteHeader({
   items,
   brandHref,
@@ -374,7 +466,7 @@ export function SiteFooter({ brandHref = '#top' }: { brandHref?: string }) {
         <BirdMark />
         <span>Turna</span>
       </a>
-      <p>关掉干扰，学会一门语言。</p>
+      <p>离线学习，按时复习。</p>
       <p className="credits">基于 <a href="https://github.com/rshrc/Varnamala" target="_blank" rel="noreferrer">rshrc/Varnamala</a> 持续构建。</p>
     </footer>
   )

@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import FsrsPage from './FsrsPage'
 
@@ -11,7 +12,7 @@ describe('FSRS algorithm page', () => {
     render(<FsrsPage />)
 
     expect(screen.getByTestId('fsrs-hero')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1, name: '每张卡片，都有自己的记忆模型。' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Turna 如何，安排复习。' })).toBeInTheDocument()
 
     expect(screen.getByText('Rust · fsrs-rs 6.6.1')).toBeInTheDocument()
     expect(screen.getByText('Dart · fsrs 2.0.1')).toBeInTheDocument()
@@ -38,6 +39,16 @@ describe('FSRS algorithm page', () => {
     expect(screen.getByText('0.2172')).toBeInTheDocument()
     expect(screen.getByText('0.2')).toBeInTheDocument()
     expect(screen.getByText(/FsrsLiteOptimizer/)).toBeInTheDocument()
+  })
+
+  it('lets readers expand a parameter explanation', async () => {
+    const user = userEvent.setup()
+    render(<FsrsPage />)
+
+    const group = screen.getByText('初始难度').closest('details')
+    expect(group).not.toHaveAttribute('open')
+    await user.click(screen.getByText('初始难度'))
+    expect(group).toHaveAttribute('open')
   })
 
   it('shows the engine configuration and rating mapping', () => {

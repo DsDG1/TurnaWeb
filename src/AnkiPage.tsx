@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import {
+  EditorialHero,
   GlowCard,
   SiteFooter,
   SiteHeader,
@@ -20,35 +21,35 @@ const ankiFeatures = [
   {
     icon: 'core',
     index: '01',
-    title: '官方 Anki 内核',
+    title: '使用官方 Anki 内核',
     description:
       'Turna 直接内嵌官方 Anki 的 Rust 核心：卡片模板、填空题（Cloze）、音频与 FSRS 调度都与桌面版 Anki 语义一致。',
   },
   {
     icon: 'course',
     index: '02',
-    title: '牌组变成课程',
+    title: '导入后加入课程',
     description:
       '导入的卡片进入课程路径：题型自动识别，配翻面与展开动画，第一次学习由课程引导，而不是孤立的卡片堆。',
   },
   {
     icon: 'identity',
     index: '03',
-    title: '一张卡，一份记忆',
+    title: '课程与复习共享记录',
     description:
       '同一张卡在课程与复习中共享同一条学习记录和排期，不会重复学，也不会漏学。',
   },
   {
     icon: 'render',
     index: '04',
-    title: '原卡保真渲染',
+    title: '保留原卡样式',
     description:
       '复杂模板、样式与媒体在隔离 WebView 中原样呈现；由卡片派生的练习则使用原生界面，流畅且风格统一。',
   },
   {
     icon: 'local',
     index: '05',
-    title: '本地优先',
+    title: '数据保存在本地',
     description:
       '牌组与学习记录保存在设备本地，无需账号，也不依赖 AnkiWeb 同步；.apkg 随时可以带回桌面版继续使用。',
   },
@@ -58,7 +59,7 @@ const flowSteps = [
   {
     number: '01',
     title: '选择牌组文件',
-    description: '在应用中导入 .apkg 或 .colpkg 文件，沿用你在 Anki 里的一切积累。',
+    description: '在应用中导入 .apkg 或 .colpkg 文件，继续使用现有牌组和学习记录。',
   },
   {
     number: '02',
@@ -187,33 +188,23 @@ function AnkiPage() {
         onNavigate={() => setMenuOpen(false)}
       />
 
-      <section id="top" ref={heroRef} className="hero anki-hero" data-testid="anki-hero" aria-labelledby="anki-hero-title">
-        <div className="hero-overlay" />
-        <div className="hero-frame">
-          <div className="hero-light" />
-          <div className="hero-copy">
-            <p className="anki-eyebrow">Anki 深度集成</p>
-            <h1 id="anki-hero-title">
-              你的 Anki 积累，<br />
-              <span>长成一门课程。</span>
-            </h1>
-            <p className="anki-hero-sub">
-              官方 Anki 内核，配上 Turna 的课程与复习体验——导入牌组只是开始。
-            </p>
-            <i className="hero-dash" aria-hidden="true" />
-          </div>
-          <a className="scroll-cue" href="#anki-features">
-            <span>向下滚动</span>
-            <i aria-hidden="true">↓</i>
-          </a>
-        </div>
-      </section>
+      <EditorialHero
+        ref={heroRef}
+        className="anki-hero content-hero"
+        testId="anki-hero"
+        titleId="anki-hero-title"
+        eyebrow="Anki 集成"
+        title={<>把 Anki 牌组，<br /><span>导入 Turna。</span></>}
+        description="Turna 使用官方 Anki 内核，并把导入的卡片接入课程和复习。"
+        primaryAction={{ label: '查看集成功能', href: '#anki-features' }}
+        scrollTarget="#anki-features"
+      />
 
       <main>
         <section id="anki-features" className="content-section features-section" aria-labelledby="anki-features-title">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">Anki 集成能力</p>
-            <h2 id="anki-features-title">不只是导入牌组。</h2>
+            <h2 id="anki-features-title">导入后可以继续学习和复习。</h2>
             <p>Turna 内嵌官方 Anki 核心，再把卡片接入课程、复习与统计的完整闭环。</p>
           </div>
           <div className="feature-grid anki-feature-grid">
@@ -236,7 +227,7 @@ function AnkiPage() {
         <section id="anki-flow" className="content-section anki-flow-section" aria-labelledby="anki-flow-title">
           <div className="anki-flow-copy" data-reveal>
             <p className="eyebrow">从导入到复习</p>
-            <h2 id="anki-flow-title">四步开始，<br />之后交给调度。</h2>
+            <h2 id="anki-flow-title">四步完成导入。</h2>
             <div className="flow-steps">
               {flowSteps.map((step) => (
                 <div key={step.number} className="flow-step">
@@ -257,22 +248,22 @@ function AnkiPage() {
         <section id="anki-fsrs" className="content-section anki-fsrs-section" aria-labelledby="anki-fsrs-title">
           <div className="anki-fsrs-copy" data-reveal>
             <p className="eyebrow">FSRS 记忆调度</p>
-            <h2 id="anki-fsrs-title">复习，交给 FSRS。</h2>
+            <h2 id="anki-fsrs-title">FSRS 会安排下一次复习。</h2>
             <p className="anki-fsrs-lead">
-              每张卡都有独立的记忆模型。FSRS 在你快要忘记的时机把它带回眼前，复习间隔越拉越长。
+              每张卡分别记录难度、稳定度和当前记忆概率。FSRS 根据评分更新下一次复习时间。
             </p>
             <div className="fsrs-points">
               <div className="fsrs-point">
-                <span>记忆有模型</span>
+                <span>记录三个变量</span>
                 <p>每张卡维护自己的难度、稳定度与可提取性，而不是一张统一的间隔表。</p>
               </div>
               <div className="fsrs-point">
-                <span>评分即数据</span>
+                <span>评分会更新排期</span>
                 <p>重来 / 困难 / 良好 / 简单四档回答，实时更新这张卡下一次出现的时间。</p>
               </div>
               <div className="fsrs-point">
-                <span>越复习越省力</span>
-                <p>在遗忘边缘及时巩固，间隔随之变长，每天需要复习的量随时间下降。</p>
+                <span>复习间隔逐步增加</span>
+                <p>答对并保持稳定后，下一次复习间隔会增加，减少不必要的重复。</p>
               </div>
             </div>
             <a className="feature-link" href="./fsrs.html">
@@ -305,8 +296,8 @@ function AnkiPage() {
           <GlowCard className="anki-cta-card">
             <div data-reveal>
               <p className="eyebrow">继续探索</p>
-              <h2 id="anki-cta-title">从第一张卡片开始。</h2>
-              <p>回到首页了解课程、FSRS 复习与 AI 伴学，或在应用中导入你的第一副牌组。</p>
+              <h2 id="anki-cta-title">继续查看课程和 FSRS。</h2>
+              <p>回到首页查看课程、FSRS 复习和 AI 答疑，或继续查看课程内容。</p>
               <div className="anki-cta-actions">
                 <a className="source-button" href="./index.html">
                   <span>返回 Turna 首页</span><span aria-hidden="true">↗</span>

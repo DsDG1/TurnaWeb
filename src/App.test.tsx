@@ -42,6 +42,14 @@ describe('Turna homepage', () => {
     expect(screen.getByTestId('ai-screen')).toBeInTheDocument()
   })
 
+  it('uses direct hero copy and links to features and curriculum', () => {
+    render(<App />)
+
+    expect(screen.getByRole('heading', { level: 1, name: '离线学习，按时复习。' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '查看功能' })).toHaveAttribute('href', '#features')
+    expect(screen.getByRole('link', { name: '查看课程' })).toHaveAttribute('href', './curriculum.html')
+  })
+
   it('opens and closes the mobile navigation accessibly', async () => {
     const user = userEvent.setup()
     render(<App />)

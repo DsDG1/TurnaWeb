@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import {
+  EditorialHero,
   GlowCard,
   SiteFooter,
   SiteHeader,
@@ -248,33 +249,23 @@ function CurriculumPage() {
         onNavigate={() => setMenuOpen(false)}
       />
 
-      <section id="top" ref={heroRef} className="hero curriculum-hero" data-testid="curriculum-hero" aria-labelledby="curriculum-hero-title">
-        <div className="hero-overlay" />
-        <div className="hero-frame">
-          <div className="hero-light" />
-          <div className="hero-copy">
-            <p className="anki-eyebrow">课程内容</p>
-            <h1 id="curriculum-hero-title">
-              一门正在生长的，<br />
-              <span>土耳其语课程。</span>
-            </h1>
-            <p className="anki-hero-sub">
-              Section → Unit → Lesson 三级结构，CEFR A1 到 B2 分级推进；每一课时都由真实内容组成。
-            </p>
-            <i className="hero-dash" aria-hidden="true" />
-          </div>
-          <a className="scroll-cue" href="#curriculum-structure">
-            <span>向下滚动</span>
-            <i aria-hidden="true">↓</i>
-          </a>
-        </div>
-      </section>
+      <EditorialHero
+        ref={heroRef}
+        className="curriculum-hero content-hero"
+        testId="curriculum-hero"
+        titleId="curriculum-hero-title"
+        eyebrow="土耳其语课程"
+        title={<>课程按级别组织，<br /><span>从 A1 学到 B2。</span></>}
+        description="课程分为 Section、Unit 和 Lesson。每节课约 5 分钟，并按顺序解锁。"
+        primaryAction={{ label: '查看课程结构', href: '#curriculum-structure' }}
+        scrollTarget="#curriculum-structure"
+      />
 
       <main>
         <section id="curriculum-structure" className="content-section curriculum-structure-section" aria-labelledby="curriculum-structure-title">
           <div className="anki-flow-copy" data-reveal>
             <p className="eyebrow">课程结构</p>
-            <h2 id="curriculum-structure-title">从 A1 到 B2，<br />逐级解锁。</h2>
+            <h2 id="curriculum-structure-title">课程分为三个层级。</h2>
             <p className="curriculum-lead">
               课程分三级：<strong>Section</strong> 按 CEFR 能力分级，<strong>Unit</strong> 围绕一个生活主题（如“问候”），<strong>Lesson</strong> 是一次 5 分钟左右的课时。课程树记录前置关系，学完当前内容才会解锁下一课。
             </p>
@@ -295,7 +286,7 @@ function CurriculumPage() {
         <section id="curriculum-types" className="content-section curriculum-types-section" aria-labelledby="curriculum-types-title">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">课时类型</p>
-            <h2 id="curriculum-types-title">六种课时，各有分工。</h2>
+            <h2 id="curriculum-types-title">六种课时对应不同练习。</h2>
             <p>从引入新知识到检验掌握，每种课时对应一种明确的教学目的。</p>
           </div>
           <div className="type-grid">
@@ -322,7 +313,7 @@ function CurriculumPage() {
         <section id="curriculum-preview" className="content-section anki-flow-section" aria-labelledby="curriculum-preview-title">
           <div className="anki-flow-copy" data-reveal>
             <p className="eyebrow">课时界面</p>
-            <h2 id="curriculum-preview-title">课时里，<br />在做些什么？</h2>
+            <h2 id="curriculum-preview-title">查看课时界面。</h2>
             <div className="preview-tabs" role="tablist" aria-label="课时界面预览">
               {([
                 ['practice', '练习'],
@@ -361,9 +352,9 @@ function CurriculumPage() {
           <GlowCard className="curriculum-status-card">
             <div data-reveal>
               <p className="eyebrow">内容进度</p>
-              <h2 id="curriculum-status-title">课程内容超缓慢开发中。</h2>
+              <h2 id="curriculum-status-title">课程内容仍在开发。</h2>
               <p>
-                A1 到 B2 的 8 个 Section 目前已全部填充真实内容；新的课时、语法点与更多语言，会以非常缓慢的速度持续补充——这是一个业余慢速推进的开源项目，宁缺毋滥。
+                A1 到 B2 的 8 个 Section 已经填入实际课程内容。新课时、语法点和更多语言会按开发进度增加；这是业余维护的开源项目，更新时间不会固定。
               </p>
               <div className="status-stats" aria-label="当前内容量">
                 {contentStats.map((stat) => (
@@ -381,8 +372,8 @@ function CurriculumPage() {
           <GlowCard className="anki-cta-card">
             <div data-reveal>
               <p className="eyebrow">继续探索</p>
-              <h2 id="curriculum-cta-title">课程之外，<br />还有复习与牌组。</h2>
-              <p>课时建立语感，FSRS 负责长期记忆；已有的 Anki 牌组也能直接加入课程。</p>
+              <h2 id="curriculum-cta-title">继续查看复习和 Anki 集成。</h2>
+              <p>课程用于学习新内容，FSRS 用于安排复习，已有的 Anki 牌组也可以导入。</p>
               <div className="anki-cta-actions">
                 <a className="source-button" href="./index.html">
                   <span>返回 Turna 首页</span><span aria-hidden="true">↗</span>
