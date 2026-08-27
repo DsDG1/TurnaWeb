@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .ok { fill: #eef2ef; stroke: #6f9991; stroke-width: 1; }
+    .warn { fill: #fff5e6; stroke: #c08552; stroke-width: 1; }
+    .err { fill: #fbece8; stroke: #b25a4a; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .arrow { stroke: #5a6b66; stroke-width: 1; fill: none; }
+    .arrow-err { stroke: #b25a4a; stroke-width: 1; fill: none; }
+  </style>
+  <rect class="bg" width="880" height="540"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">发布管线与回滚路径</text>
+
+  <!-- Phase row -->
+  <g transform="translate(24, 60)">
+    <g transform="translate(0, 0)">
+      <rect class="frame" width="150" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">1. validate</text>
+      <text class="muted" x="14" y="40">JSON / 引用 / 形状</text>
+      <text class="muted" x="14" y="56">退出码 0 必通过</text>
+    </g>
+    <g transform="translate(170, 0)">
+      <rect class="frame" width="150" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">2. lint</text>
+      <text class="muted" x="14" y="40">命名 / 干扰项 / 难度</text>
+      <text class="muted" x="14" y="56">error 必须为 0</text>
+    </g>
+    <g transform="translate(340, 0)">
+      <rect class="frame" width="150" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">3. audio-manifest</text>
+      <text class="muted" x="14" y="40">kind=missing = 0</text>
+      <text class="muted" x="14" y="56">LUFS 差 ≤ 2</text>
+    </g>
+    <g transform="translate(510, 0)">
+      <rect class="frame" width="150" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">4. version bump</text>
+      <text class="muted" x="14" y="40">index.json +1</text>
+      <text class="muted" x="14" y="56">expressions.json +1</text>
+    </g>
+    <g transform="translate(680, 0)">
+      <rect class="frame" width="150" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">5. diff + 报告</text>
+      <text class="muted" x="14" y="40">Markdown 发布报告</text>
+      <text class="muted" x="14" y="56">release-notes 模板</text>
+    </g>
+  </g>
+
+  <path class="arrow" d="M 174 90 L 194 90"/>
+  <polygon points="190,86 194,90 190,94" fill="#5a6b66"/>
+  <path class="arrow" d="M 344 90 L 364 90"/>
+  <polygon points="360,86 364,90 360,94" fill="#5a6b66"/>
+  <path class="arrow" d="M 514 90 L 534 90"/>
+  <polygon points="530,86 534,90 530,94" fill="#5a6b66"/>
+  <path class="arrow" d="M 684 90 L 704 90"/>
+  <polygon points="700,86 704,90 700,94" fill="#5a6b66"/>
+
+  <!-- Phase row 2 -->
+  <g transform="translate(24, 152)">
+    <g transform="translate(0, 0)">
+      <rect class="ok" width="320" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">6. 教师试做</text>
+      <text class="muted" x="14" y="40">首课 / 复习 / 听力 / 长文本</text>
+      <text class="muted" x="14" y="56">至少 1 次完整通过</text>
+    </g>
+    <g transform="translate(340, 0)">
+      <rect class="ok" width="320" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">7. 客户端 reseed 验证</text>
+      <text class="muted" x="14" y="40">课程树数量 · 引用闭环 · 进度不孤立</text>
+      <text class="muted" x="14" y="56">flutter test</text>
+    </g>
+    <g transform="translate(680, 0)">
+      <rect class="ok" width="150" height="60" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">8. 发布</text>
+      <text class="muted" x="14" y="40">客户端开始下载</text>
+    </g>
+  </g>
+
+  <path class="arrow" d="M 344 182 L 364 182"/>
+  <polygon points="360,178 364,182 360,186" fill="#5a6b66"/>
+  <path class="arrow" d="M 684 182 L 704 182"/>
+  <polygon points="700,178 704,182 700,186" fill="#5a6b66"/>
+
+  <!-- Gate check row -->
+  <g transform="translate(24, 244)">
+    <rect class="frame" width="832" height="76" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">门禁（任一不通过 → 阻断）</text>
+    <line x1="14" y1="30" x2="818" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="50">· validate exit 0  &amp;  lint error 0  &amp;  manifest missing 0</text>
+    <text class="muted" x="14" y="66">· index.json.version 已递增（不复用）  &amp;  教师试做通过</text>
+  </g>
+
+  <!-- Rollback path -->
+  <g transform="translate(24, 348)">
+    <text class="text" x="0" y="14" font-size="12" font-weight="600">回滚路径</text>
+
+    <g transform="translate(0, 28)">
+      <rect class="frame" width="240" height="56" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">保留上一个 git tag</text>
+      <text class="muted" x="14" y="40">JSON 快照 · release notes</text>
+    </g>
+    <g transform="translate(260, 28)">
+      <rect class="frame" width="240" height="56" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">恢复目标 JSON</text>
+      <text class="muted" x="14" y="40">Section / Unit / Lesson 还原</text>
+    </g>
+    <g transform="translate(520, 28)">
+      <rect class="frame" width="312" height="56" rx="4"/>
+      <text class="text" x="14" y="22" font-weight="600">递增 version（新值）</text>
+      <text class="muted" x="14" y="40">不恢复旧 version · 强制 reseed</text>
+    </g>
+
+    <path class="arrow" d="M 240 56 L 260 56"/>
+    <polygon points="256,52 260,56 256,60" fill="#5a6b66"/>
+    <path class="arrow" d="M 500 56 L 520 56"/>
+    <polygon points="516,52 520,56 516,60" fill="#5a6b66"/>
+  </g>
+
+  <!-- Bottom: gray -->
+  <g transform="translate(24, 444)">
+    <rect class="frame" width="832" height="76" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">灰度与监控（发布后 24h）</text>
+    <line x1="14" y1="30" x2="818" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="50">· 真机冒烟：Android × 1 + iOS × 1</text>
+    <text class="muted" x="14" y="66">· 崩溃率维持基线 ±0.1%  &amp;  反馈通道开启版本过滤</text>
+  </g>
+
+  <text class="muted" x="24" y="532">图 6 — 发布管线（八阶段） + 回滚路径 + 灰度窗口</text>
+</svg>

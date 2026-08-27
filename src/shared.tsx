@@ -17,6 +17,28 @@ export type NavItem = {
   href: string
 }
 
+export const DOCS_HREF = './docs/'
+
+export function siteNavigation(page: 'home' | 'curriculum' | 'other' = 'other'): readonly NavItem[] {
+  return [
+    {
+      id: 'features',
+      label: '功能',
+      href: page === 'home' ? '#features' : './index.html#features',
+    },
+    {
+      id: 'curriculum',
+      label: '课程',
+      href: page === 'curriculum' ? '#top' : './curriculum.html',
+    },
+    {
+      id: 'docs',
+      label: '文档',
+      href: DOCS_HREF,
+    },
+  ]
+}
+
 export type HeroAction = {
   label: string
   href: string
@@ -459,14 +481,30 @@ export function SiteHeader({
   )
 }
 
+const footerLinks = [
+  { href: './curriculum.html', label: '课程' },
+  { href: DOCS_HREF, label: '文档' },
+  { href: './anki.html', label: 'Anki' },
+  { href: './fsrs.html', label: 'FSRS' },
+  { href: './ai.html', label: 'AI' },
+  { href: './editor.html', label: '编辑器' },
+] as const
+
 export function SiteFooter({ brandHref = '#top' }: { brandHref?: string }) {
   return (
     <footer>
-      <a className="footer-brand" href={brandHref}>
-        <BirdMark />
-        <span>Turna</span>
-      </a>
-      <p>离线学习，按时复习。</p>
+      <div className="footer-brand-block">
+        <a className="footer-brand" href={brandHref}>
+          <BirdMark />
+          <span>Turna</span>
+        </a>
+        <p>离线学习，按时复习。</p>
+      </div>
+      <nav className="footer-links" aria-label="站点页面">
+        {footerLinks.map((link) => (
+          <a key={link.href} href={link.href}>{link.label}</a>
+        ))}
+      </nav>
       <p className="credits">基于 <a href="https://github.com/rshrc/Varnamala" target="_blank" rel="noreferrer">rshrc/Varnamala</a> 持续构建。</p>
     </footer>
   )

@@ -1,5 +1,5 @@
 import { Profiler } from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 // Vite 的 ?raw 导入：把 CSS 文件当字符串读入，绕开 node:fs 的类型依赖。
@@ -48,6 +48,24 @@ describe('Turna homepage', () => {
     expect(screen.getByRole('heading', { level: 1, name: '离线学习，按时复习。' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '查看功能' })).toHaveAttribute('href', '#features')
     expect(screen.getByRole('link', { name: '查看课程' })).toHaveAttribute('href', './curriculum.html')
+  })
+
+  it('keeps the header to 功能, 课程 and 文档', () => {
+    render(<App />)
+
+    const nav = screen.getByRole('navigation', { name: '主导航' })
+    const labels = within(nav).getAllByRole('link').map((link) => link.textContent)
+    expect(labels).toEqual(['功能', '课程', '文档'])
+    expect(within(nav).getByRole('link', { name: '功能' })).toHaveAttribute('href', '#features')
+    expect(within(nav).getByRole('link', { name: '课程' })).toHaveAttribute('href', './curriculum.html')
+    expect(within(nav).getByRole('link', { name: '文档' })).toHaveAttribute('href', './docs/')
+  })
+
+  it('links the AI feature card and the course editor from the homepage', () => {
+    render(<App />)
+
+    expect(screen.getByRole('link', { name: '了解 AI 伴学' })).toHaveAttribute('href', './ai.html')
+    expect(screen.getByRole('link', { name: '课程编辑器' })).toHaveAttribute('href', './editor.html')
   })
 
   it('opens and closes the mobile navigation accessibly', async () => {

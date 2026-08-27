@@ -10,12 +10,10 @@ import {
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
-  type NavItem,
+  siteNavigation,
 } from './shared'
 
-const navigation: readonly NavItem[] = [
-  { id: 'anki', label: 'Anki', href: '#top' },
-]
+const navigation = siteNavigation()
 
 const ankiFeatures = [
   {
@@ -181,7 +179,7 @@ function AnkiPage() {
         brandHref="./index.html"
         compact={compactHeader}
         theme={theme}
-        activeId="anki"
+        activeId=""
         menuOpen={menuOpen}
         onToggleTheme={toggleTheme}
         onToggleMenu={() => setMenuOpen((open) => !open)}

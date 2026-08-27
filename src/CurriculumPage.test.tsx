@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import CurriculumPage from './CurriculumPage'
@@ -68,5 +68,8 @@ describe('Curriculum page', () => {
 
     expect(screen.getByRole('link', { name: '返回 Turna 首页' })).toHaveAttribute('href', './index.html')
     expect(screen.getByRole('link', { name: '了解 Anki 集成' })).toHaveAttribute('href', './anki.html')
+    const nav = screen.getByRole('navigation', { name: '主导航' })
+    expect(within(nav).getByRole('link', { name: '课程' })).toHaveAttribute('href', '#top')
+    expect(within(nav).getByRole('link', { name: '文档' })).toHaveAttribute('href', './docs/')
   })
 })

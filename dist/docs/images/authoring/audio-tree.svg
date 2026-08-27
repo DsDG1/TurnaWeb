@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .folder { fill: #eef2ef; stroke: #5a6b66; stroke-width: 1; }
+    .file { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .warn { fill: #fff5e6; stroke: #c08552; stroke-width: 1; }
+    .err { fill: #fbece8; stroke: #b25a4a; stroke-width: 1; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+  </style>
+  <rect class="bg" width="760" height="460"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">音频资产目录与 manifest 校验</text>
+
+  <!-- Tree -->
+  <g transform="translate(24, 56)">
+    <text class="text" x="0" y="14" font-weight="600">assets/sounds/turkish/</text>
+
+    <g transform="translate(0, 36)">
+      <rect class="folder" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">listening/</text>
+      <text class="muted" x="120" y="11">普通人工对话录音</text>
+    </g>
+    <g transform="translate(32, 64)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">l-u1-greetings-intro.mp3</text>
+    </g>
+    <g transform="translate(32, 88)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">l-u2-directions.mp3</text>
+    </g>
+
+    <g transform="translate(0, 116)">
+      <rect class="folder" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">bgm/</text>
+      <text class="muted" x="120" y="11">听力节目背景音</text>
+    </g>
+    <g transform="translate(0, 144)">
+      <rect class="folder" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">debut/</text>
+      <text class="muted" x="120" y="11">听力课 debut 阶段</text>
+    </g>
+    <g transform="translate(0, 172)">
+      <rect class="folder" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">fin/</text>
+      <text class="muted" x="120" y="11">听力课 fin 阶段</text>
+    </g>
+
+    <g transform="translate(0, 200)">
+      <rect class="folder" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">lessons/</text>
+      <text class="muted" x="120" y="11">Lesson 专用素材</text>
+    </g>
+    <g transform="translate(32, 228)">
+      <rect class="folder" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">l-u1-greetings-intro/</text>
+    </g>
+    <g transform="translate(64, 256)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">debut.mp3</text>
+    </g>
+    <g transform="translate(64, 280)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">main.mp3</text>
+    </g>
+    <g transform="translate(64, 304)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">fin.mp3</text>
+    </g>
+  </g>
+
+  <!-- Side panel: spec -->
+  <g transform="translate(420, 56)">
+    <rect class="frame" width="316" height="200" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">格式规范</text>
+    <line x1="14" y1="30" x2="302" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <text class="muted" x="14" y="52">容器  MP3</text>
+    <text class="muted" x="14" y="70">采样率  44.1 kHz</text>
+    <text class="muted" x="14" y="88">声道  单声道优先</text>
+    <text class="muted" x="14" y="106">比特率  ≥ 128 kbps</text>
+    <text class="muted" x="14" y="124">前后静音  ≤ 0.3 s</text>
+    <text class="muted" x="14" y="142">true peak  ≤ -1 dBTP</text>
+    <text class="muted" x="14" y="160">响度差  ≤ 2 LUFS</text>
+    <text class="muted" x="14" y="178">SNR  ≥ 40 dB</text>
+  </g>
+
+  <!-- Side panel: status -->
+  <g transform="translate(420, 272)">
+    <rect class="frame" width="316" height="160" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">manifest 状态</text>
+    <line x1="14" y1="30" x2="302" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <g transform="translate(14, 44)">
+      <rect class="file" width="280" height="22" rx="2"/>
+      <text class="text" x="22" y="14">tr/listening/l-u1/main</text>
+      <text class="accent" x="270" y="14" text-anchor="end" font-weight="600">exists</text>
+    </g>
+    <g transform="translate(14, 72)">
+      <rect class="file" width="280" height="22" rx="2"/>
+      <text class="text" x="22" y="14">tr/listening/l-u2/dialogue</text>
+      <text class="accent" x="270" y="14" text-anchor="end" font-weight="600">exists</text>
+    </g>
+    <g transform="translate(14, 100)">
+      <rect class="warn" width="280" height="22" rx="2"/>
+      <text class="text" x="22" y="14">tr/lessons/l-u1/intro/fin</text>
+      <text x="270" y="14" text-anchor="end" font-weight="600" fill="#c08552">loudness -12.4 LUFS</text>
+    </g>
+    <g transform="translate(14, 128)">
+      <rect class="err" width="280" height="22" rx="2"/>
+      <text class="text" x="22" y="14">tr/lessons/l-u3/intro/main</text>
+      <text x="270" y="14" text-anchor="end" font-weight="600" fill="#b25a4a">missing</text>
+    </g>
+  </g>
+
+  <text class="muted" x="24" y="452">图 9 — 音频目录结构 + manifest 三色状态（绿 / 黄 / 红）</text>
+</svg>

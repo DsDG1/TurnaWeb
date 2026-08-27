@@ -10,12 +10,10 @@ import {
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
-  type NavItem,
+  siteNavigation,
 } from './shared'
 
-const navigation: readonly NavItem[] = [
-  { id: 'fsrs', label: 'FSRS', href: '#top' },
-]
+const navigation = siteNavigation()
 
 const memoryVariables = [
   {
@@ -132,7 +130,7 @@ function FsrsPage() {
         brandHref="./index.html"
         compact={compactHeader}
         theme={theme}
-        activeId="fsrs"
+        activeId=""
         menuOpen={menuOpen}
         onToggleTheme={toggleTheme}
         onToggleMenu={() => setMenuOpen((open) => !open)}

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import FsrsPage from './FsrsPage'
@@ -66,5 +66,6 @@ describe('FSRS algorithm page', () => {
     expect(screen.getByRole('link', { name: '返回 Turna 首页' })).toHaveAttribute('href', './index.html')
     expect(screen.getByRole('link', { name: '了解 Anki 集成' })).toHaveAttribute('href', './anki.html')
     expect(screen.getByRole('link', { name: '看看课程内容' })).toHaveAttribute('href', './curriculum.html')
+    expect(within(screen.getByRole('navigation', { name: '主导航' })).getByRole('link', { name: '文档' })).toHaveAttribute('href', './docs/')
   })
 })

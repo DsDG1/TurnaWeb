@@ -4,11 +4,15 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "node scripts/dev.mjs",
+    "dev:site": "vite",
+    "build": "tsc -b && vite build && npm run docs:build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "docs:dev": "npm --prefix docs run docs:dev",
+    "docs:build": "npm --prefix docs run docs:build",
+    "docs:preview": "npm --prefix docs run docs:preview"
   },
   "dependencies": {
     "react": "^19.2.8",

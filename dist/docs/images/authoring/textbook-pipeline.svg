@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .ok { fill: #eef2ef; stroke: #6f9991; stroke-width: 1; }
+    .warn { fill: #fff5e6; stroke: #c08552; stroke-width: 1; }
+    .err { fill: #fbece8; stroke: #b25a4a; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .arrow { stroke: #5a6b66; stroke-width: 1; fill: none; }
+    .arrow-err { stroke: #b25a4a; stroke-width: 1; fill: none; }
+    .lane { fill: none; stroke: #5a6b66; stroke-width: 0.6; stroke-dasharray: 3 4; }
+  </style>
+  <rect class="bg" width="900" height="520"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">教材导入流水线（章节抽取 → 草稿 → 导入）</text>
+
+  <!-- Phase 1: input -->
+  <g transform="translate(24, 60)">
+    <rect class="frame" width="180" height="68" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">1. 输入与提取</text>
+    <text class="muted" x="14" y="40">Markdown / PDF / Word / 图片</text>
+    <text class="muted" x="14" y="56">扫描件 PDF → 外部 OCR 后导入</text>
+  </g>
+
+  <!-- Phase 2: chop -->
+  <g transform="translate(240, 60)">
+    <rect class="frame" width="180" height="68" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">2. 切章</text>
+    <text class="muted" x="14" y="40">按 Markdown 标题层级</text>
+    <text class="muted" x="14" y="56">超长章 → 段落滑窗 + 去重合并</text>
+  </g>
+
+  <!-- Phase 3: preset -->
+  <g transform="translate(456, 60)">
+    <rect class="frame" width="180" height="68" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">3. 预设 + 并发</text>
+    <text class="muted" x="14" y="40">general | grammar</text>
+    <text class="muted" x="14" y="56">dialogue | reading</text>
+  </g>
+
+  <!-- Phase 4: extract -->
+  <g transform="translate(672, 60)">
+    <rect class="frame" width="200" height="68" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">4. 抽取</text>
+    <text class="muted" x="14" y="40">vocab / expressions</text>
+    <text class="muted" x="14" y="56">grammar_points / 对话</text>
+  </g>
+
+  <!-- Arrows phase 1-4 -->
+  <path class="arrow" d="M 204 94 L 240 94"/>
+  <polygon points="236,90 240,94 236,98" fill="#5a6b66"/>
+  <path class="arrow" d="M 420 94 L 456 94"/>
+  <polygon points="452,90 456,94 452,98" fill="#5a6b66"/>
+  <path class="arrow" d="M 636 94 L 672 94"/>
+  <polygon points="668,90 672,94 668,98" fill="#5a6b66"/>
+
+  <!-- State lights row -->
+  <g transform="translate(24, 152)">
+    <text class="text" x="0" y="14" font-size="12" font-weight="600">状态灯</text>
+
+    <g transform="translate(0, 28)">
+      <rect class="ok" width="200" height="48" rx="3"/>
+      <circle cx="20" cy="24" r="6" fill="#6f9991"/>
+      <text class="text" x="38" y="22" font-weight="600">绿 · 通过</text>
+      <text class="muted" x="38" y="38">入池 · 重新抽取</text>
+    </g>
+    <g transform="translate(220, 28)">
+      <rect class="warn" width="200" height="48" rx="3"/>
+      <circle cx="20" cy="24" r="6" fill="#c08552"/>
+      <text class="text" x="38" y="22" font-weight="600">黄 · warning</text>
+      <text class="muted" x="38" y="38">修复 · 重抽</text>
+    </g>
+    <g transform="translate(440, 28)">
+      <rect class="err" width="200" height="48" rx="3"/>
+      <circle cx="20" cy="24" r="6" fill="#b25a4a"/>
+      <text class="text" x="38" y="22" font-weight="600">红 · 失败</text>
+      <text class="muted" x="38" y="38">重试 / 仅抽词汇 / 跳过</text>
+    </g>
+    <g transform="translate(660, 28)">
+      <rect class="frame" width="200" height="48" rx="3"/>
+      <circle cx="20" cy="24" r="6" fill="#5a6b66"/>
+      <text class="text" x="38" y="22" font-weight="600">灰 · 未抽取</text>
+      <text class="muted" x="38" y="38">触发抽取</text>
+    </g>
+  </g>
+
+  <!-- Pipeline phase: 5 review -->
+  <g transform="translate(24, 252)">
+    <rect class="frame" width="280" height="120" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">5. 知识点审校</text>
+    <line x1="14" y1="30" x2="266" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="50">· 编辑 / 批量删 / AI 修复</text>
+    <text class="muted" x="14" y="66">· 按质量重抽（回灌问题）</text>
+    <text class="muted" x="14" y="82">· 失败自动级联 standard → vocab_only</text>
+    <text class="muted" x="14" y="98">· 开关 QSettings/textbook/auto_cascade</text>
+    <text class="muted" x="14" y="114">· id 仍按 ch-{slug}- 确定性生成</text>
+  </g>
+
+  <!-- Phase 6: bubble pool -->
+  <g transform="translate(328, 252)">
+    <rect class="frame" width="240" height="120" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">6. 气泡池</text>
+    <line x1="14" y1="30" x2="226" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="50">· 上限约 200</text>
+    <text class="muted" x="14" y="66">· 入池后入 AI 轨道</text>
+    <text class="muted" x="14" y="82">· Grounded 生成优先选词</text>
+    <text class="muted" x="14" y="98">· 池外新词带 new 标签</text>
+  </g>
+
+  <!-- Phase 7: orbit -->
+  <g transform="translate(592, 252)">
+    <rect class="frame" width="280" height="120" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">7. AI 轨道 + 生成</text>
+    <line x1="14" y1="30" x2="266" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="50">· 主题 / CEFR / 模板 / 单元数</text>
+    <text class="muted" x="14" y="66">· 快速（整节）或 精修（流水线）</text>
+    <text class="muted" x="14" y="82">· Ctrl+Enter 触发生成</text>
+    <text class="muted" x="14" y="98">· Esc 取消</text>
+    <text class="muted" x="14" y="114">· 草稿只到 ReadyImport 为止</text>
+  </g>
+
+  <!-- Phase 8: import -->
+  <g transform="translate(24, 396)">
+    <rect class="ok" width="848" height="92" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">8. 导入（人工确认）</text>
+    <line x1="14" y1="30" x2="834" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <g transform="translate(14, 42)">
+      <rect class="frame" width="200" height="40" rx="3"/>
+      <text class="text" x="100" y="18" text-anchor="middle">合并预览（默认）</text>
+      <text class="muted" x="100" y="32" text-anchor="middle">逐项决定 · 低风险</text>
+    </g>
+    <g transform="translate(224, 42)">
+      <rect class="frame" width="200" height="40" rx="3"/>
+      <text class="text" x="100" y="18" text-anchor="middle">跳过已存在</text>
+      <text class="muted" x="100" y="32" text-anchor="middle">保留现有 · 低风险</text>
+    </g>
+    <g transform="translate(434, 42)">
+      <rect class="frame" width="200" height="40" rx="3"/>
+      <text class="text" x="100" y="18" text-anchor="middle">覆盖已存在</text>
+      <text class="muted" x="100" y="32" text-anchor="middle">整体替换 · 高风险</text>
+    </g>
+    <g transform="translate(644, 42)">
+      <rect class="frame" width="200" height="40" rx="3"/>
+      <text class="text" x="100" y="18" text-anchor="middle">作为新 Section</text>
+      <text class="muted" x="100" y="32" text-anchor="middle">生成新 ID 并存</text>
+    </g>
+  </g>
+
+  <!-- arrows to 8 -->
+  <path class="arrow" d="M 164 372 L 164 396"/>
+  <path class="arrow" d="M 448 372 L 448 396"/>
+  <path class="arrow" d="M 732 372 L 732 396"/>
+
+  <text class="muted" x="24" y="512">图 5 — 教材导入：状态灯 / 审校 / 气泡 / 轨道 / 导入策略</text>
+</svg>

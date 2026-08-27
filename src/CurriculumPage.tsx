@@ -10,12 +10,10 @@ import {
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
-  type NavItem,
+  siteNavigation,
 } from './shared'
 
-const navigation: readonly NavItem[] = [
-  { id: 'curriculum', label: '课程', href: '#top' },
-]
+const navigation = siteNavigation('curriculum')
 
 const cefrLevels = [
   { level: 'A1', label: '入门', sections: 'Section 1 – 2' },

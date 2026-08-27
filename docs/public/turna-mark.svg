@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- 极简鹤形 / Turna = 土耳其语“鹤” -->
+  <path
+    d="M16 50 C20 40 28 30 40 24 C48 20 54 18 56 14 M40 24 C36 28 32 32 30 38 M30 38 C30 42 32 46 36 48"
+    stroke="#6f9991"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="55" cy="14" r="1.6" fill="#6f9991" />
+</svg>

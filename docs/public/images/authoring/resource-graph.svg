@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="13">
+  <style>
+    .bg { fill: #fafaf7; }
+    .resource { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .lesson { fill: #eef2ef; stroke: #5a6b66; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .edge { stroke: #5a6b66; stroke-width: 1; fill: none; }
+    .edge-deny { stroke: #b25a4a; stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .warn { fill: #b25a4a; }
+  </style>
+  <rect class="bg" width="800" height="460"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">引用图：资源 → Lesson（单向）</text>
+  <text class="muted" x="280" y="28" font-size="11">资源不引用 Lesson · 反向引用会被 validate 拒绝</text>
+
+  <!-- Resources column -->
+  <g transform="translate(40, 64)">
+    <rect class="resource" width="220" height="56" rx="4"/>
+    <rect class="accent" width="3" height="56"/>
+    <text class="text" x="14" y="22" font-weight="600">vocab.json</text>
+    <text class="muted" x="14" y="40">词汇 · items[].id</text>
+    <text class="muted" x="14" y="54">w-merhaba, w-selam …</text>
+  </g>
+  <g transform="translate(40, 144)">
+    <rect class="resource" width="220" height="56" rx="4"/>
+    <rect class="accent" width="3" height="56"/>
+    <text class="text" x="14" y="22" font-weight="600">expressions.json</text>
+    <text class="muted" x="14" y="40">固定表达 · 独立 version</text>
+    <text class="muted" x="14" y="54">e-self-intro …</text>
+  </g>
+  <g transform="translate(40, 224)">
+    <rect class="resource" width="220" height="56" rx="4"/>
+    <rect class="accent" width="3" height="56"/>
+    <text class="text" x="14" y="22" font-weight="600">grammar_points.json</text>
+    <text class="muted" x="14" y="40">语法点 · linkedVocabIds</text>
+    <text class="muted" x="14" y="54">g-greeting-particles …</text>
+  </g>
+
+  <!-- Lesson / interaction column -->
+  <g transform="translate(440, 96)">
+    <rect class="lesson" width="320" height="220" rx="4"/>
+    <rect class="accent" width="3" height="220"/>
+    <text class="text" x="14" y="22" font-weight="600">Lesson</text>
+    <text class="muted" x="14" y="40">l-u1-greetings-intro</text>
+
+    <line x1="14" y1="52" x2="306" y2="52" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="text" x="14" y="72">content.interactions[]</text>
+    <text class="muted" x="14" y="92">  · wordId      → vocab</text>
+    <text class="muted" x="14" y="110">  · expressionId → expressions</text>
+    <text class="text" x="14" y="134">linkedGrammarPointIds</text>
+    <text class="muted" x="14" y="152">  → grammar_points</text>
+
+    <line x1="14" y1="166" x2="306" y2="166" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="186">交互题型：showWord · multipleChoice</text>
+    <text class="muted" x="14" y="202">fillBlank · listenAndPick · …</text>
+    <text class="muted" x="14" y="218">runtimeType 必须已注册</text>
+  </g>
+
+  <!-- Arrows (resource → lesson) -->
+  <path class="edge" d="M 260 92 C 340 92, 360 132, 440 152"/>
+  <polygon points="436,148 446,152 436,156" fill="#5a6b66"/>
+  <path class="edge" d="M 260 172 C 340 172, 360 172, 440 196"/>
+  <polygon points="436,192 446,196 436,200" fill="#5a6b66"/>
+  <path class="edge" d="M 260 252 C 340 252, 360 230, 440 220"/>
+  <polygon points="436,216 446,220 436,224" fill="#5a6b66"/>
+
+  <!-- Reverse arrows (denied) -->
+  <path class="edge-deny" d="M 440 132 C 360 132, 320 102, 260 86"/>
+  <text class="warn" x="280" y="78" font-size="11">拒绝反向引用</text>
+  <path class="edge-deny" d="M 440 168 C 360 168, 320 158, 260 168"/>
+  <text class="warn" x="280" y="158" font-size="11">拒绝反向引用</text>
+  <path class="edge-deny" d="M 440 210 C 360 210, 320 220, 260 244"/>
+  <text class="warn" x="280" y="252" font-size="11">拒绝反向引用</text>
+
+  <!-- Downstream readers -->
+  <g transform="translate(40, 332)">
+    <rect class="resource" width="720" height="92" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">下游消费方</text>
+    <line x1="14" y1="30" x2="706" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <text class="text" x="14" y="52">总览 / 覆盖率统计</text>
+    <text class="muted" x="14" y="68">vocab 引用数 · 语法点覆盖度 · 跨表重复检测</text>
+
+    <text class="text" x="380" y="52">客户端 reseed</text>
+    <text class="muted" x="380" y="68">version 变化时重建 SQLite 缓存</text>
+  </g>
+
+  <text class="muted" x="24" y="448">图 3 — 资源与 Lesson 的引用图（反向引用被拒绝）</text>
+</svg>

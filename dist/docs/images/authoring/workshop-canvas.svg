@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .window { fill: #ffffff; stroke: #1a2421; stroke-width: 1.2; }
+    .toolbar { fill: #1a2421; }
+    .toolbar-text { fill: #fafaf7; }
+    .col-left { fill: #f3f6f4; stroke: #5a6b66; stroke-width: 1; }
+    .col-mid { fill: #eef2ef; stroke: #6f9991; stroke-width: 1.2; }
+    .col-right { fill: #f3f6f4; stroke: #5a6b66; stroke-width: 1; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .accent { fill: #6f9991; }
+    .pill { fill: #6f9991; }
+    .bubble { fill: #ffffff; stroke: #6f9991; stroke-width: 1; }
+    .statusbar { fill: #1a2421; }
+    .status-text { fill: #6f9991; }
+  </style>
+  <rect class="bg" width="900" height="520"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">课程工坊 · 创意画布三栏布局</text>
+
+  <g transform="translate(24, 48)">
+    <rect class="window" width="852" height="436" rx="6"/>
+
+    <!-- Toolbar + checklist -->
+    <g>
+      <rect class="toolbar" width="852" height="40" rx="6"/>
+      <rect class="toolbar" y="34" width="852" height="6"/>
+      <text class="toolbar-text" x="14" y="25" font-weight="600">课程工坊</text>
+      <text class="toolbar-text" x="84" y="25" font-size="11">项目：土耳其语初级教程  ·  Chinese → Turkish</text>
+
+      <g transform="translate(520, 10)">
+        <text class="toolbar-text" x="0" y="16" font-size="11">✓ 素材</text>
+        <text class="toolbar-text" x="68" y="16" font-size="11">✓ 知识</text>
+        <text class="toolbar-text" x="120" y="16" font-size="11">○ 草稿</text>
+        <text class="toolbar-text" x="180" y="16" font-size="11">○ 导入</text>
+      </g>
+    </g>
+
+    <!-- 3 columns -->
+    <g transform="translate(8, 48)">
+      <rect class="col-left" width="270" height="340"/>
+      <text class="text" x="12" y="22" font-weight="600">左栏 · 教材 / 知识 / 气泡</text>
+      <line x1="12" y1="30" x2="258" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+      <g transform="translate(12, 44)">
+        <text class="muted" x="0" y="14">教材与章节</text>
+      </g>
+      <g transform="translate(12, 64)">
+        <text class="muted" x="0" y="14">知识点审校</text>
+        <text class="accent" x="86" y="14">●</text>
+        <text class="muted" x="98" y="14">12 / 15</text>
+      </g>
+      <g transform="translate(12, 84)">
+        <text class="muted" x="0" y="14">气泡池</text>
+        <text class="muted" x="60" y="14">87 / 200</text>
+      </g>
+
+      <g transform="translate(12, 116)">
+        <rect class="bubble" width="246" height="22" rx="11"/>
+        <text class="text" x="14" y="15">merhaba · 你好</text>
+      </g>
+      <g transform="translate(12, 144)">
+        <rect class="bubble" width="246" height="22" rx="11"/>
+        <text class="text" x="14" y="15">selam · 你好（口语）</text>
+      </g>
+      <g transform="translate(12, 172)">
+        <rect class="bubble" width="246" height="22" rx="11"/>
+        <text class="text" x="14" y="15">hoşça kal · 再见</text>
+      </g>
+      <g transform="translate(12, 200)">
+        <rect class="bubble" width="246" height="22" rx="11"/>
+        <text class="text" x="14" y="15">teşekkürler · 谢谢</text>
+      </g>
+      <g transform="translate(12, 228)">
+        <rect class="bubble" width="246" height="22" rx="11"/>
+        <text class="text" x="14" y="15">Tanıştığımıza memnun oldum</text>
+      </g>
+
+      <g transform="translate(12, 268)">
+        <text class="muted" x="0" y="14">状态灯</text>
+      </g>
+      <g transform="translate(12, 288)">
+        <text class="accent" x="0" y="14">●</text>
+        <text class="muted" x="14" y="14">ch-1: 12 / 抽全通过</text>
+      </g>
+      <g transform="translate(12, 308)">
+        <text fill="#c08552" x="0" y="14">●</text>
+        <text class="muted" x="14" y="14">ch-2: 8 / 5 空翻译</text>
+      </g>
+    </g>
+
+    <!-- Middle (AI orbit) -->
+    <g transform="translate(286, 48)">
+      <rect class="col-mid" width="280" height="340"/>
+      <text class="text" x="12" y="22" font-weight="600">中栏 · AI 轨道</text>
+      <line x1="12" y1="30" x2="268" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+      <g transform="translate(12, 44)">
+        <text class="muted" x="0" y="14">主题</text>
+        <rect class="window" x="60" y="0" width="200" height="22" rx="3"/>
+        <text class="text" x="70" y="15">日常问候与介绍</text>
+      </g>
+      <g transform="translate(12, 72)">
+        <text class="muted" x="0" y="14">CEFR</text>
+        <rect class="pill" x="60" y="0" width="60" height="22" rx="3"/>
+        <text class="toolbar-text" x="90" y="15" text-anchor="middle" font-weight="600">A1</text>
+      </g>
+      <g transform="translate(12, 100)">
+        <text class="muted" x="0" y="14">模板</text>
+        <rect class="pill" x="60" y="0" width="80" height="22" rx="3"/>
+        <text class="toolbar-text" x="100" y="15" text-anchor="middle" font-weight="600">intro</text>
+      </g>
+      <g transform="translate(12, 128)">
+        <text class="muted" x="0" y="14">单元</text>
+        <text class="muted" x="180" y="14">3 单元 × 4 课时</text>
+      </g>
+
+      <g transform="translate(12, 168)">
+        <text class="muted" x="0" y="14">聚焦</text>
+        <text class="text" x="0" y="34">资源池：5 词 · 1 表达 · 0 语法</text>
+      </g>
+
+      <g transform="translate(110, 220)">
+        <circle r="48" fill="#6f9991"/>
+        <text class="toolbar-text" x="0" y="-4" text-anchor="middle" font-size="11" font-weight="600">AI</text>
+        <text class="toolbar-text" x="0" y="14" text-anchor="middle" font-size="14" font-weight="600">核心</text>
+        <text class="toolbar-text" x="0" y="30" text-anchor="middle" font-size="10">Ctrl+Enter</text>
+      </g>
+
+      <g transform="translate(12, 300)">
+        <text class="muted" x="0" y="14">模式</text>
+        <text class="accent" x="60" y="14" font-weight="600">精修（流水线）</text>
+      </g>
+    </g>
+
+    <!-- Right (outline / import) -->
+    <g transform="translate(574, 48)">
+      <rect class="col-right" width="270" height="340"/>
+      <text class="text" x="12" y="22" font-weight="600">右栏 · 结构大纲 / 导入</text>
+      <line x1="12" y1="30" x2="258" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+      <g transform="translate(12, 44)">
+        <text class="muted" x="0" y="14">tab</text>
+        <text class="accent" x="34" y="14" font-weight="600">结构大纲</text>
+        <text class="muted" x="106" y="14">·</text>
+        <text class="muted" x="120" y="14">对话与高级</text>
+        <text class="muted" x="200" y="14">·</text>
+        <text class="muted" x="214" y="14">章节导入</text>
+      </g>
+
+      <g transform="translate(12, 76)">
+        <text class="text" x="0" y="14">▾ u-1 问候与介绍</text>
+      </g>
+      <g transform="translate(28, 96)">
+        <text class="text" x="0" y="14">l-…-intro</text>
+        <text class="accent" x="100" y="14">●</text>
+        <text class="muted" x="116" y="14">池内 100%</text>
+      </g>
+      <g transform="translate(28, 116)">
+        <text class="text" x="0" y="14">l-…-practice</text>
+        <text class="accent" x="100" y="14">●</text>
+        <text class="muted" x="116" y="14">池内 100%</text>
+      </g>
+      <g transform="translate(28, 136)">
+        <text class="text" x="0" y="14">l-…-listening</text>
+        <text fill="#c08552" x="100" y="14">●</text>
+        <text class="muted" x="116" y="14">池内 80%</text>
+      </g>
+
+      <g transform="translate(12, 168)">
+        <text class="text" x="0" y="14">▸ u-2 数字与时间</text>
+      </g>
+      <g transform="translate(12, 188)">
+        <text class="text" x="0" y="14">▸ u-3 自我介绍</text>
+      </g>
+
+      <g transform="translate(12, 224)">
+        <rect class="pill" width="58" height="22" rx="3"/>
+        <text class="toolbar-text" x="29" y="15" text-anchor="middle" font-size="11" font-weight="600">试做</text>
+        <rect class="frame" x="68" y="0" width="58" height="22" rx="3"/>
+        <text class="text" x="97" y="15" text-anchor="middle" font-size="11">diff</text>
+        <rect class="frame" x="136" y="0" width="58" height="22" rx="3"/>
+        <text class="text" x="165" y="15" text-anchor="middle" font-size="11">修复</text>
+        <rect class="pill" x="204" y="0" width="58" height="22" rx="3"/>
+        <text class="toolbar-text" x="233" y="15" text-anchor="middle" font-size="11" font-weight="600">导入</text>
+      </g>
+
+      <g transform="translate(12, 268)">
+        <text class="text" x="0" y="14" font-size="11" font-weight="600">导入策略</text>
+      </g>
+      <g transform="translate(12, 288)">
+        <text class="muted" x="0" y="14">●</text>
+        <text class="text" x="14" y="14">合并预览（默认）</text>
+      </g>
+      <g transform="translate(12, 308)">
+        <text class="muted" x="0" y="14">○</text>
+        <text class="text" x="14" y="14">跳过已存在</text>
+      </g>
+      <g transform="translate(140, 288)">
+        <text class="muted" x="0" y="14">○</text>
+        <text class="text" x="14" y="14">覆盖</text>
+      </g>
+      <g transform="translate(140, 308)">
+        <text class="muted" x="0" y="14">○</text>
+        <text class="text" x="14" y="14">作为新 Section</text>
+      </g>
+    </g>
+
+    <!-- Status bar -->
+    <g transform="translate(0, 396)">
+      <rect class="statusbar" width="852" height="40" rx="6"/>
+      <rect class="statusbar" y="0" width="852" height="6"/>
+      <text class="status-text" x="14" y="26" font-size="11">定位到课程树</text>
+      <text class="status-text" x="118" y="26" font-size="11">· 草稿就绪</text>
+      <text class="status-text" x="200" y="26" font-size="11">· tokens 1,240</text>
+      <text class="status-text" x="298" y="26" font-size="11">· 自动保存 · 取消任务</text>
+    </g>
+  </g>
+
+  <text class="muted" x="24" y="512">图 11 — 课程工坊三栏：左 教材 / 中 AI 轨道 / 右 结构大纲 + 导入</text>
+</svg>

@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .lane { fill: #ffffff; stroke: #5a6b66; stroke-width: 0.6; }
+    .lane-head { fill: #1a2421; }
+    .step { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .step-ok { fill: #eef2ef; stroke: #6f9991; stroke-width: 1; }
+    .step-warn { fill: #fff5e6; stroke: #c08552; stroke-width: 1; }
+    .step-err { fill: #fbece8; stroke: #b25a4a; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .text { fill: #1a2421; }
+    .text-light { fill: #fafaf7; }
+    .muted { fill: #5a6b66; }
+    .arrow { stroke: #5a6b66; stroke-width: 1; fill: none; }
+    .arrow-err { stroke: #b25a4a; stroke-width: 1; fill: none; }
+  </style>
+  <rect class="bg" width="880" height="480"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">GUI 保存协议与回滚时序</text>
+
+  <!-- Lanes -->
+  <g>
+    <rect class="lane-head" x="24" y="48" width="120" height="32" rx="2"/>
+    <text class="text-light" x="84" y="68" text-anchor="middle" font-weight="600">Author</text>
+
+    <rect class="lane" x="24" y="80" width="120" height="320" rx="2"/>
+
+    <rect class="lane-head" x="144" y="48" width="200" height="32" rx="2"/>
+    <text class="text-light" x="244" y="68" text-anchor="middle" font-weight="600">CourseAdapter</text>
+
+    <rect class="lane" x="144" y="80" width="200" height="320" rx="2"/>
+
+    <rect class="lane-head" x="344" y="48" width="200" height="32" rx="2"/>
+    <text class="text-light" x="444" y="68" text-anchor="middle" font-weight="600">course_cli</text>
+
+    <rect class="lane" x="344" y="80" width="200" height="320" rx="2"/>
+
+    <rect class="lane-head" x="544" y="48" width="312" height="32" rx="2"/>
+    <text class="text-light" x="700" y="68" text-anchor="middle" font-weight="600">磁盘 JSON</text>
+
+    <rect class="lane" x="544" y="80" width="312" height="320" rx="2"/>
+  </g>
+
+  <!-- Author click -->
+  <g transform="translate(44, 96)">
+    <rect class="step" width="80" height="34" rx="3"/>
+    <text class="text" x="40" y="22" text-anchor="middle">Ctrl+S</text>
+  </g>
+
+  <!-- arrow 1 -->
+  <path class="arrow" d="M 124 113 L 144 113"/>
+  <polygon points="140,109 144,113 140,117" fill="#5a6b66"/>
+
+  <!-- serialize -->
+  <g transform="translate(168, 96)">
+    <rect class="step" width="152" height="34" rx="3"/>
+    <text class="text" x="76" y="22" text-anchor="middle">序列化内存编辑 → JSON 草稿</text>
+  </g>
+
+  <!-- arrow 2 -->
+  <path class="arrow" d="M 320 113 L 344 113"/>
+  <polygon points="340,109 344,113 340,117" fill="#5a6b66"/>
+
+  <!-- atomic write to disk -->
+  <g transform="translate(560, 96)">
+    <rect class="step" width="280" height="34" rx="3"/>
+    <text class="text" x="140" y="22" text-anchor="middle">临时目录原子写盘 · 暂存草稿</text>
+  </g>
+
+  <!-- arrow back to CLI -->
+  <path class="arrow" d="M 560 130 L 544 130"/>
+  <polygon points="548,126 544,130 548,134" fill="#5a6b66"/>
+
+  <!-- validate -->
+  <g transform="translate(368, 144)">
+    <rect class="step step-ok" width="152" height="40" rx="3"/>
+    <text class="text" x="76" y="20" text-anchor="middle" font-weight="600">validate</text>
+    <text class="muted" x="76" y="34" text-anchor="middle">退出码 0 = pass</text>
+  </g>
+
+  <!-- lint -->
+  <g transform="translate(368, 200)">
+    <rect class="step step-warn" width="152" height="40" rx="3"/>
+    <text class="text" x="76" y="20" text-anchor="middle" font-weight="600">lint</text>
+    <text class="muted" x="76" y="34" text-anchor="middle">warning 标黄 · 不阻断</text>
+  </g>
+
+  <!-- error branch back to adapter -->
+  <path class="arrow-err" d="M 368 164 L 344 164 L 344 232 L 320 232"/>
+  <polygon points="324,228 320,232 324,236" fill="#b25a4a"/>
+  <text class="muted" x="320" y="156" font-size="10">error</text>
+
+  <!-- rollback -->
+  <g transform="translate(168, 216)">
+    <rect class="step step-err" width="152" height="40" rx="3"/>
+    <text class="text" x="76" y="20" text-anchor="middle" font-weight="600">回滚内存 + 写回原文件</text>
+    <text class="muted" x="76" y="34" text-anchor="middle">问题节点红角标</text>
+  </g>
+
+  <!-- rollback arrow to disk -->
+  <path class="arrow-err" d="M 320 232 L 560 232"/>
+  <polygon points="556,228 560,232 556,236" fill="#b25a4a"/>
+  <text class="muted" x="380" y="226" font-size="10">恢复上一个合法版本</text>
+
+  <!-- ok branch -->
+  <path class="arrow" d="M 520 184 L 544 184"/>
+  <polygon points="540,180 544,184 540,188" fill="#5a6b66"/>
+
+  <!-- replace file -->
+  <g transform="translate(560, 170)">
+    <rect class="step step-ok" width="280" height="40" rx="3"/>
+    <text class="text" x="140" y="20" text-anchor="middle" font-weight="600">替换原文件</text>
+    <text class="muted" x="140" y="34" text-anchor="middle">index.json.version 视策略递增</text>
+  </g>
+
+  <!-- notify author -->
+  <path class="arrow" d="M 560 184 L 320 184 L 320 268"/>
+  <polygon points="316,264 320,268 324,264" fill="#5a6b66"/>
+
+  <g transform="translate(168, 252)">
+    <rect class="step step-ok" width="152" height="40" rx="3"/>
+    <text class="text" x="76" y="20" text-anchor="middle" font-weight="600">状态栏 · 已保存</text>
+    <text class="muted" x="76" y="34" text-anchor="middle">课程树红角标清除</text>
+  </g>
+
+  <path class="arrow" d="M 168 272 L 144 272 L 144 116 L 124 116"/>
+  <polygon points="128,112 124,116 128,120" fill="#5a6b66"/>
+
+  <g transform="translate(44, 264)">
+    <rect class="step step-ok" width="80" height="40" rx="3"/>
+    <text class="text" x="40" y="20" text-anchor="middle" font-weight="600">作者看到</text>
+    <text class="muted" x="40" y="34" text-anchor="middle">状态变更</text>
+  </g>
+
+  <!-- Bottom: guarantees -->
+  <g transform="translate(24, 332)">
+    <rect class="lane" width="832" height="124" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">回滚保证</text>
+    <line x1="14" y1="30" x2="818" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+    <text class="muted" x="14" y="50">· 磁盘文件保持失败前的最后一个合法版本</text>
+    <text class="muted" x="14" y="68">· 内存编辑状态完整保留，可继续修改后重试</text>
+    <text class="muted" x="14" y="86">· 状态栏显示「校验失败，已回滚」</text>
+    <text class="muted" x="14" y="104">· 问题以红角标 + 列表呈现，JSON Pointer 定位</text>
+  </g>
+
+  <text class="muted" x="24" y="472">图 4 — 保存协议与回滚时序（Author / Adapter / CLI / 磁盘）</text>
+</svg>

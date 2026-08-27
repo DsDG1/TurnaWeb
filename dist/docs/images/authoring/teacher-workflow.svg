@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .ok { fill: #eef2ef; stroke: #6f9991; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .text-light { fill: #fafaf7; }
+    .arrow { stroke: #5a6b66; stroke-width: 1; fill: none; }
+    .arrow-err { stroke: #b25a4a; stroke-width: 1; fill: none; }
+  </style>
+  <rect class="bg" width="880" height="480"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">教师产出一节 intro 课：六步流程</text>
+
+  <!-- Steps -->
+  <g transform="translate(24, 60)">
+    <g transform="translate(0, 0)">
+      <rect class="accent" width="40" height="40" rx="3"/>
+      <text class="text-light" x="20" y="26" text-anchor="middle" font-weight="600">1</text>
+      <text class="text" x="50" y="20" font-weight="600">打开本地课程目录</text>
+      <text class="muted" x="50" y="36">状态栏确认「已加载」</text>
+    </g>
+
+    <g transform="translate(0, 64)">
+      <rect class="accent" width="40" height="40" rx="3"/>
+      <text class="text-light" x="20" y="26" text-anchor="middle" font-weight="600">2</text>
+      <text class="text" x="50" y="20" font-weight="600">右键 Unit → 新增 Lesson</text>
+      <text class="muted" x="50" y="36">选 template=intro（自动写入缺省 content）</text>
+    </g>
+
+    <g transform="translate(0, 128)">
+      <rect class="accent" width="40" height="40" rx="3"/>
+      <text class="text-light" x="20" y="26" text-anchor="middle" font-weight="600">3</text>
+      <text class="text" x="50" y="20" font-weight="600">填写 name / description / prereq</text>
+      <text class="muted" x="50" y="36">id 由系统生成，发布后不可变</text>
+    </g>
+
+    <g transform="translate(0, 192)">
+      <rect class="accent" width="40" height="40" rx="3"/>
+      <text class="text-light" x="20" y="26" text-anchor="middle" font-weight="600">4</text>
+      <text class="text" x="50" y="20" font-weight="600">从 vocab.json 选词 + 填题型</text>
+      <text class="muted" x="50" y="36">干扰项须可解释 · 不得复制另一份词表</text>
+    </g>
+
+    <g transform="translate(0, 256)">
+      <rect class="accent" width="40" height="40" rx="3"/>
+      <text class="text-light" x="20" y="26" text-anchor="middle" font-weight="600">5</text>
+      <text class="text" x="50" y="20" font-weight="600">保存（Ctrl+S）→ 校验</text>
+      <text class="muted" x="50" y="36">失败回滚，问题节点红角标</text>
+    </g>
+
+    <g transform="translate(0, 320)">
+      <rect class="accent" width="40" height="40" rx="3"/>
+      <text class="text-light" x="20" y="26" text-anchor="middle" font-weight="600">6</text>
+      <text class="text" x="50" y="20" font-weight="600">教师模式试做 · 资源库联检</text>
+      <text class="muted" x="50" y="36">至少 1 次完整通过</text>
+    </g>
+  </g>
+
+  <!-- Decision branches -->
+  <g transform="translate(420, 60)">
+    <rect class="frame" width="436" height="380" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">分支与回退</text>
+    <line x1="14" y1="30" x2="422" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <!-- save ok -->
+    <g transform="translate(14, 48)">
+      <rect class="ok" width="200" height="48" rx="3"/>
+      <text class="text" x="100" y="20" text-anchor="middle" font-weight="600">保存成功</text>
+      <text class="muted" x="100" y="36" text-anchor="middle">磁盘写盘 · 状态栏「已保存」</text>
+    </g>
+    <g transform="translate(220, 48)">
+      <rect class="ok" width="200" height="48" rx="3"/>
+      <text class="text" x="100" y="20" text-anchor="middle" font-weight="600">教师试做通过</text>
+      <text class="muted" x="100" y="36" text-anchor="middle">移交发布</text>
+    </g>
+
+    <path class="arrow" d="M 214 72 L 220 72"/>
+    <polygon points="216,68 220,72 216,76" fill="#5a6b66"/>
+
+    <!-- save error -->
+    <g transform="translate(14, 120)">
+      <rect class="frame" width="200" height="48" rx="3" stroke="#b25a4a" stroke-width="1.2" fill="#fbece8"/>
+      <text class="text" x="100" y="20" text-anchor="middle" font-weight="600">保存失败</text>
+      <text class="muted" x="100" y="36" text-anchor="middle">「校验失败，已回滚」</text>
+    </g>
+    <g transform="translate(220, 120)">
+      <rect class="frame" width="200" height="48" rx="3"/>
+      <text class="text" x="100" y="20" text-anchor="middle" font-weight="600">红角标 + JSON Pointer</text>
+      <text class="muted" x="100" y="36" text-anchor="middle">定位 → 修复 → 重新保存</text>
+    </g>
+
+    <path class="arrow-err" d="M 14 144 L 14 240 L 220 240 L 220 168"/>
+    <polygon points="216,164 220,168 224,164" fill="#b25a4a"/>
+    <text x="80" y="232" font-size="11" fill="#b25a4a">不手动改 JSON 绕过校验</text>
+
+    <!-- test fail -->
+    <g transform="translate(14, 192)">
+      <rect class="frame" width="200" height="48" rx="3" stroke="#c08552" stroke-width="1.2" fill="#fff5e6"/>
+      <text class="text" x="100" y="20" text-anchor="middle" font-weight="600">教师试做失败</text>
+      <text class="muted" x="100" y="36" text-anchor="middle">题目 / 音频 / 先修异常</text>
+    </g>
+    <g transform="translate(220, 192)">
+      <rect class="frame" width="200" height="48" rx="3"/>
+      <text class="text" x="100" y="20" text-anchor="middle" font-weight="600">回到步骤 4 调整</text>
+      <text class="muted" x="100" y="36" text-anchor="middle">改题型 / 改词 / 改 prereq</text>
+    </g>
+
+    <path class="arrow" d="M 214 216 L 220 216"/>
+    <polygon points="216,212 220,216 216,220" fill="#5a6b66"/>
+
+    <!-- common constraints -->
+    <g transform="translate(14, 264)">
+      <text class="text" x="0" y="14" font-size="11" font-weight="600">硬性约束</text>
+      <line x1="0" y1="20" x2="408" y2="20" stroke="#5a6b66" stroke-width="0.4"/>
+      <text class="muted" x="0" y="40">· 词汇必须来自 vocab.json，不复制另一份</text>
+      <text class="muted" x="0" y="58">· prerequisiteLessonIds 只在同 Unit 内</text>
+      <text class="muted" x="0" y="76">· 听力课必须有 audioAsset；先做 intro / practice</text>
+      <text class="muted" x="0" y="94">· 删除资源前扫描引用；引用数 &gt; 0 阻断</text>
+    </g>
+  </g>
+
+  <text class="muted" x="24" y="472">图 10 — 教师产出一节 intro 课的六步流程与回退路径</text>
+</svg>

@@ -4,4 +4,9 @@ coverage
 .DS_Store
 .mimosa
 .zcode
+tmp-editor-shots
 
+# VitePress docs site
+docs/node_modules
+docs/.vitepress/dist
+docs/.vitepress/cache

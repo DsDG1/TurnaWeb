@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="13">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: none; stroke: #5a6b66; stroke-width: 1; }
+    .folder { fill: #eef2ef; stroke: #5a6b66; stroke-width: 1; }
+    .file { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .label { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .legend { fill: #1a2421; font-size: 12px; }
+  </style>
+  <rect class="bg" width="760" height="360"/>
+
+  <text class="label" x="24" y="28" font-size="14" font-weight="600">assets/courses/turkish/</text>
+  <line x1="24" y1="36" x2="240" y2="36" stroke="#5a6b66" stroke-width="0.6"/>
+
+  <!-- index.json -->
+  <g transform="translate(24, 56)">
+    <rect class="file" width="14" height="14" rx="2"/>
+    <rect class="accent" x="2" y="0" width="3" height="14"/>
+    <text class="label" x="24" y="11">index.json</text>
+    <text class="muted" x="160" y="11">version, language, sections[]</text>
+  </g>
+
+  <!-- vocab.json -->
+  <g transform="translate(24, 84)">
+    <rect class="file" width="14" height="14" rx="2"/>
+    <rect class="accent" x="2" y="0" width="3" height="14"/>
+    <text class="label" x="24" y="11">vocab.json</text>
+    <text class="muted" x="160" y="11">词汇</text>
+  </g>
+
+  <!-- expressions.json -->
+  <g transform="translate(24, 112)">
+    <rect class="file" width="14" height="14" rx="2"/>
+    <rect class="accent" x="2" y="0" width="3" height="14"/>
+    <text class="label" x="24" y="11">expressions.json</text>
+    <text class="muted" x="160" y="11">固定表达 (独立 version)</text>
+  </g>
+
+  <!-- grammar_points.json -->
+  <g transform="translate(24, 140)">
+    <rect class="file" width="14" height="14" rx="2"/>
+    <rect class="accent" x="2" y="0" width="3" height="14"/>
+    <text class="label" x="24" y="11">grammar_points.json</text>
+    <text class="muted" x="160" y="11">语法点</text>
+  </g>
+
+  <!-- sections/ folder -->
+  <g transform="translate(24, 176)">
+    <rect class="folder" width="14" height="14" rx="2"/>
+    <text class="label" x="24" y="11">sections/</text>
+    <text class="muted" x="160" y="11">Section → Unit → Lesson 实体</text>
+  </g>
+
+  <!-- section files -->
+  <g transform="translate(56, 204)">
+    <line x1="-12" y1="-7" x2="0" y2="0" stroke="#5a6b66" stroke-width="0.8"/>
+    <rect class="file" width="14" height="14" rx="2"/>
+    <text class="label" x="24" y="11">section1.json</text>
+  </g>
+  <g transform="translate(56, 232)">
+    <line x1="-12" y1="-7" x2="0" y2="0" stroke="#5a6b66" stroke-width="0.8"/>
+    <rect class="file" width="14" height="14" rx="2"/>
+    <text class="label" x="24" y="11">section2.json</text>
+  </g>
+  <g transform="translate(56, 260)">
+    <line x1="-12" y1="-7" x2="0" y2="0" stroke="#5a6b66" stroke-width="0.8"/>
+    <rect class="file" width="14" height="14" rx="2"/>
+    <text class="label" x="24" y="11">sectionN.json</text>
+  </g>
+
+  <!-- side panel: rules -->
+  <g transform="translate(440, 56)">
+    <rect class="frame" width="296" height="280" rx="4"/>
+    <text class="label" x="14" y="22" font-size="12" font-weight="600">规模上限（contract）</text>
+    <line x1="14" y1="30" x2="282" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <text class="label" x="14" y="56">每 Section 的 Unit</text>
+    <text class="muted" x="240" y="56">≤ 60</text>
+    <line x1="14" y1="64" x2="282" y2="64" stroke="#5a6b66" stroke-width="0.3" stroke-dasharray="2 3"/>
+
+    <text class="label" x="14" y="86">每 Unit 的 Lesson</text>
+    <text class="muted" x="240" y="86">≤ 40</text>
+    <line x1="14" y1="94" x2="282" y2="94" stroke="#5a6b66" stroke-width="0.3" stroke-dasharray="2 3"/>
+
+    <text class="label" x="14" y="116">index.json.version</text>
+    <text class="muted" x="240" y="116">严格递增</text>
+    <line x1="14" y1="124" x2="282" y2="124" stroke="#5a6b66" stroke-width="0.3" stroke-dasharray="2 3"/>
+
+    <text class="label" x="14" y="146">expressions.json.version</text>
+    <text class="muted" x="240" y="146">独立递增</text>
+    <line x1="14" y1="154" x2="282" y2="154" stroke="#5a6b66" stroke-width="0.3" stroke-dasharray="2 3"/>
+
+    <text class="label" x="14" y="186" font-size="12" font-weight="600">引用方向</text>
+    <line x1="14" y1="194" x2="282" y2="194" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <text class="label" x="14" y="218">Lesson → resources（单向）</text>
+    <text class="label" x="14" y="240">resources → 不引用 Lesson</text>
+    <text class="label" x="14" y="262">SQLite 仅为运行期缓存</text>
+  </g>
+
+  <text class="muted" x="24" y="340">图 1 — 课程目录结构与上限契约</text>
+</svg>

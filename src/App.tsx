@@ -11,18 +11,12 @@ import {
   usePointerSurface,
   useRevealOnScroll,
   useSiteTheme,
-  type NavItem,
+  siteNavigation,
 } from './shared'
 
 export type PreviewKey = 'course' | 'review' | 'ai'
 
-const navigation: readonly NavItem[] = [
-  { id: 'features', label: '功能', href: '#features' },
-  { id: 'preview', label: '预览', href: '#preview' },
-  { id: 'audience', label: '适合谁', href: '#audience' },
-  { id: 'curriculum', label: '课程', href: './curriculum.html' },
-  { id: 'anki', label: 'Anki', href: './anki.html' },
-]
+const navigation = siteNavigation('home')
 
 type HomepageFeature = {
   icon: string
@@ -61,6 +55,8 @@ const features: HomepageFeature[] = [
     index: '04',
     title: '按当前进度提供 AI 答疑',
     description: '根据当前课程和错题提供讲解；关闭 AI 也不影响学习和复习。',
+    link: './ai.html',
+    linkLabel: '了解 AI 伴学',
   },
 ]
 
@@ -331,9 +327,14 @@ function App() {
               <p className="eyebrow">项目状态</p>
               <h2 id="open-source-title">Turna 仍在持续开发。</h2>
               <p>代码仓库上线后，你可以查看实现、运行项目或参与贡献。</p>
-              <button className="source-button" type="button" onClick={showSourceNotice}>
-                <span>查看项目状态</span><span aria-hidden="true">↗</span>
-              </button>
+              <div className="source-actions">
+                <button className="source-button" type="button" onClick={showSourceNotice}>
+                  <span>查看项目状态</span><span aria-hidden="true">↗</span>
+                </button>
+                <a className="source-button is-ghost" href="./editor.html">
+                  <span>课程编辑器</span><span aria-hidden="true">↗</span>
+                </a>
+              </div>
               {sourceNotice && (
                 <p className="source-notice" role="status">Gitee 仓库近期上线</p>
               )}
