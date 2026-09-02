@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(git add src/styles.css && git commit -F - <<'EOF' fix: hide logo outer frame when header is compact on scroll 下滑时通过 .is-compact 自动隐藏 BirdMark 的外框 rect，带过渡动效。 Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF echo \"COMMIT_EXIT:$?\")",
+      "Shell(git push gitee master 2>&1; echo \"EXIT:$?\")",
+      "Shell(git:*)",
+      "Shell(git commit -F - <<'EOF' fix: 修复手机端菜单被裁剪与深色卡片徽标配色反转 - site-header 去除 contain: layout / translateZ(0) 并设 overflow: visible，避免 absolute 的 mobile-nav 被裁剪导致无法展开 - @media (pointer: coarse) 浅色 glow-card 覆盖排除 open-source-card/curriculum-status-card 并保留深底，修复\"持续开发中的开源项目\"浅字浅底 Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF git log --oneline -2 git push gitee master 2>&1 | tail -n 20)",
+      "Shell(git commit -F - <<'EOF' chore: 同步构建产物 dist Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF git push gitee master 2>&1 | tail -n 20 git log --oneline -3)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

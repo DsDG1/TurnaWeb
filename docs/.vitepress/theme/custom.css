@@ -1,7 +1,8 @@
 :root {
   --vp-font-family-base: Inter, 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', ui-monospace, monospace;
-  --turna-font-display: Inter, 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
+  /* Classical serif covers only Latin/digits; CJK glyphs fall through to the sans stack that follows */
+  --turna-font-display: Georgia, 'Times New Roman', 'Liberation Serif', 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, sans-serif;
   --vp-c-brand-1: #176b63;
   --vp-c-brand-2: #135a54;
   --vp-c-brand-3: #104a46;
@@ -84,7 +85,7 @@ body::before {
 
 .dark .VPNavBar { background: rgba(13, 29, 28, .92) !important; }
 .VPNavBar.has-sidebar .content { background: transparent !important; }
-.VPNavBarTitle .title { border-bottom: 0 !important; font-family: var(--turna-font-display); font-weight: 720; letter-spacing: -.025em; }
+.VPNavBarTitle .title { border-bottom: 0 !important; font-family: var(--turna-font-display); font-weight: 700; letter-spacing: -.015em; }
 .VPImage.logo { width: 30px; height: 30px; }
 
 .DocSearch-Button,
@@ -117,9 +118,9 @@ body::before {
 }
 .VPDoc .vp-doc h1,
 .VPDoc .vp-doc h2,
-.VPDoc .vp-doc h3 { font-family: var(--turna-font-display); font-weight: 720; color: var(--vp-c-text-1); }
-.VPDoc .vp-doc h1 { font-size: clamp(32px, 4vw, 46px); line-height: 1.14; letter-spacing: -.045em; }
-.VPDoc .vp-doc h2 { margin-top: 56px; padding-top: 22px; border-top-color: var(--vp-c-divider); font-size: 25px; letter-spacing: -.025em; }
+.VPDoc .vp-doc h3 { font-family: var(--turna-font-display); font-weight: 700; color: var(--vp-c-text-1); }
+.VPDoc .vp-doc h1 { font-size: clamp(32px, 4vw, 46px); line-height: 1.14; letter-spacing: -.03em; }
+.VPDoc .vp-doc h2 { margin-top: 56px; padding-top: 22px; border-top-color: var(--vp-c-divider); font-size: 25px; letter-spacing: -.015em; }
 .VPDoc .vp-doc h3 { font-size: 19px; letter-spacing: -.015em; }
 .VPDoc .vp-doc p,
 .VPDoc .vp-doc li { line-height: 1.82; }
@@ -164,9 +165,9 @@ body::before {
   padding-top: 22px;
   font-family: var(--turna-font-display);
   font-size: clamp(44px, 6vw, 70px);
-  font-weight: 760;
-  line-height: 1.08;
-  letter-spacing: -.06em;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -.03em;
   color: var(--vp-c-text-1);
   -webkit-text-fill-color: currentColor;
   background: none;
@@ -188,7 +189,7 @@ body::before {
 .VPHome .vp-doc > div { margin: 0; }
 .turna-home { width: min(1180px, calc(100% - 48px)); margin: 0 auto; padding-bottom: 110px; }
 .turna-home h2, .turna-home h3, .turna-home p { margin: 0; }
-.turna-home h2 { border: 0; padding: 0; font-family: var(--turna-font-display); font-weight: 740; letter-spacing: -.045em; }
+.turna-home h2 { border: 0; padding: 0; font-family: var(--turna-font-display); font-weight: 700; letter-spacing: -.02em; }
 .turna-home a { text-decoration: none; }
 .turna-home ul, .turna-home ol { margin: 0; padding: 0; }
 
@@ -223,7 +224,7 @@ body::before {
 .route-card header { display: flex; justify-content: space-between; align-items: center; font-family: var(--vp-font-family-mono); color: var(--vp-c-text-3); }
 .route-card header span { font-size: 13px; }
 .route-card header small { font-size: 10px; letter-spacing: .14em; }
-.route-card h3 { margin-top: 62px; font-family: var(--turna-font-display); font-size: 27px; font-weight: 700; letter-spacing: -.03em; }
+.route-card h3 { margin-top: 62px; font-family: var(--turna-font-display); font-size: 27px; font-weight: 700; letter-spacing: -.015em; }
 .route-card > p { margin-top: 16px; color: var(--vp-c-text-2); font-size: 14px; line-height: 1.8; }
 .route-card nav { position: absolute; right: 28px; bottom: 28px; left: 28px; display: grid; }
 .route-card nav a { display: flex; justify-content: space-between; padding: 11px 0; border-top: 1px solid var(--vp-c-divider); color: var(--vp-c-text-2); font-size: 13px; }
@@ -235,13 +236,13 @@ body::before {
 .capability-item:nth-last-child(-n+3) { border-bottom: 0; }
 .capability-item:hover { background: var(--turna-panel-strong); }
 .capability-code { display: inline-flex; padding: 5px 8px; border: 1px solid var(--vp-c-divider); border-radius: 3px; font-family: var(--vp-font-family-mono); font-size: 9px; letter-spacing: .12em; color: var(--vp-c-text-3); }
-.capability-item h3 { margin-top: 40px; font-family: var(--turna-font-display); font-size: 22px; font-weight: 690; letter-spacing: -.025em; }
+.capability-item h3 { margin-top: 40px; font-family: var(--turna-font-display); font-size: 22px; font-weight: 700; letter-spacing: -.012em; }
 .capability-item p { min-height: 76px; margin-top: 13px; color: var(--vp-c-text-2); font-size: 13px; line-height: 1.75; }
 .text-link { display: inline-flex; align-items: center; gap: 12px; color: var(--vp-c-brand-1); font-size: 12px; }
 .text-link b { font-size: 15px; transition: transform .2s ease; }
 .capability-item:hover .text-link b, .text-link:hover b { transform: translateX(4px); }
 
-.loop-list { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); list-style: none; border-top: 1px solid var(--vp-c-divider); }
+.turna-home .loop-list { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); list-style: none; border-top: 1px solid var(--vp-c-divider); }
 .loop-list::before { position: absolute; top: -4px; left: 0; width: 7px; height: 7px; content: ''; border-radius: 50%; background: var(--vp-c-brand-1); box-shadow: 0 0 0 6px var(--vp-c-brand-soft); }
 .loop-list li { padding: 24px 20px 8px 0; }
 .loop-list li > span { font-family: var(--vp-font-family-mono); font-size: 11px; color: var(--vp-c-brand-1); }
@@ -265,7 +266,7 @@ body::before {
 .window-bar small { margin-left: auto; font-family: var(--vp-font-family-mono); font-size: 8px; color: var(--vp-c-text-3); }
 .data-node { display: flex; min-height: 210px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--turna-line); border-radius: 5px; background: rgba(255,255,255,.08); text-align: center; }
 .data-node small, .data-optional small { font-family: var(--vp-font-family-mono); font-size: 9px; letter-spacing: .14em; color: var(--vp-c-brand-1); }
-.data-node strong { margin-top: 14px; font-family: var(--turna-font-display); font-size: 24px; font-weight: 700; letter-spacing: -.025em; }
+.data-node strong { margin-top: 14px; font-family: var(--turna-font-display); font-size: 24px; font-weight: 700; letter-spacing: -.015em; }
 .data-node p { margin-top: 8px; color: var(--vp-c-text-3); font-size: 11px; }
 .data-connector { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; padding: 16px 28px; }
 .data-connector i { height: 1px; background: var(--vp-c-divider); }
@@ -283,6 +284,14 @@ body::before {
 .facts-panel div:last-child { border-bottom: 0; }
 .facts-panel dt { color: var(--vp-c-text-3); font-size: 12px; }
 .facts-panel dd { margin: 0; color: var(--vp-c-text-1); font-family: var(--vp-font-family-mono); font-size: 13px; }
+
+/* Annotation copy: Latin/digits render in the mono stack; CJK glyphs fall through to the base sans stack */
+.VPHero .tagline,
+.signal-stats dd,
+.route-card > p,
+.capability-item p,
+.loop-list p,
+.facts-panel dt { font-family: var(--vp-font-family-mono); }
 
 .author-banner { padding: clamp(34px, 5vw, 62px); border-radius: 7px; }
 .author-banner > div:first-child { display: grid; grid-template-columns: 1fr 1fr; gap: 54px; }
@@ -315,7 +324,7 @@ body::before {
   .capability-item:nth-last-child(-n+3) { border-bottom: 1px solid var(--vp-c-divider); }
   .capability-item:nth-last-child(-n+2) { border-bottom: 0; }
   .loop-list { grid-template-columns: 1fr; border-top: 0; border-left: 1px solid var(--vp-c-divider); }
-  .loop-list::before { top: 0; left: -4px; }
+  .turna-home .loop-list::before { top: 0; left: -4px; }
   .loop-list li { display: grid; grid-template-columns: 54px 1fr; padding: 0 0 28px 24px; }
   .loop-list h3 { margin-top: 0; }
   .data-window { max-width: 650px; }

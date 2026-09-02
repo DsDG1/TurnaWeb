@@ -19,6 +19,9 @@ export type NavItem = {
 
 export const DOCS_HREF = './docs/'
 
+export const GITHUB_HREF = 'https://github.com/DsDG1/turna'
+export const GITEE_HREF = 'https://gitee.com/dhwdwf3/turna-web'
+
 export function siteNavigation(page: 'home' | 'curriculum' | 'other' = 'other'): readonly NavItem[] {
   return [
     {
@@ -482,12 +485,14 @@ export function SiteHeader({
 }
 
 const footerLinks = [
-  { href: './curriculum.html', label: '课程' },
-  { href: DOCS_HREF, label: '文档' },
-  { href: './anki.html', label: 'Anki' },
-  { href: './fsrs.html', label: 'FSRS' },
-  { href: './ai.html', label: 'AI' },
-  { href: './editor.html', label: '编辑器' },
+  { href: './curriculum.html', label: '课程', external: false },
+  { href: DOCS_HREF, label: '文档', external: false },
+  { href: './anki.html', label: 'Anki', external: false },
+  { href: './fsrs.html', label: 'FSRS', external: false },
+  { href: './ai.html', label: 'AI', external: false },
+  { href: './editor.html', label: '编辑器', external: false },
+  { href: GITHUB_HREF, label: 'GitHub', external: true },
+  { href: GITEE_HREF, label: 'Gitee', external: true },
 ] as const
 
 export function SiteFooter({ brandHref = '#top' }: { brandHref?: string }) {
@@ -500,9 +505,17 @@ export function SiteFooter({ brandHref = '#top' }: { brandHref?: string }) {
         </a>
         <p>离线学习，按时复习。</p>
       </div>
-      <nav className="footer-links" aria-label="站点页面">
+      <nav className="footer-links" aria-label="站点页面与代码仓库">
         {footerLinks.map((link) => (
-          <a key={link.href} href={link.href}>{link.label}</a>
+          <a
+            key={link.href}
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noreferrer' : undefined}
+          >
+            {link.label}
+            {link.external && <span aria-hidden="true"> ↗</span>}
+          </a>
         ))}
       </nav>
       <p className="credits">基于 <a href="https://github.com/rshrc/Varnamala" target="_blank" rel="noreferrer">rshrc/Varnamala</a> 持续构建。</p>

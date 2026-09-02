@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import {
   EditorialHero,
   FeatureIcon,
   GlowCard,
+  GITEE_HREF,
+  GITHUB_HREF,
   SiteFooter,
   SiteHeader,
   useCompactHeader,
@@ -166,16 +168,12 @@ function App() {
   const [preview, setPreview] = useState<PreviewKey>('course')
   const [activeSection, setActiveSection] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [sourceNotice, setSourceNotice] = useState(false)
-  const noticeTimer = useRef<number>(0)
   const heroRef = usePointerSurface<HTMLElement>('glow', 6)
   const compactHeader = useCompactHeader(heroRef)
 
   useRevealOnScroll()
   useEscapeKey(() => setMenuOpen(false))
   useLockBodyScroll(menuOpen)
-
-  useEffect(() => () => window.clearTimeout(noticeTimer.current), [])
 
   useEffect(() => {
     if (!('IntersectionObserver' in window)) return
@@ -194,12 +192,6 @@ function App() {
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
   }, [])
-
-  const showSourceNotice = () => {
-    setSourceNotice(true)
-    window.clearTimeout(noticeTimer.current)
-    noticeTimer.current = window.setTimeout(() => setSourceNotice(false), 2500)
-  }
 
   return (
     <div className={`app theme-${theme}`} data-theme={theme}>
@@ -326,18 +318,18 @@ function App() {
             <div className="source-copy" data-reveal>
               <p className="eyebrow">项目状态</p>
               <h2 id="open-source-title">Turna 仍在持续开发。</h2>
-              <p>代码仓库上线后，你可以查看实现、运行项目或参与贡献。</p>
+              <p>项目以开源方式开发，你可以在这里查看实现、运行项目或参与贡献。</p>
               <div className="source-actions">
-                <button className="source-button" type="button" onClick={showSourceNotice}>
-                  <span>查看项目状态</span><span aria-hidden="true">↗</span>
-                </button>
+                <a className="source-button" href={GITHUB_HREF} target="_blank" rel="noreferrer">
+                  <span>GitHub 仓库</span><span aria-hidden="true">↗</span>
+                </a>
+                <a className="source-button is-ghost" href={GITEE_HREF} target="_blank" rel="noreferrer">
+                  <span>Gitee 仓库</span><span aria-hidden="true">↗</span>
+                </a>
                 <a className="source-button is-ghost" href="./editor.html">
                   <span>课程编辑器</span><span aria-hidden="true">↗</span>
                 </a>
               </div>
-              {sourceNotice && (
-                <p className="source-notice" role="status">Gitee 仓库近期上线</p>
-              )}
             </div>
             <div className="tech-stack" data-reveal aria-label="主要技术">
               {['Flutter', 'SQLite', 'FSRS', 'Anki', 'Local-first'].map((item, index) => (

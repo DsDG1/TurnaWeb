@@ -1343,26 +1343,6 @@ main::before {
   transform: translateY(-2px);
 }
 
-.source-notice {
-  margin: 14px 0 0;
-  color: #ffe3b8;
-  font-size: 13px;
-  letter-spacing: .02em;
-  animation: source-notice-in 240ms ease both;
-}
-
-@keyframes source-notice-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .tech-stack {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
