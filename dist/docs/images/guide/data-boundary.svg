@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .local { fill: #eef2ef; stroke: #5a6b66; stroke-width: 1; }
+    .opt { fill: #f3f6f4; stroke: #5a6b66; stroke-width: 1; stroke-dasharray: 5 3; }
+    .accent { fill: #6f9991; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .arrow { stroke: #5a6b66; stroke-width: 1; stroke-dasharray: 5 3; fill: none; }
+  </style>
+  <rect class="bg" width="800" height="420"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">数据边界：本地为默认，网络为可选</text>
+  <text class="muted" x="380" y="28" font-size="11">核心流程无账号 · 学习记录默认不上行</text>
+
+  <!-- Device boundary -->
+  <g transform="translate(24, 60)">
+    <rect class="local" width="440" height="300" rx="6"/>
+    <text class="text" x="16" y="26" font-weight="600">本机（你的设备）</text>
+    <line x1="16" y1="34" x2="424" y2="34" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <g transform="translate(16, 48)">
+      <rect class="frame" width="196" height="56" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">课程 JSON</text>
+      <text class="muted" x="12" y="40">真理源 · 版本化</text>
+    </g>
+    <g transform="translate(224, 48)">
+      <rect class="frame" width="200" height="56" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">SQLite 缓存</text>
+      <text class="muted" x="12" y="40">派生 · 可重建</text>
+    </g>
+    <g transform="translate(16, 116)">
+      <rect class="frame" width="196" height="56" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">进度 / SRS 状态</text>
+      <text class="muted" x="12" y="40">D·S·R · due · lapses</text>
+    </g>
+    <g transform="translate(224, 116)">
+      <rect class="frame" width="200" height="56" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">Official Collection</text>
+      <text class="muted" x="12" y="40">Anki 卡与排期</text>
+    </g>
+    <g transform="translate(16, 184)">
+      <rect class="frame" width="196" height="56" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">设置 / 偏好</text>
+      <text class="muted" x="12" y="40">含 AI key（本机持久化）</text>
+    </g>
+    <g transform="translate(224, 184)">
+      <rect class="frame" width="200" height="56" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">错题本 / 日志</text>
+      <text class="muted" x="12" y="40">FIFO · 事件指纹</text>
+    </g>
+    <text class="muted" x="16" y="270">清除应用数据 = 全部移除；导出先行</text>
+  </g>
+
+  <!-- Optional outside -->
+  <g transform="translate(520, 60)">
+    <text class="text" x="0" y="14" font-size="12" font-weight="600">可选外部（用户主动触发）</text>
+
+    <g transform="translate(0, 28)">
+      <rect class="opt" width="256" height="64" rx="4"/>
+      <text class="text" x="14" y="24" font-weight="600">课程更新</text>
+      <text class="muted" x="14" y="44">拉取新版 JSON 包</text>
+    </g>
+    <g transform="translate(0, 104)">
+      <rect class="opt" width="256" height="64" rx="4"/>
+      <text class="text" x="14" y="24" font-weight="600">AI 服务</text>
+      <text class="muted" x="14" y="44">未配置时用本地内容兜底</text>
+    </g>
+    <g transform="translate(0, 180)">
+      <rect class="opt" width="256" height="64" rx="4"/>
+      <text class="text" x="14" y="24" font-weight="600">导出 / 备份</text>
+      <text class="muted" x="14" y="44">用户主动发起</text>
+    </g>
+
+    <path class="arrow" d="M 464 116 L 520 88"/>
+    <polygon points="516,84 522,87 517,92" fill="#5a6b66"/>
+    <path class="arrow" d="M 464 152 L 520 136"/>
+    <polygon points="516,132 522,135 517,140" fill="#5a6b66"/>
+    <path class="arrow" d="M 464 204 L 520 212"/>
+    <polygon points="516,208 522,211 517,216" fill="#5a6b66"/>
+  </g>
+
+  <text class="muted" x="24" y="392">图 — 学习数据留在设备；虚线框是可选外部能力，关闭不影响核心学习与复习</text>
+</svg>

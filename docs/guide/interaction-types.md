@@ -18,7 +18,15 @@ Interaction 是课程运行时的最小可执行单元。每种 Interaction 使�
 | 阅读 | `readingMcq` | 篇章后的选择 | 正误 |
 | 阅读 | `readingTrueFalse` | 真 / 假 | 正误 |
 | 阅读 | `readingShortAnswer` | 简答 | 配置判定 |
-| Anki 保真 | `ankiHtmlCard` | 原卡 HTML | 四档评分或课程结果 |
+| Anki 翻卡 | `ankiCard` | 原卡正面 / 背面文本 | 翻面 + 课程结果 |
+| Anki 保真 | `ankiHtmlCard` | 原卡 HTML | 见下方说明 |
+
+共 14 种（`lib/domain/course/interaction.dart` 的 sealed union，`tool/gui/src/backend/schema_constants.py` 保持一致）。
+
+两个 Anki 题型的区别：
+
+- **`ankiCard`**：导入卡片的普通翻卡形态（正面 → 点按 → 背面），用于课时体与 Official 复习投影的纯文本卡。
+- **`ankiHtmlCard`**：携带 `frontHtml` / `backHtml` / `allowJs` / `mediaBasePath` 的保真卡。Official 复习路径用 WebView 按原模板渲染；**课时体与错题回放里该类型的渲染器已退役**（`AnkiHtmlCardRetiredRenderer`），显示为「确认后继续」占位卡 —— 新课程不要再产出 `ankiHtmlCard` 课时项。
 
 ## 设计规则
 

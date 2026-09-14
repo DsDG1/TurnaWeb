@@ -1,63 +1,53 @@
 # 卡片渲染与网络隔离
 
-Anki 卡片可能包含 HTML、CSS、JavaScript、媒体引用和 cloze 模板。Turna 按卡片能力选择渲染路径，并将网络与脚本视为独立权限。
+Anki 卡片可能包含 HTML、CSS、JavaScript、媒体引用和 cloze 模板。Turna 按卡片来源选择渲染路径，脚本与网络是独立权限。
 
 ## 渲染路径
 
-| 路径 | 用途 | 平台 |
+复习入口由 `OfficialAnkiReviewerRouter` 按来源分发：
+
+| 来源 | 渲染 | 说明 |
 | --- | --- | --- |
-| Flutter HTML | 默认卡面 | 支持的客户端平台 |
-| WebView | 需要现场 JavaScript、MathJax 或用户强制时 | Android / iOS |
-| 纯文本 | HTML 路径不可用时的最终降级 | 全平台 |
+| Official（正式导入） | Official 复习器 | 模板卡面经 `AnkiHtmlCardView` 走 WebView；普通卡走结构化 Flutter 卡面 |
+| Legacy（历史数据） | 旧版渲染器 | 兼容保留 |
+| Turna 练习题 | Flutter 练习 | 课程 Interaction 渲染器 |
 
-Web 与桌面不实例化移动 WebView。降级必须保留可读内容和评分入口，不应显示空白卡。
+题型层面再分两种（见 [交互题型](/guide/interaction-types)）：
 
-## 自动判定
+- `ankiCard` —— 纯文本翻卡（front → back），全平台 Flutter 渲染。
+- `ankiHtmlCard` —— 带 `frontHtml` / `backHtml` / `css` / `mediaBasePath` / `allowJs` 的保真卡，仅 Official 复习路径用 WebView 按原模板渲染；**课时体与错题回放里该类型的渲染器已退役**（显示「旧版导入的 Anki 卡片」占位，确认后继续）。
 
-`AnkiRenderPolicy` 根据 notetype 和卡片能力选择 structured、fidelity 或文本降级。选择结果可以持久化到卡片元数据。用户的全局设置和单牌组覆盖可改变策略，但不能扩大平台不存在的能力。
+## 平台差异
+
+| 平台 | 行为 |
+| --- | --- |
+| Android / iOS | `AnkiHtmlCardView` 用 WebView 渲染保真卡 |
+| 桌面 / Web | 不实例化 WebView，降级为剥离标签的纯文本视图 |
+
+降级保留可读内容和评分入口，不显示空白卡。
 
 ## JavaScript
 
-JavaScript 默认关闭。以下场景可能需要临时执行：
+`AnkiHtmlCardView` 的 `javascriptMode` 由两个条件放开：`allowJs`（notetype 模板含 `<script>` 时置位）或 `typeAnswerEnabled`（`type:Field` 键入模板需要输入桥）。Official 模板卡当前以 `allowJs: true` 渲染。
 
-- notetype 明确声明 `allowJs`。
-- 卡片依赖现场解密。
-- 模板要求浏览器执行才能产生正文。
+- 键入卡的答案文本通过 `ankiTypeAnswer` 通道回传 Flutter —— **评分永不信任页面 JS**。
+- JS 关闭的卡不安装任何 JS 通道（包括高度上报）。
+- 设置 → 旧版与兼容性里有 `ankiForceDisableJs` 强制关 JS 的兜底开关。
+- 执行 JavaScript 不等于开放网络，见下节。
 
-执行 JavaScript 不等于开放网络。两项权限分别判定。
+## 网络隔离
 
-## 网络策略
-
-| 策略 | 行为 |
-| --- | --- |
-| 完全离线 | 通过 CSP 阻断 fetch、XHR、WebSocket 和远程资源 |
-| 询问 | 首次仍阻断；用户明确允许后仅本次放行 |
-| 允许 | 按用户设置执行；仍受平台与页面导航限制 |
-
-默认值为完全离线。页面跳转拦截不能替代网络拦截，因为脚本可以在不跳转页面的情况下请求外部资源。
-
-## 预渲染缓存
-
-某些模板需要执行一次混淆脚本才能得到正文。流程如下：
-
-1. 在 WebView 中执行模板。
-2. 延时读取 `document.body.innerHTML`。
-3. 移除 `<script>`。
-4. 将纯 HTML 写入预渲染缓存。
-5. 后续以 `allowJs=false` 使用缓存。
-
-清除此缓存不会删除 note、card、媒体或复习状态。下次复习时按需重新生成。
+WebView 的 `NavigationDelegate` 只放行 `file:` / `data:` / `about:` 等本地导航，其余一律 `prevent` —— 模板脚本无法通过页面跳转访问外部地址。相对路径的 `<img>` / `<audio>` 经 `<base href="file:///…">` 解析到该次导入的媒体目录（`mediaBasePath`）。
 
 ## 媒体
 
 - 缺失图片显示占位，不阻塞评分。
-- 原音频失败时可以对卡片文本执行系统 TTS。
-- 可配置去重、未引用媒体过滤和大图片压缩。
-- 为兼容旧牌组，导入未引用媒体默认开启。
+- 原音频失败时可对卡片文本执行系统 TTS。
+- `cardTextScale` 可访问性设置以 `html{zoom}` 注入放大 WebView 卡片文本（100% 时不注入，保留原模板样式）。
 
 ## 安全模式
 
-安全模式是运行时覆盖：强制关闭模板脚本和外部网络，但不改写用户保存的设置。退出安全模式后恢复进入前的配置。
+安全模式是系统健康里的运行时覆盖：强制收敛异常行为，但不改写用户保存的设置，退出后恢复进入前的配置。
 
 ## 相关文档
 

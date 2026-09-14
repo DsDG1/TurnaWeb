@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="12">
+  <style>
+    .bg { fill: #fafaf7; }
+    .frame { fill: #ffffff; stroke: #5a6b66; stroke-width: 1; }
+    .stage { fill: #f3f6f4; stroke: #5a6b66; stroke-width: 1; }
+    .accent { fill: #6f9991; }
+    .warn { fill: #fff5e6; stroke: #c08552; stroke-width: 1; }
+    .err { fill: #fbece8; stroke: #b25a4a; stroke-width: 1; }
+    .text { fill: #1a2421; }
+    .muted { fill: #5a6b66; }
+    .arrow { stroke: #5a6b66; stroke-width: 1; fill: none; }
+    .arrow-err { stroke: #b25a4a; stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
+  </style>
+  <rect class="bg" width="800" height="460"/>
+
+  <text class="text" x="24" y="28" font-size="14" font-weight="600">复习队列生命周期（Turna 课程车道）</text>
+  <text class="muted" x="360" y="28" font-size="11">Official Anki 卡走独立车道 · 评分与调度不共享</text>
+
+  <!-- Lane: Turna course -->
+  <g transform="translate(24, 56)">
+    <rect class="frame" width="520" height="220" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">课程词 / 表达（FSRS）</text>
+    <line x1="14" y1="30" x2="506" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <g transform="translate(20, 44)">
+      <rect class="stage" width="140" height="48" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">new</text>
+      <text class="muted" x="12" y="36">课堂首次露面</text>
+    </g>
+    <g transform="translate(190, 44)">
+      <rect class="stage" width="140" height="48" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">learning</text>
+      <text class="muted" x="12" y="36">当日重复出现</text>
+    </g>
+    <g transform="translate(360, 44)">
+      <rect class="stage" width="140" height="48" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">review</text>
+      <text class="muted" x="12" y="36">进入间隔调度</text>
+    </g>
+
+    <path class="arrow" d="M 160 68 L 190 68"/>
+    <polygon points="186,64 190,68 186,72" fill="#5a6b66"/>
+    <path class="arrow" d="M 330 68 L 360 68"/>
+    <polygon points="356,64 360,68 356,72" fill="#5a6b66"/>
+
+    <g transform="translate(190, 118)">
+      <rect class="warn" width="140" height="48" rx="4"/>
+      <text class="text" x="12" y="20" font-weight="600">due → 今日队列</text>
+      <text class="muted" x="12" y="36">按 due 时间排序</text>
+    </g>
+    <path class="arrow" d="M 430 92 L 430 108 L 330 108 L 330 118"/>
+    <polygon points="326,118 330,124 334,118" fill="#5a6b66" transform="rotate(180 330 118)"/>
+
+    <g transform="translate(20, 172)">
+      <rect class="stage" width="220" height="36" rx="4"/>
+      <text class="text" x="12" y="22">评分 ≥ Hard → 更新 D/S/R → 回 review</text>
+    </g>
+    <g transform="translate(280, 172)">
+      <rect class="err" width="220" height="36" rx="4"/>
+      <text class="text" x="12" y="22">评分 Again → relearning → 今日重出</text>
+    </g>
+    <path class="arrow" d="M 260 166 L 260 172"/>
+    <path class="arrow-err" d="M 330 166 L 330 156 L 470 156 L 470 172"/>
+  </g>
+
+  <!-- Lane: Official Anki -->
+  <g transform="translate(568, 56)">
+    <rect class="frame" width="208" height="220" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">Official Anki 卡</text>
+    <line x1="14" y1="30" x2="194" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <g transform="translate(14, 44)">
+      <rect class="stage" width="180" height="40" rx="4"/>
+      <text class="text" x="12" y="24">导入 → Official Collection</text>
+    </g>
+    <g transform="translate(14, 96)">
+      <rect class="stage" width="180" height="40" rx="4"/>
+      <text class="text" x="12" y="24">Official scheduler 持有 IVL/DUE</text>
+    </g>
+    <g transform="translate(14, 148)">
+      <rect class="stage" width="180" height="40" rx="4"/>
+      <text class="text" x="12" y="24">评分写回官方调度</text>
+    </g>
+    <path class="arrow" d="M 104 84 L 104 96"/>
+    <path class="arrow" d="M 104 136 L 104 148"/>
+    <text class="muted" x="14" y="210">Turna FSRS 不接管官方卡</text>
+  </g>
+
+  <!-- Bottom rules -->
+  <g transform="translate(24, 304)">
+    <rect class="frame" width="752" height="120" rx="4"/>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">队列规则</text>
+    <line x1="14" y1="30" x2="738" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
+
+    <text class="muted" x="14" y="52">· 错题先走错题本（FIFO），清完才进正式复习</text>
+    <text class="muted" x="14" y="70">· leech 判定硬编码：lapses ≥ 5 且 lapses &gt; reps → 队列降权，无自动暂停</text>
+    <text class="muted" x="14" y="88">· 同日失败达 maxSameDayFails（默认 4）后，该项目 due 推迟到次日</text>
+    <text class="muted" x="14" y="106">· 同胞卡 bury 为手动操作，无自动 bury</text>
+  </g>
+
+  <text class="muted" x="24" y="452">图 — 复习生命周期：new → learning → review → due；Again 回 relearning；官方卡独立车道</text>
+</svg>

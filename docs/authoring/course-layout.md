@@ -1,6 +1,8 @@
 # 课程目录约定
 
-> **真理源是磁盘上的 JSON**。SQLite 只是 App 启动后从 JSON 派生出来的运行期缓存，编辑器、CLI、CI、客户端均按同一份目录读写。任何流程都不应以数据库为权威。
+::: info 真理源
+**磁盘上的 JSON 是真理源**。SQLite 只是 App 启动后从 JSON 派生出来的运行期缓存，编辑器、CLI、CI、客户端均按同一份目录读写。任何流程都不应以数据库为权威。
+:::
 
 ![课程目录结构与规模上限契约](/images/authoring/course-directory.svg)
 
@@ -30,19 +32,21 @@ assets/courses/<lang>/
 
 `<lang>` 使用 BCP 47 简短代码。已落地语言：`turkish`。其他语言以 `index.json` 中的 `language` 字段为准。
 
-> **多课程并存**：`<lang>` 路径下只承载一种语言课程；不同语种必须落各自目录，避免 cross-language 引用。
+::: tip 多课程并存
+`<lang>` 路径下只承载一种语言课程；不同语种必须落各自目录，避免 cross-language 引用。
+:::
 
 ## index.json 字段合同
 
 ```jsonc
 {
-  "version": 7,                    // 课程语义版本；任何结构/资源变更必须 +1
+  "version": 12,                   // 课程语义版本；任何结构/资源变更必须 +1（当前值示例）
   "language": "tr",                // BCP 47 短代码，与目录名一致
   "displayName": "Türkçe",
   "sections": [
     {
-      "id": "s-basics",
-      "name": "基础起步",
+      "id": "section1",
+      "name": "Section 1",
       "description": "...",
       "level": "A1",               // CEFR: A1 / A2 / B1 / B2
       "prerequisiteSectionIds": [],
@@ -62,21 +66,27 @@ assets/courses/<lang>/
 | `sections[].prerequisiteSectionIds` | 否 | 跨 Section 解锁依赖；必须为已知 ID 集合 |
 | `sections[].level` | 是 | Section 目标等级；用于复习调度权重 |
 
-> **ID 一旦发布即不可变**。`tool/gui` 拒绝已有节点 ID 的重命名。语义变更须通过新增 + 删除完成。
+::: warning ID 一旦发布即不可变
+`tool/gui` 拒绝已有节点 ID 的重命名。语义变更须通过新增 + 删除完成。
+:::
 
 ## Section 文件合同
 
 ```jsonc
 {
-  "id": "s-basics",
-  "name": "基础起步",
+  "id": "section1",
+  "name": "Section 1",
+  "description": "...",
+  "prerequisiteSectionIds": [],
   "units": [
     {
-      "id": "u-1",
+      "id": "s1-u1",
       "name": "问候与介绍",
+      "description": "...",
+      "prerequisiteUnitIds": [],
       "lessons": [
         {
-          "id": "l-u1-greetings-intro",
+          "id": "s1-l1",
           "name": "Greetings / Intro",
           "type": "normal",
           "template": "intro",
@@ -91,7 +101,7 @@ assets/courses/<lang>/
 }
 ```
 
-层级固定为三段：`Section → Unit → Lesson`，不可越级或扩展。
+层级固定为三段：`Section → Unit → Lesson`，不可越级或扩展。当前课程 ID 约定：`sectionN` / `sN-uM` / `sN-lK`（GUI 新建节点用 `s-<hex>` / `u-<hex>` / `l-<hex>` 随机短 id，两者都合法，关键是稳定且唯一）。
 
 ## Canonical content 形状
 
@@ -127,7 +137,7 @@ assets/courses/<lang>/
 resources (vocab / expressions / grammar_points)
         │ stable id
         ▼
-Lesson.content.interactions[].wordId | expressionId | grammarPointId
+Lesson.content…items[].wordId | expressionId | grammarPointId
         │
         ▼
 validate / lint (course_cli) ──► 写盘 ──► 客户端 reseed
@@ -154,6 +164,8 @@ python tool/course_cli.py lint --course-dir assets/courses/turkish
 ## 新建议程目录
 
 GUI 工具栏 **「课程仓库 → 新建课程目录…」** 触发 `InitCourseDialog`（`tool/gui/src/dialogs/init_course_dialog.py:24`）。该对话框在所选父目录下写出最小可运行课程骨架：
+
+![新建课程目录对话框（实际运行截图：目标目录 / 显示名 / 语言 / Section 数 / 每单元课时数）](/images/authoring/_real/12-init-course.png)
 
 | 表单字段 | 默认值 | 范围 | 落点 |
 | --- | --- | --- | --- |

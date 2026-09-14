@@ -7,9 +7,9 @@
 | 偏好 | 范围 | 运行时效果 |
 | --- | --- | --- |
 | `textScale` | 100%–200% | 覆盖根文本缩放 |
+| `cardTextScale` | 100%–200% | 卡片内容（含 WebView 卡面 `html{zoom}` 注入）单独缩放 |
 | `reducedMotion` | 布尔 | 设置 disableAnimations，减少非必要动画 |
 | `highContrast` | 布尔 | 使用高对比明暗主题 |
-| `dyslexiaFont` | 布尔 | 切换到 Lexend 字体体系 |
 | `sensoryReduce` | 布尔 | 关闭音效和触觉反馈 |
 | `focusMode` | 布尔 | 关闭旋转图、计时器等分心元素 |
 

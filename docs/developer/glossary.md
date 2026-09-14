@@ -11,14 +11,11 @@
 | due | 项目下一次可进入正式复习的时间 |
 | Fidelity rendering | 保留原 Anki HTML/CSS/必要模板行为的渲染路径 |
 | FSRS | Free Spaced Repetition Scheduler |
-| Full mode | 为较小 Anki 牌组生成完整课程树投影 |
 | Interaction | Lesson 中最小可执行题目或展示单元 |
 | Lesson | Unit 下的单次学习单元 |
-| Lite mode | 大牌组的轻量课程投影模式 |
 | Local-first | 核心状态默认在本地，网络是可选能力 |
 | Notetype | Anki note 的字段和卡片模板定义 |
 | Official owner | 由 Official Anki Collection 和 scheduler 持有状态的来源 |
-| Pre-render cache | 执行一次模板脚本后保存的无脚本纯 HTML |
 | R / Retrievability | 当前时刻成功提取的估计概率 |
 | reseed | 根据课程内容版本重建数据库课程投影 |
 | Review event | 一次评分及其前后调度状态记录 |

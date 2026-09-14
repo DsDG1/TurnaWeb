@@ -21,53 +21,53 @@
     <g transform="translate(0, 36)">
       <rect class="folder" width="14" height="14" rx="2"/>
       <text class="text" x="22" y="11">listening/</text>
-      <text class="muted" x="120" y="11">普通人工对话录音</text>
+      <text class="muted" x="150" y="11">具名听力素材（生成或人工录音，平铺）</text>
     </g>
     <g transform="translate(32, 64)">
       <rect class="file" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">l-u1-greetings-intro.mp3</text>
+      <text class="text" x="22" y="11">s1-dialogue-a.mp3</text>
+      <text class="muted" x="180" y="11">audioAsset = s1-dialogue-a</text>
     </g>
     <g transform="translate(32, 88)">
       <rect class="file" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">l-u2-directions.mp3</text>
+      <text class="text" x="22" y="11">s2-dialogue-b.mp3</text>
     </g>
 
     <g transform="translate(0, 116)">
       <rect class="folder" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">bgm/</text>
-      <text class="muted" x="120" y="11">听力节目背景音</text>
+      <text class="text" x="22" y="11">listening/bgm/</text>
+      <text class="muted" x="150" y="11">混音用背景音素材池</text>
     </g>
-    <g transform="translate(0, 144)">
-      <rect class="folder" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">debut/</text>
-      <text class="muted" x="120" y="11">听力课 debut 阶段</text>
-    </g>
-    <g transform="translate(0, 172)">
-      <rect class="folder" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">fin/</text>
-      <text class="muted" x="120" y="11">听力课 fin 阶段</text>
+    <g transform="translate(32, 144)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">bgmA.mp3 · bgmB.mp3 · bgmC.mp3</text>
     </g>
 
-    <g transform="translate(0, 200)">
+    <g transform="translate(0, 172)">
       <rect class="folder" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">lessons/</text>
-      <text class="muted" x="120" y="11">Lesson 专用素材</text>
+      <text class="text" x="22" y="11">listening/debut/</text>
+      <text class="muted" x="150" y="11">混音用开场素材池</text>
     </g>
-    <g transform="translate(32, 228)">
+    <g transform="translate(32, 200)">
+      <rect class="file" width="14" height="14" rx="2"/>
+      <text class="text" x="22" y="11">debutA.mp3 · debutB.mp3 · debutC.mp3</text>
+    </g>
+
+    <g transform="translate(0, 228)">
       <rect class="folder" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">l-u1-greetings-intro/</text>
+      <text class="text" x="22" y="11">listening/fin/</text>
+      <text class="muted" x="150" y="11">混音用收束素材池</text>
     </g>
-    <g transform="translate(64, 256)">
+    <g transform="translate(32, 256)">
       <rect class="file" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">debut.mp3</text>
+      <text class="text" x="22" y="11">finA.mp3 · finB.mp3 · finC.mp3</text>
     </g>
-    <g transform="translate(64, 280)">
-      <rect class="file" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">main.mp3</text>
+
+    <g transform="translate(0, 288)">
+      <text class="muted" x="0" y="11">词/表达 id（w-…）→ 运行时 TTS，不落盘</text>
     </g>
-    <g transform="translate(64, 304)">
-      <rect class="file" width="14" height="14" rx="2"/>
-      <text class="text" x="22" y="11">fin.mp3</text>
+    <g transform="translate(0, 312)">
+      <text class="muted" x="0" y="11">anki:// 前缀 → 应用内 Anki 媒体目录，不参与 manifest</text>
     </g>
   </g>
 
@@ -87,33 +87,33 @@
     <text class="muted" x="14" y="178">SNR  ≥ 40 dB</text>
   </g>
 
-  <!-- Side panel: status -->
+  <!-- Side panel: manifest -->
   <g transform="translate(420, 272)">
     <rect class="frame" width="316" height="160" rx="4"/>
-    <text class="text" x="14" y="22" font-size="12" font-weight="600">manifest 状态</text>
+    <text class="text" x="14" y="22" font-size="12" font-weight="600">manifest 状态（asset_id · referenced_by）</text>
     <line x1="14" y1="30" x2="302" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
 
     <g transform="translate(14, 44)">
       <rect class="file" width="280" height="22" rx="2"/>
-      <text class="text" x="22" y="14">tr/listening/l-u1/main</text>
-      <text class="accent" x="270" y="14" text-anchor="end" font-weight="600">exists</text>
+      <text class="text" x="22" y="14">s1-dialogue-a · section1/s1-u2/s1-l4</text>
+      <text class="accent" x="270" y="14" text-anchor="end" font-weight="600">present</text>
     </g>
     <g transform="translate(14, 72)">
       <rect class="file" width="280" height="22" rx="2"/>
-      <text class="text" x="22" y="14">tr/listening/l-u2/dialogue</text>
-      <text class="accent" x="270" y="14" text-anchor="end" font-weight="600">exists</text>
+      <text class="text" x="22" y="14">s2-dialogue-b · section2/s2-u1/s2-l3</text>
+      <text class="accent" x="270" y="14" text-anchor="end" font-weight="600">present</text>
     </g>
     <g transform="translate(14, 100)">
       <rect class="warn" width="280" height="22" rx="2"/>
-      <text class="text" x="22" y="14">tr/lessons/l-u1/intro/fin</text>
-      <text x="270" y="14" text-anchor="end" font-weight="600" fill="#c08552">loudness -12.4 LUFS</text>
+      <text class="text" x="22" y="14">s5-summary-a · section5/s5-u1/s5-l6</text>
+      <text x="270" y="14" text-anchor="end" font-weight="600" fill="#c08552">present · 待替换人工</text>
     </g>
     <g transform="translate(14, 128)">
       <rect class="err" width="280" height="22" rx="2"/>
-      <text class="text" x="22" y="14">tr/lessons/l-u3/intro/main</text>
+      <text class="text" x="22" y="14">s8-dialogue-a · section8/s8-u1/s8-l2</text>
       <text x="270" y="14" text-anchor="end" font-weight="600" fill="#b25a4a">missing</text>
     </g>
   </g>
 
-  <text class="muted" x="24" y="452">图 9 — 音频目录结构 + manifest 三色状态（绿 / 黄 / 红）</text>
+  <text class="muted" x="24" y="452">图 — 具名素材落 listening/ 平铺；bgm/debut/fin 是混音素材池；manifest 只统计具名素材</text>
 </svg>

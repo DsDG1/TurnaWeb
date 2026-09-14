@@ -16,7 +16,7 @@
                                         ▼
    工具栏（主窗口）─────────────────────────────────────────────
    课程仓库 / 保存 / 课程工坊 / 总览 / 资源库 / 发布 / 生成听力音频
-   / 教师模式 / 设置（7 tab）
+   / 教师模式 / 设置（8 tab）
                                         │
                                         ▼
                           1.5 设置与运维（双模型 / 缓存 / 用量）
@@ -94,7 +94,9 @@ Telemetry：`ai.edit.open` / `ai.edit.ready` / `ai.edit.applied` / `ai.edit.canc
 
 ### 1.5 设置与运维
 
-入口：工具栏 **设置** → 7 个 tab。
+入口：工具栏 **设置** → 8 个 tab。
+
+![设置 → AI 配置（实际运行截图：供应商预设 / Base URL / Key / 双模型）](/images/authoring/_real/11-settings-ai.png)
 
 | Tab | 关键 AI 能力 |
 | --- | --- |
@@ -103,6 +105,7 @@ Telemetry：`ai.edit.open` / `ai.edit.ready` / `ai.edit.applied` / `ai.edit.canc
 | AI 用量 | 今日 / 累计 token；按模型价格估算成本（`backend/ai_presets.py` 本地计价表） |
 | 提取 Prompt | 语言对抽取规则块的持久化覆盖 |
 | 编辑器 | 撤销上限 10–500 步；关闭时未保存策略 |
+| 体验 OS | 体验模式四档（observer / copilot / active / immersive）+ Immersive 子开关 + 能力开关 + 日配额 |
 | Git 库 | 克隆根 / 二进制路径 / 默认语言 / LAN 端口 / 绑定 / token / SSH 私钥 |
 | 操作日志 | 最近 200 条操作 / 错误回看 |
 
@@ -189,7 +192,7 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
 | 抽取失败（vocab_only） | 仍红 | 标红 + 拟人化分析按钮 |
 | LLM 返回包含已删 id | `_detect_ai_edit_conflicts` | 弹三选一冲突解决；不得自动应用 |
 | LLM 产出不合 validate | 修复阶段 | 先规则修复，LLM 仅处理剩余 error |
-| TTS voice_id 失效 | MiniMax API 4xx | fallback voice → fallback model → 跳过该 phase 仅保留文本 |
+| TTS 生成失败 | MiniMax API 4xx / 网络失败 | 无自动 fallback；失败项记 telemetry，人工处置 |
 
 ## 4. 字段表
 
@@ -199,6 +202,7 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
 
 - **供应商预设**（`backend/ai_presets.py`）：
 
+  ::: details 五个预设对照
   | 预设标识 | 显示名称 | 默认 Base URL | 默认模型 | 推理链支持 |
   | --- | --- | --- | --- | --- |
   | `deepseek` | DeepSeek | `https://api.deepseek.com` | `deepseek-v4-pro` | 是 |
@@ -206,23 +210,27 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
   | `moonshot` | Moonshot AI | `https://api.moonshot.cn/v1` | `moonshot-v1-8k` | 否 |
   | `ollama` | Ollama（本地） | `http://localhost:11434/v1` | `qwen2.5` | 否 |
   | `custom` | 自定义 | 用户填写 | 用户填写 | 用户勾选 |
+  :::
 
 - **JSON Schema 严格度**：`auto`（默认）首次 `json_schema` 试错遇 400 时调用 `mark_json_schema_unsupported()`，后续切 `json_object`；`on` 强制 `json_schema`；`off` 强制 `json_object`。
 - **响应缓存**：进程内 LRU(128)；命中仍会跑 validator 防脏；`ai.cache.stats` 事件给出命中/未命中计数。
 
 ### 4.2 抽取预设
 
+::: details 四个预设对照
 | 预设 | 目标 | 提示词倾向 | 实现 |
 | --- | --- | --- | --- |
 | `general` | 通用教材 | 均衡抽取 | `backend/textbook_presets.py` |
 | `grammar` | 语法书 | 低温度，强调规则 | 同上 |
 | `dialogue` | 对话书 | 强调表达与口语 | 同上 |
 | `reading` | 阅读材料 | 词汇抽取为主 | 同上 |
+:::
 
 ### 4.3 内容质量六维
 
 `backend/content_quality.py` 纯函数；不依赖 Qt。每维 0–1，越高越好；默认阈值 0.7。
 
+::: details 六维探针对照
 | 维度 | 探针 | 阈值 | 不阻断 |
 | --- | --- | ---: | --- |
 | 复现（reproducibility） | 同 prompt 多 LLM 输出 JSON Schema 一致性 | ≥ 0.8 | 是 |
@@ -231,11 +239,13 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
 | 难度（difficulty） | 同一 stage 内认知梯度单调 | ≥ 0.7 | 是 |
 | 听力（listening） | `listeningPhases` 资产齐全 + 重播按钮 + 文本边界 ≥ 2 s | ≥ 0.7 | 是 |
 | 资源卫生（hygiene） | 词汇 / 表达 / 语法点引用闭环；无孤立条目 | ≥ 0.8 | 是 |
+:::
 
 ## 5. Telemetry 事件表
 
 `src/infrastructure/telemetry.py` 已实现事件（按子系统分组）：
 
+::: details 事件全表
 | 子系统 | 事件 |
 | --- | --- |
 | 仓库 | `repo.open` / `repo.new` / `repo.open.cancelled` / `repo.new.cancelled` / `repo.save.triggered` |
@@ -248,18 +258,19 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
 | 教材抽取 | `textbook.extract.cancel` / `textbook.review.edit` |
 | 体验 | `experience.chip.start` / `experience.palette` / `overview.open` / `publish.open` / `resources.open` / `settings.open` / `workshop.open` / `wizard.open` / `git_library.open` |
 | 关闭 | `app.close_requested` / `app.close_saved` / `app.close_discarded` / `app.close_cancelled` |
+:::
 
 所有事件通过 `QSettings` 持久化在设置 → 操作日志 tab 可见。失败类事件走 `telemetry.record_error(exc, context=...)` 同时记录异常堆栈与上下文。
 
 ## 6. 与 GUI 主窗口的衔接
 
 ```text
-工具栏入口（8 项）：
+工具栏入口（9 项）：
   课程仓库 / 保存 / 课程工坊 / 总览 / 资源库 / 发布 / 生成听力音频 / 教师模式 / 设置
 
-课程树右键入口（16 动作）：
-  Section  → 新增 Unit / 删除 / AI 编辑此 / AI 修正此
-  Unit     → 新增 Lesson / 功能课向导 / 删除 / AI 编辑 / AI 修正
+课程树右键入口（17 动作）：
+  Section  → 新建 Unit / 删除 / AI 编辑此 / AI 修正此
+  Unit     → 新建 Lesson / 功能课向导… / 删除 / AI 编辑 / AI 修正
   Lesson   → 复制 (Ctrl+D) / 删除 / AI 编辑 / AI 修正
   多选     → 批量复制 / 批量移动 / 批量套用预设 / 批量删除
 
@@ -299,8 +310,8 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
 
 ### 7.6 TTS 失败
 
-- 检测：MiniMax API 4xx / 网络失败。
-- 降级：fallback voice → fallback model → 跳过该 phase 仅保留文本（`backend/generate_audio_worker.py` 内部 fallback chain）。
+- 检测：MiniMax API 4xx / 网络失败 / 子进程非零退出。
+- 降级：无自动 fallback 链；失败项记 `telemetry`，明细在设置 → 操作日志查看；该 phase 保留文本，发布前补录或重试。
 
 ## 8. 创作者不下放的边界
 
@@ -317,7 +328,7 @@ Plan ──► 大纲 ──► 分课生成 ──► 校验 ──► 内容�
 
 违反上述任一条的 AI 输出必须由作者裁决，不得静默应用。
 
-> AI 的「下不下放」由 5 模式阶梯（observer / copilot / active / immersive / sovereign）控制。13 个 `PolicyDecision` 字段、7 类子模式、M-08 配额熔断与 C-06 LLM 意图分类见 [AI 控制模式](/authoring/ai-control-modes)。
+> AI 的「下不下放」由 4 档体验模式（observer / copilot / active / immersive）控制。`PolicyDecision` 字段、M-08 配额熔断、LLM 意图分类与 `Ctrl+Shift+D` 一键降档见 [AI 控制模式](/authoring/ai-control-modes)。
 
 ## 9. 相关文档
 

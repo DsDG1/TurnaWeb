@@ -4,14 +4,27 @@
 
 ## 客户端基线
 
-```bash
+::: code-group
+
+```bash [Windows]
 flutter analyze
 flutter test
-python -m pytest
+python -m unittest discover -s test -p "*_test.py"            # Python 工具测试（Makefile test-python）
+python -m unittest discover -s tool/gui/tests -p "test_*.py"  # GUI 测试
 make ci
 ```
 
-具体 Python 测试范围由项目 Makefile 和工具目录定义。不要用“命令执行但未收集测试”替代通过。
+```bash [Linux / macOS]
+flutter analyze
+flutter test
+python3 -m unittest discover -s test -p "*_test.py"            # Python 工具测试（Makefile test-python）
+python3 -m unittest discover -s tool/gui/tests -p "test_*.py"  # GUI 测试
+make ci
+```
+
+:::
+
+Python 测试走 unittest（非 pytest）。测试基线见应用仓库 `test/BASELINE.md`。不要用"命令执行但未收集测试"替代通过。
 
 ## 课程门禁
 

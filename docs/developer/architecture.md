@@ -56,7 +56,7 @@ GetIt 与 Injectable 注册 renderer、service 和 repository。生成文件由 
 
 ## 渲染插件
 
-13 种 Interaction renderer 通过 Injectable 注册并按 `runtimeType` 查找。新增题型需要同时修改：
+14 种 Interaction renderer 通过 Injectable 注册并按 `runtimeType` 查找（`di/renderer_module.dart`；分发走 `interaction_renderer.dart` 的 `lookupRenderer()`）。注意 `ankiHtmlCard` 在课时体内的渲染器是退役占位；Official 复习的保真渲染走 `anki_official/` 自己的路径。新增题型需要同时修改：
 
 1. 领域 union / 序列化。
 2. renderer。

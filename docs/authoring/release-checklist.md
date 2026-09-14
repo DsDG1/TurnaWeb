@@ -38,7 +38,9 @@
 
 ## 3. 自动检查
 
-```bash
+::: code-group
+
+```bash [Windows]
 # 1. 结构校验（必通过，退出码 0）
 python tool/course_cli.py validate --course-dir assets/courses/turkish
 
@@ -49,13 +51,34 @@ python tool/course_cli.py lint --course-dir assets/courses/turkish
 python tool/export_content_inventory.py
 
 # 4. 音频 manifest
-python tool/course_cli.py audio-manifest --output /tmp/manifest.csv
+python tool/course_cli.py audio-manifest --course-dir assets/courses/turkish --output manifest.csv
 
 # 5. 客户端测试（reseed 行为）
 flutter test
 ```
 
-任何**非零**退出码阻断发布。`validate` 与 `lint` 的 JSON 输出须进入 CI 产物。
+```bash [Linux / macOS]
+# 1. 结构校验（必通过，退出码 0）
+python3 tool/course_cli.py validate --course-dir assets/courses/turkish
+
+# 2. 内容 lint（error 必须 0；warning 视团队策略）
+python3 tool/course_cli.py lint --course-dir assets/courses/turkish
+
+# 3. 内容清单（核对规模变化）
+python3 tool/export_content_inventory.py
+
+# 4. 音频 manifest
+python3 tool/course_cli.py audio-manifest --course-dir assets/courses/turkish --output /tmp/manifest.csv
+
+# 5. 客户端测试（reseed 行为）
+flutter test
+```
+
+:::
+
+::: warning 门禁
+任何**非零**退出码阻断发布。`validate --format json` 的输出可进入 CI 产物（`lint` 仅文本输出，CI 用退出码 / `--strict` 做门禁）。
+:::
 
 ## 4. 教师试做
 
@@ -163,13 +186,7 @@ GUI 工具栏「发布」按钮触发 `PublishDialog`（`tool/gui/src/widgets/pu
 
 **AI 拟人化能力**（按质量分修复 / AI 解释 / AI 写发布说明）为 opt-in，发布按钮不自动调用；见 [AI 能力 - AI 拟人化的边界](#ai-拟人化的边界)。
 
-非 GUI 场景下等价 CLI：
-
-```bash
-python tool/course_cli.py publish \
-  --course-dir assets/courses/turkish \
-  --report-out dist/publish-report.md
-```
+非 GUI 场景没有等价的 `publish` 子命令；需手工串联第 3 节的 `validate` / `lint` / `audio-manifest` + git 操作完成同等检查。
 
 发布执行的所有步骤均通过 telemetry 记录：`repo.publish.triggered`、`repo.publish.committed`、`repo.publish.failed`（错误携带异常堆栈）。
 
@@ -198,7 +215,11 @@ python tool/course_cli.py publish \
 
 ### AI 辅助发布
 
-`PublishDialog`（`tool/gui/src/widgets/publish_dialog.py:39`）专家模式新增 **「按质量分修复」** 按钮（位于「版本号变更」分组下方）。点击后：
+`PublishDialog`（`tool/gui/src/widgets/publish_dialog.py:39`）专家模式新增 **「按质量分修复」** 按钮（位于「版本号变更」分组下方），另有按六维质量分定向批量修复的 `QualityCampaignDialog`：
+
+![质量活动对话框（实际运行截图：按六维质量分选目标节批量修复）](/images/authoring/_real/14-quality-campaign.png)
+
+点击「按质量分修复」后：
 
 1. 调 `backend/content_quality.py::overview_quality(adapter)` 取所有 Section 的六维均值。
 2. 按 `mean` 升序排序，取最低的 3 个 Section。

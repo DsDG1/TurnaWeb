@@ -59,42 +59,42 @@
     <g transform="translate(14, 44)">
       <text class="field-key" x="0" y="14">listeningPhases</text>
       <rect class="box" x="120" y="0" width="270" height="20" rx="2"/>
-      <text class="text" x="130" y="14">[debut, main, fin]</text>
+      <text class="text" x="130" y="14">[wordPairing, dialogue, summary]</text>
     </g>
     <g transform="translate(40, 72)">
-      <text class="muted" x="0" y="14">kind</text>
-      <rect class="accent" x="40" y="0" width="80" height="20" rx="2"/>
-      <text x="80" y="14" text-anchor="middle" fill="#fafaf7" font-weight="600">debut</text>
-      <text class="muted" x="132" y="14">audioAsset</text>
-      <rect class="box" x="190" y="0" width="170" height="20" rx="2"/>
-      <text class="text" x="200" y="14">l-u1/debut.mp3</text>
+      <text class="muted" x="0" y="14">type</text>
+      <rect class="accent" x="40" y="0" width="100" height="20" rx="2"/>
+      <text x="90" y="14" text-anchor="middle" fill="#fafaf7" font-weight="600">wordPairing</text>
+      <text class="muted" x="152" y="14">items[]</text>
+      <rect class="box" x="200" y="0" width="160" height="20" rx="2"/>
+      <text class="text" x="210" y="14">listenAndPick × N</text>
     </g>
     <g transform="translate(40, 96)">
-      <text class="muted" x="0" y="14">kind</text>
-      <rect class="accent" x="40" y="0" width="80" height="20" rx="2"/>
-      <text x="80" y="14" text-anchor="middle" fill="#fafaf7" font-weight="600">main</text>
-      <text class="muted" x="132" y="14">audioAsset</text>
-      <rect class="box" x="190" y="0" width="170" height="20" rx="2"/>
-      <text class="text" x="200" y="14">l-u1/main.mp3</text>
+      <text class="muted" x="0" y="14">type</text>
+      <rect class="accent" x="40" y="0" width="100" height="20" rx="2"/>
+      <text x="90" y="14" text-anchor="middle" fill="#fafaf7" font-weight="600">dialogue</text>
+      <text class="muted" x="152" y="14">transcript</text>
+      <rect class="box" x="200" y="0" width="160" height="20" rx="2"/>
+      <text class="text" x="210" y="14">逐字稿</text>
     </g>
     <g transform="translate(40, 120)">
-      <text class="muted" x="0" y="14">kind</text>
-      <rect class="accent" x="40" y="0" width="80" height="20" rx="2"/>
-      <text x="80" y="14" text-anchor="middle" fill="#fafaf7" font-weight="600">fin</text>
-      <text class="muted" x="132" y="14">audioAsset</text>
-      <rect class="box" x="190" y="0" width="170" height="20" rx="2"/>
-      <text class="text" x="200" y="14">l-u1/fin.mp3</text>
+      <text class="muted" x="0" y="14">type</text>
+      <rect class="accent" x="40" y="0" width="100" height="20" rx="2"/>
+      <text x="90" y="14" text-anchor="middle" fill="#fafaf7" font-weight="600">summary</text>
+      <text class="muted" x="152" y="14">items[]</text>
+      <rect class="box" x="200" y="0" width="160" height="20" rx="2"/>
+      <text class="text" x="210" y="14">listenOnly 等</text>
     </g>
 
     <g transform="translate(14, 152)">
       <text class="field-key" x="0" y="14">stages</text>
       <rect class="box" x="120" y="0" width="270" height="20" rx="2"/>
-      <text class="text" x="130" y="14">[st-comprehension]</text>
+      <text class="text" x="130" y="14">[st-comprehension]（可选）</text>
     </g>
     <g transform="translate(40, 178)">
-      <text class="muted" x="0" y="14">items</text>
-      <rect class="box" x="64" y="0" width="270" height="20" rx="2"/>
-      <text class="text" x="74" y="14">[q-listen-1 · listenAndPick]</text>
+      <text class="muted" x="0" y="14">audioAsset</text>
+      <rect class="box" x="90" y="0" width="270" height="20" rx="2"/>
+      <text class="text" x="100" y="14">w-merhaba（词 id → TTS）或具名素材</text>
     </g>
   </g>
 
@@ -139,8 +139,8 @@
 
   <!-- runtimeType matrix -->
   <g transform="translate(464, 304)">
-    <rect class="frame" width="412" height="200" rx="4"/>
-    <text class="text" x="14" y="22" font-weight="600">已注册 runtimeType（闭合枚举）</text>
+    <rect class="frame" width="412" height="216" rx="4"/>
+    <text class="text" x="14" y="22" font-weight="600">已注册 runtimeType（闭合枚举，14 种）</text>
     <line x1="14" y1="30" x2="398" y2="30" stroke="#5a6b66" stroke-width="0.4"/>
 
     <g transform="translate(14, 44)">
@@ -173,7 +173,12 @@
       <rect class="box" x="64" y="0" width="320" height="20" rx="2"/>
       <text class="text" x="74" y="14">readingMcq · readingTrueFalse · readingShortAnswer</text>
     </g>
+    <g transform="translate(14, 188)">
+      <text class="muted" x="0" y="14">Anki</text>
+      <rect class="box" x="64" y="0" width="320" height="20" rx="2"/>
+      <text class="text" x="74" y="14">ankiCard · ankiHtmlCard（课时体内已退役）</text>
+    </g>
   </g>
 
-  <text class="muted" x="24" y="532">图 8 — 四个 template 的 canonical content + runtimeType 枚举</text>
+  <text class="muted" x="24" y="532">图 — 四个 template 的 canonical content + 14 种 runtimeType 枚举</text>
 </svg>

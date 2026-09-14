@@ -19,7 +19,9 @@
 3. 启动后通过工具栏 **「课程仓库 → 打开课程目录」** 选定该目录。
 4. 状态栏显示 `已加载：<路径>` 即就绪。
 
-> 团队协作请使用 **「资源库 → Git 资源库」** 接入远程仓库；不直接在共享目录写盘，避免覆盖别人未提交的修改。
+::: tip 团队协作
+使用 **「资源库 → Git 资源库」** 接入远程仓库；不直接在共享目录写盘，避免覆盖别人未提交的修改。
+:::
 
 ## 1. GUI 总览
 
@@ -42,9 +44,9 @@
 
 ### 2.1 新建
 
-1. 在目标 Unit 上右键 → **新增 Lesson**。
-2. 弹出模板选择，选 **intro（认识新词）**。
-3. 程序自动生成 id（`l-u{N}-{slug}`），教师只填：
+1. 在目标 Unit 上右键 → **新建 Lesson**。
+2. 弹出模板选择，选 **intro（认识新词）**（如需 listening/reading/mastery 可走「功能课向导」三步产出）。
+3. 程序自动生成 id（`l-<8 位随机 hex>`），教师只填：
    - `name`：用户可见名称
    - `description`：本课的可验证目标（一句话即可）
    - `prerequisiteLessonIds`：同 Unit 内必须先完成的课
@@ -58,7 +60,7 @@
 ### 2.2 填词
 
 - 词汇**必须**来自 `vocab.json`。**禁止**在 Lesson 内复制另一份词表。
-- 题型表单的「词项」下拉关联到 `vocab.json.items[]`，按 ID 绑定。
+- 题型表单的「词项」下拉关联到 `vocab.json.words[]`，按 ID 绑定。
 - 干扰项从同范围同词性的真实易混项中选取，**不要**填入随机无关词。
 - 释义以学习者母语写就；非空、不含占位文本。
 
@@ -95,12 +97,12 @@
 
 | 操作 | 触发 | 备注 |
 | --- | --- | --- |
-| 新增 | 右键 → 新增 | 弹出模板选择；可走 FunctionalLessonWizard |
+| 新建 | 右键 → 新建 | 弹出模板选择；可走 FunctionalLessonWizard |
 | 复制 | `Ctrl+D` | 复制当前节点及其下级 |
 | 重命名 | `F2` | 仅改 `name`，ID 不变 |
 | 上移 / 下移 | `Ctrl+↑` / `Ctrl+↓` | 仅排序，不影响依赖 |
 | 删除 | `Delete` | 二次确认；引用数 > 0 时阻断 |
-| 套用预设 | 右键 → 套用预设 | 替换为预设的题型组合 |
+| 套用预设 | 多选 Lesson → 右键 → 批量套用预设… | 替换为预设的题型组合（单课无此入口） |
 | AI 编辑此节点 | 右键 → AI 编辑此 Section/Unit/Lesson | 弹窗针对当前节点改写 |
 | AI 修正此节点 | 右键 → AI 修正 | 把当前节点的 validate 错误回灌给 LLM |
 | 批量操作 | `Ctrl` / `Shift` 多选后右键 | 复制 / 移动 / 套用预设 / 删除 |
@@ -113,8 +115,8 @@
 
 | 节点 | 动作 |
 | --- | --- |
-| Section | 新增 Unit / 删除 Section / AI 编辑此 Section / AI 修正此 Section |
-| Unit | 新增 Lesson / 删除 Unit / AI 编辑此 Unit / AI 修正此 Unit |
+| Section | 新建 Unit / 删除 Section / AI 编辑此 Section / AI 修正此 Section |
+| Unit | 新建 Lesson / **功能课向导…** / 删除 Unit / AI 编辑此 Unit / AI 修正此 Unit |
 | Lesson | 复制 Lesson（`Ctrl+D`）/ 删除 Lesson / AI 编辑此 Lesson / AI 修正此 Lesson |
 | 选中多 Lesson | 批量复制（N）/ 批量移动到…/ 批量套用预设…/ 批量删除（N） |
 
@@ -208,6 +210,7 @@
 
 工具栏 **「教师模式」** 是一个 `QCheckAction`（`app.py::_on_mode_toggled`）。切换后以下元素变化：
 
+::: details 逐项对照
 | 元素 | 关闭 | 开启 |
 | --- | --- | --- |
 | 工具栏按钮文字 | 教师模式 | 教师模式：开 |
@@ -217,16 +220,18 @@
 | AI 按钮 | 全部显示 | 默认隐藏；按权限分级显示 |
 | 状态栏常驻提示 | `AI 校验防护激活中` | 替换为 `教师模式：试做中` |
 
-`teacher_view_model.TeacherViewModel`（`tool/gui/src/backend/teacher_view_model.py`）按节点类型给出视图投影：教师模式下，`content.interactions[].correctAnswer` 不被渲染到 UI；学员提交答案后才显示对错。
+`teacher_view_model.TeacherViewModel`（`tool/gui/src/backend/teacher_view_model.py`）按节点类型给出视图投影：教师模式下，题目的答案字段（`correctIndex` / `correctIndices` / `answer` 等）不被渲染到 UI；学员提交答案后才显示对错。
+:::
 
 ## B. LessonPreviewDialog 流程
 
-`tool/gui/src/teacher/preview_window.py:222` 实现的 `LessonPreviewDialog` 提供 Lesson 级试做视图。入口：
+`tool/gui/src/teacher/preview_window.py:252` 实现的 `LessonPreviewDialog` 提供 Lesson 级试做视图。入口：
 
 - 教师模式 → 课程树右键 → **试做此 Lesson**。
 - 教师模式 → 详情面板右上角 **试做** 按钮。
 - 教师模式 → 总览点击 Lesson 卡片 → 弹窗预览。
 
+::: details 预览区域与题型支持
 | 区域 | 内容 |
 | --- | --- |
 | 顶部 | Lesson 名称 / `template` 中文标签 / 总进度 `3/12` |
@@ -234,19 +239,22 @@
 | 底部 | 上一题 / 下一题 / 重新开始 / 显示答案（仅教师模式） |
 | 右上角 | 退出试做 → 关闭对话框返回主窗口 |
 
-支持 `runtimeType` 渲染：`showWord` / `multipleChoice` / `multiSelect` / `fillBlank` / `translateSentence` / `reorderSentence` / `typeTheWord` / `listenAndPick` / `listenOnly` / `readingMcq` / `readingTrueFalse` / `readingShortAnswer` / `ankiHtmlCard`（共 13 种）。试做结束不写盘；纯运行时模拟。
+支持 `runtimeType` 渲染：`showWord` / `multipleChoice` / `multiSelect` / `fillBlank` / `translateSentence` / `reorderSentence` / `typeTheWord` / `listenAndPick` / `listenOnly` / `readingMcq` / `readingTrueFalse` / `readingShortAnswer` / `ankiCard` / `ankiHtmlCard`（共 14 种；Anki 两种在桌面是降级预览 —— `ankiCard` 显示为普通翻卡，`ankiHtmlCard` 显示剥标签文本 + 「App 渲染为准」标记）。试做结束不写盘；纯运行时模拟。
+:::
 
 ## C. 状态栏与全局通知
 
 `QStatusBar` 固定 28px 高，分三段：
 
+::: details 三段对照
 | 段 | 内容 | 来源 |
 | --- | --- | --- |
 | 左 | 当前操作状态（如「已加载: assets/courses/turkish」、「校验失败，已回滚」） | 业务调用 `statusBar().showMessage(msg, timeout)` |
 | 中 | AI 校验防护 / 撤销 / 复制粘贴 等临时提示 | `_on_status` 回调 |
 | 右 | 永久挂载的免责声明「AI 生成内容仅供参考，请作者自行审核其准确性与适用性。」 | `app.py::_build_status_bar` |
+:::
 
-`telemetry` 事件贯穿所有写盘动作；`operations_log` 标签页（设置第 7 tab）可回看最近 200 条操作。
+`telemetry` 事件贯穿所有写盘动作；`操作日志` 标签页（设置第 8 个 tab）可回看最近 200 条操作。
 
 ## AI 协作模式
 
@@ -292,7 +300,7 @@ GUI 在上述边界处会拒绝 AI 写入并提示冲突；详见 [AI 课程生�
 
 ### 3.3 模式与不下放的对应
 
-AI 的「下不下放」由 5 模式阶梯控制。`observer` 模式下任何 AI 写动作均被拒绝；`copilot` 默认安全；`active` 启用 ambient / soft / defer 套装；`immersive` 允许全自；`sovereign` 进入后 300 秒不可降档。完整 13 字段决策矩阵见 [AI 控制模式 - 决策矩阵](/authoring/ai-control-modes#7-决策矩阵模式--能力)。
+AI 的「下不下放」由 4 档体验模式控制。`observer` 模式下任何 AI 写动作均被拒绝；`copilot` 默认安全；`active` 启用 ambient / soft / defer 套装；`immersive` 允许白名单静默执行（出站操作仍拒绝），`Ctrl+Shift+D` 随时降档回 `copilot`。完整决策矩阵见 [AI 控制模式 - 决策矩阵](/authoring/ai-control-modes#7-决策矩阵模式--能力)。
 
 ## 下一步
 

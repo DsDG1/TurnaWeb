@@ -82,7 +82,7 @@ const facts = [
         <p>文档按学习者、Anki 用户、课程作者和开发者四类任务组织，提供操作步骤、行为说明与数据约束。</p>
       </div>
       <dl class="signal-stats">
-        <div><dt>41</dt><dd>技术文档</dd></div>
+        <div><dt>42</dt><dd>技术文档</dd></div>
         <div><dt>04</dt><dd>任务入口</dd></div>
         <div><dt>100%</dt><dd>离线主流程</dd></div>
       </dl>

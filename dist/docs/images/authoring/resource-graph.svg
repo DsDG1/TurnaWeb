@@ -20,7 +20,7 @@
     <rect class="resource" width="220" height="56" rx="4"/>
     <rect class="accent" width="3" height="56"/>
     <text class="text" x="14" y="22" font-weight="600">vocab.json</text>
-    <text class="muted" x="14" y="40">词汇 · items[].id</text>
+    <text class="muted" x="14" y="40">词汇 · words[].id</text>
     <text class="muted" x="14" y="54">w-merhaba, w-selam …</text>
   </g>
   <g transform="translate(40, 144)">
@@ -34,7 +34,7 @@
     <rect class="resource" width="220" height="56" rx="4"/>
     <rect class="accent" width="3" height="56"/>
     <text class="text" x="14" y="22" font-weight="600">grammar_points.json</text>
-    <text class="muted" x="14" y="40">语法点 · linkedVocabIds</text>
+    <text class="muted" x="14" y="40">语法点 · grammarPoints[].id</text>
     <text class="muted" x="14" y="54">g-greeting-particles …</text>
   </g>
 
@@ -43,10 +43,10 @@
     <rect class="lesson" width="320" height="220" rx="4"/>
     <rect class="accent" width="3" height="220"/>
     <text class="text" x="14" y="22" font-weight="600">Lesson</text>
-    <text class="muted" x="14" y="40">l-u1-greetings-intro</text>
+    <text class="muted" x="14" y="40">s1-l1</text>
 
     <line x1="14" y1="52" x2="306" y2="52" stroke="#5a6b66" stroke-width="0.4"/>
-    <text class="text" x="14" y="72">content.interactions[]</text>
+    <text class="text" x="14" y="72">content…items[]</text>
     <text class="muted" x="14" y="92">  · wordId      → vocab</text>
     <text class="muted" x="14" y="110">  · expressionId → expressions</text>
     <text class="text" x="14" y="134">linkedGrammarPointIds</text>
@@ -87,5 +87,5 @@
     <text class="muted" x="380" y="68">version 变化时重建 SQLite 缓存</text>
   </g>
 
-  <text class="muted" x="24" y="448">图 3 — 资源与 Lesson 的引用图（反向引用被拒绝）</text>
+  <text class="muted" x="24" y="448">图 — 资源与 Lesson 的引用图（反向引用被拒绝）</text>
 </svg>

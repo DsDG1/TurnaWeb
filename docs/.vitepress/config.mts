@@ -1,8 +1,37 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitepress'
 
+const srcDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const siteBase = process.env.SITE_BASE?.replace(/^\/+|\/+$/g, '')
 const docsBase = process.env.DOCS_BASE || (siteBase ? `/${siteBase}/docs/` : '/docs/')
 const docsPort = Number(process.env.DOCS_DEV_PORT || 5174)
+
+// First prose paragraph becomes the page description (meta/og) when the page
+// does not set one explicitly in frontmatter.
+function inferDescription(relativePath: string): string | undefined {
+  try {
+    const src = fs
+      .readFileSync(path.join(srcDir, relativePath), 'utf8')
+      .replace(/^---[\s\S]*?---\r?\n/, '')
+    let inFence = false
+    for (const line of src.split('\n')) {
+      const t = line.trim()
+      if (/^(`{3,}|~{3,})/.test(t)) { inFence = !inFence; continue }
+      if (inFence) continue
+      // skip headings, quotes, lists, tables, images, containers, html, ascii diagrams
+      if (!t || /^[#>|!\-`*|:<┌┐└┘│├┤─═╔╗╚╝║]/.test(t)) continue
+      const text = t
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/[*_`]/g, '')
+      if (text.length >= 20) return text.length > 120 ? `${text.slice(0, 120)}…` : text
+    }
+  } catch {
+    /* missing file — leave description unset */
+  }
+  return undefined
+}
 
 export default defineConfig({
   title: 'Turna',
@@ -14,7 +43,14 @@ export default defineConfig({
   base: docsBase,
   outDir: '../dist/docs',
   cleanUrls: true,
-  ignoreDeadLinks: true,
+  // Links escaping the docs site to the main site (`../../<page>.html`) are
+  // intentional — the docs are deployed under the site's /docs/ path. Dev-server
+  // localhost links inside docs prose are equally intentional. (The array form
+  // does not special-case 'localhostLinks', so match the host explicitly.)
+  ignoreDeadLinks: [
+    /^https?:\/\/localhost/,
+    /^(\.\/)?\.\.\//,
+  ],
 
   appearance: true,
   lastUpdated: true,
@@ -27,12 +63,40 @@ export default defineConfig({
   },
 
   head: [
-    ['meta', { name: 'theme-color', content: '#e8efec' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${docsBase}turna-mark.svg` }],
+    ['meta', { name: 'theme-color', content: '#e8efec', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#0d1d1c', media: '(prefers-color-scheme: dark)' }],
     ['meta', { name: 'description', content: 'Turna 是一款本地优先、离线可用的开源语言学习应用，当前专注土耳其语。' }],
     ['meta', { property: 'og:title', content: 'Turna 文档' }],
     ['meta', { property: 'og:description', content: '本地优先、离线可用的开源语言学习应用，当前专注土耳其语。' }],
     ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:image', content: `${docsBase}turna-mark.svg` }],
   ],
+
+  markdown: {
+    image: { lazyLoading: true },
+  },
+
+  transformPageData(pageData) {
+    const fm = pageData.frontmatter
+    if (fm.description || fm.layout === 'home') return
+    const desc = inferDescription(pageData.relativePath)
+    if (desc) {
+      fm.description = desc
+      pageData.description = desc
+    }
+  },
+
+  // The SSR head only emits siteData.description when the page leaves it unset;
+  // transformHead is the reliable channel for per-page meta.
+  transformHead({ pageData }) {
+    const desc = pageData.frontmatter?.description
+    if (!desc) return []
+    return [
+      ['meta', { name: 'description', content: desc }],
+      ['meta', { property: 'og:description', content: desc }],
+    ]
+  },
 
   themeConfig: {
     logo: { src: '/turna-mark.svg', alt: 'Turna' },
@@ -171,9 +235,13 @@ export default defineConfig({
       next: '下一篇',
     },
 
+    lastUpdated: {
+      text: '最后更新',
+    },
+
     editLink: {
-      pattern: 'https://github.com/DsDG1/turna/edit/master/docs/:path',
-      text: '在 GitHub 上编辑此页',
+      pattern: 'https://gitee.com/dhwdwf3/turna-web/edit/master/docs/:path',
+      text: '在 Gitee 上编辑此页',
     },
   },
 })

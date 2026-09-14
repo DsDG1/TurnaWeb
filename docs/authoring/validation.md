@@ -8,49 +8,47 @@
 
 ## 命令
 
-```bash
-python tool/course_cli.py validate --course-dir assets/courses/turkish
-python tool/course_cli.py lint --course-dir assets/courses/turkish
-```
-
-GUI 与 CI 走机器可读输出：
+`tool/course_cli.py` 的全部子命令：
 
 ```bash
-python tool/course_cli.py validate \
-  --format json \
-  --course-dir assets/courses/turkish
+python tool/course_cli.py validate  --course-dir assets/courses/turkish           # 结构校验
+python tool/course_cli.py validate  --course-dir assets/courses/turkish --format json  # 机器可读
+python tool/course_cli.py lint      --course-dir assets/courses/turkish           # 内容 lint
+python tool/course_cli.py lint      --course-dir assets/courses/turkish --strict  # warning 也算失败
+python tool/course_cli.py export-csv   --course-dir <dir> --type vocab --output out.csv
+python tool/course_cli.py import-csv   --course-dir <dir> --type vocab --input in.csv [--dry-run]
+python tool/course_cli.py audio-manifest --course-dir <dir> --output manifest.csv
+python tool/course_cli.py diff         --before <dir_a> --after <dir_b>           # 按 id 集合对比
 ```
+
+`export-csv` / `import-csv` 的 `--type` 取 `vocab` / `expressions` / `grammar_points`；`import-csv --dry-run` 只校验不写盘。
+
+::: tip 解释器名
+Windows 用 `python`；Linux / macOS 一般需要用 `python3` 替代。
+:::
 
 ### 退出码契约
 
 | 退出码 | 含义 | 调用方决策 |
 | ---: | --- | --- |
 | `0` | 通过 | 继续 |
-| `1` | validate error | 阻断保存 / 阻断发布 |
-| `2` | lint error | 阻断发布；不阻断保存 |
-| `3` | 内部错误（IO / 解析） | 阻断保存，提示修复环境 |
-| `64+` | 保留 | 由 CLI 内部扩展 |
+| `1` | 有 error（lint 在 `--strict` 下 warning 也返回 1） | 阻断保存 / 阻断发布 |
 
-调用方根据退出码与 JSON `ok` 字段判定结果，**不**通过解析自然语言日志推断成功。
+没有更细的退出码分档；调用方根据退出码与 JSON `ok` 字段判定结果，**不**通过解析自然语言日志推断成功。
 
 ## JSON 输出 schema
+
+`validate --format json` 的实际输出：
 
 ```json
 {
   "ok": false,
-  "exitCode": 1,
-  "scope": "validate",
-  "courseDir": "assets/courses/turkish",
   "errorCount": 1,
-  "warningCount": 0,
   "problems": [
     {
-      "id": "unresolved-reference",
       "level": "error",
-      "code": "E_REFERENCE",
-      "path": "sections/section1.json#/units/0/lessons/2/content/subLessons/0/stages/0/items/0/wordId",
-      "message": "Lesson l-u1-greetings-intro 引用了不存在的 vocab id: w-merhab",
-      "suggestion": "检查 vocab.json；该 id 是否拼写错误或已被删除"
+      "message": "Lesson s1-l1 引用了不存在的 vocab id: w-merhab",
+      "path": "sections/section1.json#/units/0/lessons/0/..."
     }
   ]
 }
@@ -58,14 +56,13 @@ python tool/course_cli.py validate \
 
 | 字段 | 说明 |
 | --- | --- |
-| `ok` | 顶层布尔；error=0 且 warning=0 时为 true |
-| `exitCode` | 与进程退出码一致 |
-| `scope` | `validate` / `lint` |
-| `problems[].id` | 机器可读 ID，便于聚合 |
-| `problems[].level` | `error` / `warning` / `info` |
-| `problems[].code` | 错误族编号（`E_*` / `W_*`） |
-| `problems[].path` | JSON Pointer；GUI 用于定位红角标 |
-| `problems[].suggestion` | 人类可读建议（可本地化） |
+| `ok` | 顶层布尔；无 error 时为 true |
+| `errorCount` | error 级问题数 |
+| `problems[].level` | `error` / `warning` |
+| `problems[].message` | 人类可读描述 |
+| `problems[].path` | 定位信息（可空字符串）；GUI 用于定位红角标 |
+
+`lint` 无 `--format` 选项，输出纯文本 `LEVEL: message` 行。
 
 ## validate 范围（error 级别）
 
@@ -146,20 +143,29 @@ lint      ──warning──► 写入红色提示，不阻断
 
 ### 修复后重试
 
+::: danger 禁止绕过校验
 错误未消除时，**禁止**手动覆盖磁盘文件绕过校验。如确认是校验器误报，先在应用仓库修复校验器与对应测试，再回到 GUI 重新保存。
+:::
 
 ## CI 集成
 
-CI 矩阵对每门语言各跑一次：
+CI 矩阵对每门语言各跑一次，直接用退出码做门禁：
 
-```bash
-python tool/course_cli.py validate --format json --course-dir assets/courses/<lang> \
-  | python tool/check_problems.py --max-error 0
-python tool/course_cli.py lint --format json --course-dir assets/courses/<lang> \
-  | python tool/check_problems.py --max-warning 100
+::: code-group
+
+```bash [Windows]
+python tool/course_cli.py validate --course-dir assets/courses/<lang>
+python tool/course_cli.py lint --strict --course-dir assets/courses/<lang>
 ```
 
-`check_problems.py` 解析 `problems[]` 计数并比对阈值，输出符合 SARIF / GitHub Actions 注解的格式。
+```bash [Linux / macOS]
+python3 tool/course_cli.py validate --course-dir assets/courses/<lang>
+python3 tool/course_cli.py lint --strict --course-dir assets/courses/<lang>
+```
+
+:::
+
+`validate` 有 error 或 `lint --strict` 有 warning 即非零退出。需要机器可读结果时用 `validate --format json` 并解析 `problems[]` / `errorCount`。
 
 ## 与 Dart 端对齐
 
@@ -251,7 +257,7 @@ AI 批量修正**不阻断**保存。若用户选择「仅修复 1 个节点、�
 
 ```json
 {
-  "s-basics": {
+  "section1": {
     "reproducibility": 0.91,
     "item_type":      0.83,
     "distractor":     0.74,

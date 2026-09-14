@@ -32,8 +32,8 @@
     <g transform="translate(340, 0)">
       <rect class="frame" width="150" height="60" rx="4"/>
       <text class="text" x="14" y="22" font-weight="600">3. audio-manifest</text>
-      <text class="muted" x="14" y="40">kind=missing = 0</text>
-      <text class="muted" x="14" y="56">LUFS 差 ≤ 2</text>
+      <text class="muted" x="14" y="40">status=missing = 0</text>
+      <text class="muted" x="14" y="56">referenced_by 齐全</text>
     </g>
     <g transform="translate(510, 0)">
       <rect class="frame" width="150" height="60" rx="4"/>
@@ -75,7 +75,7 @@
     <g transform="translate(680, 0)">
       <rect class="ok" width="150" height="60" rx="4"/>
       <text class="text" x="14" y="22" font-weight="600">8. 发布</text>
-      <text class="muted" x="14" y="40">客户端开始下载</text>
+      <text class="muted" x="14" y="40">git tag + 报告归档</text>
     </g>
   </g>
 
@@ -128,5 +128,5 @@
     <text class="muted" x="14" y="66">· 崩溃率维持基线 ±0.1%  &amp;  反馈通道开启版本过滤</text>
   </g>
 
-  <text class="muted" x="24" y="532">图 6 — 发布管线（八阶段） + 回滚路径 + 灰度窗口</text>
+  <text class="muted" x="24" y="532">图 — 发布管线（八阶段） + 回滚路径 + 灰度窗口</text>
 </svg>

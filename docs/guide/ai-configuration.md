@@ -6,21 +6,23 @@ AI 不是核心学习流程的前置条件。未配置模型时，课程、复�
 
 | 字段 | 含义 |
 | --- | --- |
-| Provider preset | 服务商预设或 custom |
-| Base URL | API 根地址 |
+| Provider preset | 服务商预设或「自定义」 |
+| Base URL | API 根地址（自定义时手填；命名预设自动带入） |
 | API key | 服务凭据 |
-| Chat model | 流式对话与解释模型 |
-| JSON model | 结构化生成模型 |
-| Strict schema mode | 对 JSON schema 的要求与回退策略 |
+| Chat model | 流式对话与解释模型；留空回退预设默认模型 |
+| JSON model | 结构化生成模型；留空回退预设默认模型 |
+| Strict schema mode | `auto`（默认，遇 400 回退 `json_object`）/ `on` / `off` |
+| Reasoning | 显式开关（`reasoning_effort` / `thinking` 字段）；预设的 `supportsReasoning` 只是能力提示，不会自动开 |
+| 响应缓存 | 命中相同请求时直接复用结果 |
 
-预设包括 DeepSeek、OpenAI、Moonshot、Ollama 和 Custom。具体模型名由用户配置，文档不假设远端默认值长期有效。
+内置预设：**DeepSeek**（默认 `deepseek-v4-flash`）、**Kimi**（`kimi-k3`）、**Qwen**（`qwen3.8-max`）、**MiMo**（`mimo-v2.5-pro`）、**自定义**。具体模型名由用户配置，文档不假设远端默认值长期有效。
 
 ## 配置顺序
 
-1. 打开设置中的 AI Tools。
-2. 选择 provider preset。
-3. 输入 base URL 与 API key；本地 Ollama 可按本地服务配置处理。
-4. 分别选择 Chat model 与 JSON model。
+1. 打开「设置 → 高级 → AI 连接」。
+2. 选择 provider preset（命名预设自动填入 Base URL 与默认模型；「自定义」保留你手填的值）。
+3. 输入 API key；自定义服务可填本地或自托管 endpoint。
+4. 需要分流时分别选择 Chat model 与 JSON model。
 5. 执行连接测试。
 6. 检查延迟和错误信息。
 7. 保存后从 AI Hub 发起最小文本请求。

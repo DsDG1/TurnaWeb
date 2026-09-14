@@ -143,5 +143,5 @@
     <text class="muted" x="14" y="104">· 问题以红角标 + 列表呈现，JSON Pointer 定位</text>
   </g>
 
-  <text class="muted" x="24" y="472">图 4 — 保存协议与回滚时序（Author / Adapter / CLI / 磁盘）</text>
+  <text class="muted" x="24" y="472">图 — 保存协议与回滚时序（Author / Adapter / CLI / 磁盘）</text>
 </svg>

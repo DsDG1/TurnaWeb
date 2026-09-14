@@ -11,8 +11,8 @@
 ## 获取代码
 
 ```bash
-git clone https://github.com/Varnamalaplus/TurnaWeb.git
-cd TurnaWeb
+git clone https://gitee.com/dhwdwf3/turna-web.git
+cd turna-web
 ```
 
 ## 安装依赖
@@ -31,7 +31,9 @@ npm run dev
 
 终端会输出 `Open the Turna site at http://127.0.0.1:<port>/`。启动器会自动避开占用端口。只打开这条主站地址；文档通过同一地址的 `/docs/` 访问。
 
-> 触屏设备和开启了「减少动态效果」的系统会自动关闭指针追踪、视差与 3D 倾斜。
+::: tip 动效降级
+触屏设备和开启了「减少动态效果」的系统会自动关闭指针追踪、视差与 3D 倾斜。
+:::
 
 ## 跑测试与生产构建
 
