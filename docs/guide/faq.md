@@ -24,6 +24,10 @@
 
 Android 生产导入合同以 `.apkg` 为主。`.colpkg` 当前不作为正式导入路径。
 
+## 能否导入 LibreLingo 课程
+
+可以，但不直接读 YAML。先用离线工具把 LibreLingo 课程转成 `.turnapack`（见[外部课程包](/authoring/course-pack)），再到「课程管理 → 导入课程包」安装（见[导入课程包](/guide/course-pack)）。
+
 ## 为什么复杂 Anki 卡片没有网络
 
 卡片网络默认关闭。HTML 模板可能包含未知脚本和远程请求。用户可以按策略显式允许，但不应默认开放。

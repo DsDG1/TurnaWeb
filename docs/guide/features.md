@@ -16,6 +16,10 @@
 
 复用官方 Anki 内核。`.apkg` 导入后进入课程路径，并与复习共用学习记录。详见 [Anki 集成](/guide/anki)。
 
+## 外部课程包
+
+LibreLingo 等社区课程经离线工具转成 `.turnapack` 后可直接导入，学习、复习与卸载恢复与内置课程一致。详见 [导入课程包](/guide/course-pack) 与 [外部课程包格式](/authoring/course-pack)。
+
 ## AI 伴学
 
 跟课答疑、分层提示、按错题和弱词出练习。不配模型时用本地课程片段讲解。详见 [AI 伴学](/guide/ai)。
