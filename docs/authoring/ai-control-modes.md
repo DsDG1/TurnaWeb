@@ -92,8 +92,10 @@
 
 | 取值 | 实现 | 适用 |
 | --- | --- | --- |
-| `fast` | `backend/ai_generator.generate_with_validate_loop` 一次出 Section 草稿 | 草稿探索 |
-| `phased` / `refine` | `backend/ai_phased` 大纲→分课→校验→质量→修复→解释 | 发布候选 |
+| `fast`（默认） | `backend/ai_generator.generate_with_validate_loop` 一次出 Section 草稿 | 草稿探索 |
+| `refine` | `backend/ai_phased` 大纲→分课→校验→质量→修复→解释 | 发布候选 |
+
+只有 `fast` 与 `refine` 两个合法取值。`phased` 不是模式名——它是 `refine` 路径的实现模块 `ai_phased`。填入其它值会被静默回落为 `fast`，不会报错。
 
 入口：工坊 **生成模式** 下拉（`fast` 默认）；QSettings `ai/pipeline_default_mode`。
 
@@ -107,7 +109,7 @@
 
 ### 4.3 AI 对话模式
 
-`ai_generator_dialog.py` 的 `mode_combo`：
+生成器对话框（`src/dialogs/ai/generator_*.py`，已拆分为 chat/flows/panels/preview/view-state/wizard/worker-hub 多个模块）的 `mode_combo`：
 
 | 取值 | 行为 |
 | --- | --- |
@@ -125,7 +127,7 @@
 
 ### 4.5 AI 助手粒度
 
-`backend/experience/handlers/` 下 AI 助手按节点粒度运行：`lesson`（整课重写 / 重生成）或 `item`（单 Interaction 改写）。
+`backend/experience/` 下的 AI 助手按节点粒度运行：`lesson`（整课重写 / 重生成）或 `item`（单 Interaction 改写）。
 
 ### 4.6 导入目标模式
 

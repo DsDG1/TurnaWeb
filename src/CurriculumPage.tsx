@@ -16,8 +16,8 @@ import {
 const navigation = siteNavigation('curriculum')
 
 const cefrLevels = [
-  { level: 'A1', label: '入门', sections: 'Section 1 – 2' },
-  { level: 'A2', label: '基础', sections: 'Section 3 – 4' },
+  { level: 'A1', label: '入门', sections: 'Section 1 – 3' },
+  { level: 'A2', label: '基础', sections: 'Section 4' },
   { level: 'B1', label: '进阶', sections: 'Section 5 – 6' },
   { level: 'B2', label: '自如', sections: 'Section 7 – 8' },
 ] as const

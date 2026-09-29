@@ -225,7 +225,7 @@
 
 ## B. LessonPreviewDialog 流程
 
-`tool/gui/src/teacher/preview_window.py:252` 实现的 `LessonPreviewDialog` 提供 Lesson 级试做视图。入口：
+`tool/gui/src/teacher/preview_window.py` 中的 `LessonPreviewDialog` 提供 Lesson 级试做视图。入口：
 
 - 教师模式 → 课程树右键 → **试做此 Lesson**。
 - 教师模式 → 详情面板右上角 **试做** 按钮。

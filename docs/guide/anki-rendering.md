@@ -2,15 +2,21 @@
 
 Anki 卡片可能包含 HTML、CSS、JavaScript、媒体引用和 cloze 模板。Turna 按卡片来源选择渲染路径，脚本与网络是独立权限。
 
+::: warning 验收状态
+Official Anki 当前口径是**「验收 NO-GO；迁移中」**，本节描述的 Official 复习器尚未通过生产 bundle 完整用户流验证（Android 写侧仅真机 debug 构建，iOS 仅模拟器 E2E）。详见 [Anki 集成](/guide/anki)。
+:::
+
 ## 渲染路径
 
 复习入口由 `OfficialAnkiReviewerRouter` 按来源分发：
 
 | 来源 | 渲染 | 说明 |
 | --- | --- | --- |
-| Official（正式导入） | Official 复习器 | 模板卡面经 `AnkiHtmlCardView` 走 WebView；普通卡走结构化 Flutter 卡面 |
-| Legacy（历史数据） | 旧版渲染器 | 兼容保留 |
+| Official（正式导入） | Official 复习器 | 模板卡面经 WebView 走原模板渲染；普通卡走结构化 Flutter 卡面 |
+| Legacy（历史数据） | 已退役 | 旧版渲染器随 v1 整体退役，非 Official 来源 fail-closed 显示错误 |
 | Turna 练习题 | Flutter 练习 | 课程 Interaction 渲染器 |
+
+Legacy（v1）已整体退役：Legacy 读路径、卸载链、NoteStore 载荷均已删除，course.db 内的 `anki_notetypes` / `anki_notes` / `anki_cards_meta` 三张表也已 drop。因此不要再指望存在一条仍可处理的「历史数据兼容」通路——遇到非 Official 来源会直接报错。
 
 题型层面再分两种（见 [交互题型](/guide/interaction-types)）：
 
@@ -21,10 +27,13 @@ Anki 卡片可能包含 HTML、CSS、JavaScript、媒体引用和 cloze 模板�
 
 | 平台 | 行为 |
 | --- | --- |
-| Android / iOS | `AnkiHtmlCardView` 用 WebView 渲染保真卡 |
+| Android | 原生复习器经 MethodChannel/JS 协议，`AnkiHtmlCardView` 用 WebView 渲染保真卡 |
+| iOS | 原生 WKWebView 复习器（`ios/Runner/AnkiReviewer/`），自定义 scheme `turna-anki://anki.local` 提供渲染资产与媒体，与 Android 协议对齐 |
 | 桌面 / Web | 不实例化 WebView，降级为剥离标签的纯文本视图 |
 
 降级保留可读内容和评分入口，不显示空白卡。
+
+> 「现场解密 / 预渲染缓存」能力已放弃：`anki_prerendered_html` 表在 schema v22 就被 drop，相关写入与文案一并删除。排查渲染问题不要再找「预渲染失败记录」。
 
 ## JavaScript
 
@@ -43,7 +52,7 @@ WebView 的 `NavigationDelegate` 只放行 `file:` / `data:` / `about:` 等本�
 
 - 缺失图片显示占位，不阻塞评分。
 - 原音频失败时可对卡片文本执行系统 TTS。
-- `cardTextScale` 可访问性设置以 `html{zoom}` 注入放大 WebView 卡片文本（100% 时不注入，保留原模板样式）。
+- `cardTextScale` 可访问性设置用于放大卡片文本。不同复习器走不同通道：Dart WebView 轨注入 `html{zoom}`，Android 原生复习器走 `WebSettings.textZoom`，iOS 原生复习器经 `setTextZoom`（钳制 100–200）注入 `WKUserScript`。100% 时不注入，保留原模板样式。
 
 ## 安全模式
 

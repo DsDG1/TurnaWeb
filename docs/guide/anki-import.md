@@ -1,6 +1,10 @@
 # 导入 Anki 牌组
 
-本页描述 Android 生产路径中的 Official-first 导入。
+本页描述 Official-first 导入。Android arm64 与 iOS 走同一条生产路径。
+
+::: warning 验收状态
+Official Anki 当前口径是**「验收 NO-GO；迁移中」**：Android 写侧仅在真机以 **debug 构建**验证过，生产 bundle 完整用户流尚未验证；iOS 侧为模拟器 E2E。不得宣称「迁移完成」或「Android 可正常使用」。
+:::
 
 ::: warning 只支持 .apkg
 生产导入输入是 `.apkg`。选择 `.colpkg` 会得到明确的不支持提示与人工引导（需先在桌面 Anki 重新导出为 `.apkg`）；内存示例牌组不属于生产导入合同。
@@ -42,7 +46,9 @@
 - 单元标签：`unit`、`chapter`、`单元`、`章`
 - 课时标签：`lesson`、`topic`、`课`、`节`
 - 正面：`front`、`question`、`正面`、`题目`、`题干` 等
-- 背面：`back`、`answer`、`背面`、`答案`、`解析` 等
+- 背面：`back`、`answer`、`背面`、`答案` 等
+
+> `解析` 不属于背面（response）角色，它绑定到额外说明（extra）角色，以免与答案字段混淆。完整词表见 `recognition/lexicon/field_roles.dart`。
 
 ## Notetype 投影目标
 
@@ -59,7 +65,9 @@
 
 ## 调度状态
 
-导入是否携带原牌组的调度状态由执行计划的 `withScheduling` 决定：官方导入 saga 默认 `withScheduling=false`（卡片作为新卡进入 Official 复习），后续导入服务路径可携带调度。无论哪条路径，排期状态都由 Official scheduler 持有 —— 不回退到 Turna FSRS。
+导入会携带原牌组的调度状态。官方导入 saga 与导入服务都以 `withScheduling: true` 调用引擎（引擎签名里该参数默认值同样是 `true`），因此卡片按原牌组的到期与间隔进入 Official 复习，而不是作为新卡重来。
+
+无论哪条路径，排期状态都由 Official scheduler 持有 —— 不回退到 Turna FSRS。
 
 ## 失败处理
 

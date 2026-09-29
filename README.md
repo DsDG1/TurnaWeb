@@ -49,7 +49,7 @@ npm run preview
 ## 素材来源
 
 - 湿地晨雾背景：项目需求提供的参考素材。
-- Turna 吉祥物：同级 `Varnamalaplus` 应用仓库中的现有品牌素材。
+- Turna 吉祥物：同级应用仓库（`turna`）中的现有品牌素材。
 - 导航线稿鸟标：本项目内联 SVG 重绘。
 
 Turna 当前是持续开发中的开源项目，基于上游 [rshrc/Varnamala](https://github.com/rshrc/Varnamala) 构建。

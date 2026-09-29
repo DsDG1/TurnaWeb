@@ -19,7 +19,7 @@
 ## 目录结构
 
 ```text
-assets/courses/<lang>/
+assets/courses/<dir>/
 ├── index.json              # 课程索引：版本、语言、Section 列表与文件指针
 ├── vocab.json              # 课程级词汇
 ├── expressions.json        # 课程级固定表达
@@ -30,7 +30,7 @@ assets/courses/<lang>/
     └── ...
 ```
 
-`<lang>` 使用 BCP 47 简短代码。已落地语言：`turkish`。其他语言以 `index.json` 中的 `language` 字段为准。
+`<dir>` 是 `assets/courses/manifest.json` 里声明的**目录名**（`turkish` / `french`），与语言代码 `code`（`tr` / `fr`）不是一回事。已落地：`turkish`（正式课程，A1–B2）与 `french`（多语言并存机制的验收 fixture，**不是正式课程**，不要当课程模板照抄）。
 
 ::: tip 多课程并存
 `<lang>` 路径下只承载一种语言课程；不同语种必须落各自目录，避免 cross-language 引用。
@@ -42,7 +42,7 @@ assets/courses/<lang>/
 {
   "version": 12,                   // 课程语义版本；任何结构/资源变更必须 +1（当前值示例）
   "language": "tr",                // BCP 47 短代码，与目录名一致
-  "displayName": "Türkçe",
+  "displayName": "Turkish",
   "sections": [
     {
       "id": "section1",
@@ -59,7 +59,7 @@ assets/courses/<lang>/
 | 字段 | 必填 | 说明 |
 | --- | --- | --- |
 | `version` | 是 | 整数。客户端在 `version` 变化时执行 reseed；同版本不重复导入 |
-| `language` | 是 | 与目录 `<lang>` 一致；不一致时 validate 报错 |
+| `language` | 是 | 语言**代码**（如 `tr`），不是目录名；与目录名不一致是正常的（`turkish/` 目录里就是 `"language": "tr"`），validate 不检查此项 |
 | `displayName` | 是 | 客户端展示用，可本地化 |
 | `sections[].id` | 是 | 全课程稳定；发布后不改 |
 | `sections[].file` | 是 | 相对课程根目录；必须可解析为现存文件 |
@@ -92,8 +92,10 @@ assets/courses/<lang>/
           "template": "intro",
           "description": "Introduce greeting forms.",
           "prerequisiteLessonIds": [],
-          "linkedGrammarPointIds": ["g-greeting-particles"],
-          "content": { /* canonical shape */ }
+          "content": {
+            "linkedGrammarPointIds": ["g-greeting-particles"],
+            /* canonical shape */
+          }
         }
       ]
     }
@@ -101,7 +103,7 @@ assets/courses/<lang>/
 }
 ```
 
-层级固定为三段：`Section → Unit → Lesson`，不可越级或扩展。当前课程 ID 约定：`sectionN` / `sN-uM` / `sN-lK`（GUI 新建节点用 `s-<hex>` / `u-<hex>` / `l-<hex>` 随机短 id，两者都合法，关键是稳定且唯一）。
+层级固定为三段：`Section → Unit → Lesson`，不可越级或扩展。土耳其语课程的 ID 约定是 `sectionN` / `sN-uM` / `sN-lK`，法语用 `fr-section1`——都合法。ID 与文件名的真正约束只有「稳定且唯一」：Section 文件名由 `index.json` 的 `sections[].file` 显式指针决定，不是硬性命名规则。GUI 新建节点则用 `s-<hex>` / `u-<hex>` / `l-<hex>` 随机短 id。
 
 ## Canonical content 形状
 
@@ -125,9 +127,9 @@ assets/courses/<lang>/
 | --- | ---: | --- |
 | 每 Section 的 Unit | ≤ 60 | validate error，保存回滚 |
 | 每 Unit 的 Lesson | ≤ 40（生产目标 ≈ 30） | 同上 |
-| 每 Lesson 的 stage | 无硬上限 | lint warning 建议 ≤ 12 |
-| 每 stage 的 interaction | 无硬上限 | lint warning 建议 ≤ 8 |
-| `index.json.version` 跨次发布增量 | ≥ 1 | 强制递增；不得复用 |
+| 每 Lesson 的 stage | 无硬上限 | 无自动检查，靠人工控制（建议 ≤ 12） |
+| 每 stage 的 interaction | 无硬上限 | 无自动检查，靠人工控制（建议 ≤ 8） |
+| `index.json.version` 跨次发布增量 | ≥ 1 | 工具不校验，须人工保证且不得复用 |
 
 上限是发布契约，不是编辑器性能极限。超过上限将导致移动端首屏渲染抖动、复习调度计算量失控。
 
@@ -149,8 +151,8 @@ validate / lint (course_cli) ──► 写盘 ──► 客户端 reseed
 
 ```bash
 # 应用仓库根目录
-python tool/course_cli.py validate --course-dir assets/courses/turkish
-python tool/course_cli.py lint --course-dir assets/courses/turkish
+python tool/course_cli.py --course-dir assets/courses/turkish validate
+python tool/course_cli.py --course-dir assets/courses/turkish lint
 ```
 
 `tool/gui` 保存按钮**始终**先调用 `CourseAdapter.save()`，底层走上述 CLI。GUI 不另行定义校验规则。失败时执行以下原子回滚：
@@ -163,7 +165,7 @@ python tool/course_cli.py lint --course-dir assets/courses/turkish
 
 ## 新建议程目录
 
-GUI 工具栏 **「课程仓库 → 新建课程目录…」** 触发 `InitCourseDialog`（`tool/gui/src/dialogs/init_course_dialog.py:24`）。该对话框在所选父目录下写出最小可运行课程骨架：
+GUI 工具栏 **「课程仓库 → 新建课程目录…」** 触发 `InitCourseDialog`（`tool/gui/src/dialogs/init_course_dialog.py` 中的 `InitCourseDialog`）。该对话框在所选父目录下写出最小可运行课程骨架：
 
 ![新建课程目录对话框（实际运行截图：目标目录 / 显示名 / 语言 / Section 数 / 每单元课时数）](/images/authoring/_real/12-init-course.png)
 
@@ -233,7 +235,7 @@ GUI 维护最近 10 个已加载课程路径，写入 `QSettings("Turna","Course
 | 最近仓库 | 启动时按 `recent_repos[0]` 自动恢复；`ai_fixer` 等组件读取最近课程的 schema 历史 | `app.py::_maybe_open_last_repo` |
 | 启动询问 | 「是否打开上次使用的课程仓库？」弹窗；记住会话选择 | `QMessageBox.question` |
 
-`InitCourseDialog` 的 6 字段中的「目标语言」与「源语言」是后续工坊 `ai_phased.lesson_presets.build_preset_lesson` 与抽取 prompt 的核心上下文；目标语言必须与目录名 `<lang>` 一致，否则 validate 报错。源语言影响 LLM 翻译方向与抽取 prompt 的语言对模板选择（参考 [AI 课程生成 - 设置与运维](/authoring/ai-course-generation#15-设置与运维)）。
+`InitCourseDialog` 的 6 字段中的「目标语言」与「源语言」是后续工坊 `backend/lesson_presets.py` 的 `build_preset_lesson` 与抽取 prompt 的核心上下文。注意工具**不校验**目标语言与目录名是否一致。源语言影响 LLM 翻译方向与抽取 prompt 的语言对模板选择（参考 [AI 课程生成 - 设置与运维](/authoring/ai-course-generation#15-设置与运维)）。
 
 新建后的课程目录默认进入空白 AI 项目流；教材项目须在工坊对话框点击「从教材新建…」并选择源文件。两种项目模式下的 AI 行为差异见 [AI 课程生成 - 决策矩阵](/authoring/ai-course-generation#31-项目模式--生成模式--预设-矩阵)。
 

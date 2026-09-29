@@ -20,8 +20,10 @@
   "type": "normal",                  // normal | listening | reading | review | challenge
   "template": "intro",               // intro | practice | listening | reading | review | mastery | legacy
   "prerequisiteLessonIds": [],
-  "linkedGrammarPointIds": [],
-  "content": { /* canonical */ }
+  "content": {
+    "linkedGrammarPointIds": [],   // 在 content 内，不在 Lesson 顶层
+    /* canonical */
+  }
 }
 ```
 
@@ -33,8 +35,11 @@
 | `type` | enum | 是 | 语义类别：`normal`/`listening`/`reading`/`review`/`challenge` |
 | `template` | enum | 是 | 渲染骨架；省略时回落 `legacy` |
 | `prerequisiteLessonIds` | string[] | 否 | 依赖必须存在且无环 |
-| `linkedGrammarPointIds` | string[] | 否 | 引用 `grammar_points.json` |
 | `content` | object | 是 | 与 `template` 匹配的 canonical 内容 |
+
+::: warning `linkedGrammarPointIds` 的层级
+它属于 `content`（`LessonContent`），**不是 Lesson 顶层字段**。写在顶层会被反序列化静默丢弃，语法 SRS 注册随之失效，且没有任何校验会报错。正确位置见上方示例。
+:::
 
 ::: tip type ≠ template
 `type` 是语义类别，`template` 是渲染骨架（`LessonTemplate`）。`mastery` 仅是 template；它服务于 `type=normal` 的高阶综合课。当前内置课程实际用到的组合见 [课型说明](/guide/lesson-types)。
@@ -273,7 +278,7 @@ AI 介入 Lesson 的两个主入口：① 课程树右键 → **AI 编辑 / AI �
 
 ### AI 节点编辑对话框
 
-课程树右键 → **AI 编辑此节点** / **AI 修正此节点** 触发两类 AI 对话框，分别位于 `tool/gui/src/dialogs/ai/ai_generator_dialog.py` 与 `tool/gui/src/dialogs/ai/node_edit_dialog.py`：
+课程树右键 → **AI 编辑此节点** / **AI 修正此节点** 触发两类 AI 对话框，分别位于 `tool/gui/src/dialogs/ai/generator_*.py（生成器已拆分为 chat/flows/panels/preview/view-state/wizard/worker-hub 多个模块）` 与 `tool/gui/src/dialogs/ai/node_edit_dialog.py`：
 
 | 入口 | 适用 | 关键字段 |
 | --- | --- | --- |

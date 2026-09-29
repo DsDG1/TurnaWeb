@@ -84,7 +84,7 @@ Telemetry：`ai.edit.open` / `ai.edit.ready` / `ai.edit.applied` / `ai.edit.canc
 | 能力 | 说明 |
 | --- | --- |
 | 4 抽取预设 | `general` / `grammar` / `dialogue` / `reading`（`backend/lesson_presets.py` 之外的 `textbook_presets.py`） |
-| 滑窗抽取 | 超长章按 `window_chars`（默认 12000）+ `overlap_chars`（800）切窗；按规范化 key 去重 |
+| 滑窗抽取 | 超长章按 `window_chars`（默认 8000）+ `overlap_chars`（500）切窗；按规范化 key 去重 |
 | 状态灯 | 绿 / 黄 / 红 / 灰；带具体问题（空翻译 / 覆盖率低 / 语言混入） |
 | 失败级联 | `standard` 失败 → 自动降级 `vocab_only` 重试一次；`QSettings/textbook/auto_cascade` 可关 |
 | 按质量重抽 | 把本章质量问题回灌 AI，输出完整修正版替换 |
@@ -142,7 +142,7 @@ README §"创作者五条主路径（AI 感知增强）" 给出的标准工作�
 | **D 校验清零** | 1. 校验面板多选问题 2.「AI 自动修正」按节点分批 merge 3. validate | 校验面板 | 不必逐条点修 |
 | **E 导入后改进** | 1. 总览看 section 质量分 2. 回工坊 / 教师定向修 3. 低分课着色提示 | 总览 → 跳转 | 低分课有着色提示 |
 
-实现位置：工坊对话框 `src/dialogs/workshop_window.py` + 草稿服务 `src/backend/experience/` 下各 `experience_handlers/*.py`。
+实现位置：工坊对话框 `src/dialogs/workshop_window.py` + 草稿服务 `src/backend/experience/` 下的平铺模块。
 
 ## 3. 决策矩阵
 

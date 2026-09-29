@@ -7,30 +7,38 @@
 ::: code-group
 
 ```bash [Windows]
+make gen                                                   # 仅在改动注解后
 flutter analyze
-flutter test
+flutter test --exclude-tags golden
 python -m unittest discover -s test -p "*_test.py"            # Python 工具测试（Makefile test-python）
-python -m unittest discover -s tool/gui/tests -p "test_*.py"  # GUI 测试
+python tool/gui/run_gui_tests.py ci                          # GUI 快速档
 make ci
 ```
 
 ```bash [Linux / macOS]
+make gen                                                   # 仅在改动注解后
 flutter analyze
-flutter test
+flutter test --exclude-tags golden
 python3 -m unittest discover -s test -p "*_test.py"            # Python 工具测试（Makefile test-python）
-python3 -m unittest discover -s tool/gui/tests -p "test_*.py"  # GUI 测试
+python3 tool/gui/run_gui_tests.py ci                          # GUI 快速档
 make ci
 ```
 
 :::
+
+`flutter test --exclude-tags golden` 才是**本地绿线**。排除 golden 是因为存在已登记的本机失配（`course_tree` 相关），直接跑全量 `flutter test` 会因这些已知失配出红。已知失配清单以应用仓库 `test/BASELINE.md` 为准，该文件前插式、只增不删。
+
+`make ci` 等价于 `format-check analyze test test-python lint-gui guard-gui test-gui build-release-smoke` 共 8 个目标，不要用只跑其中几项的命令替代。
+
+GUI 测试走分档运行器 `run_gui_tests.py`：`ci` 是快速档，`full` 才是 CI 跑的全量档（等价于 `make test-gui`）。
 
 Python 测试走 unittest（非 pytest）。测试基线见应用仓库 `test/BASELINE.md`。不要用"命令执行但未收集测试"替代通过。
 
 ## 课程门禁
 
 ```bash
-python tool/course_cli.py validate --course-dir assets/courses/turkish
-python tool/course_cli.py lint --course-dir assets/courses/turkish
+python tool/course_cli.py --course-dir assets/courses/turkish validate
+python tool/course_cli.py --course-dir assets/courses/turkish lint
 python tool/export_content_inventory.py
 ```
 

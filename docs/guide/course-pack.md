@@ -1,6 +1,8 @@
 # 导入课程包
 
-`.turnapack` 是外部课程进入 Turna 的唯一格式。LibreLingo 等社区课程的 YAML 源在离线工具中转换成 `.turnapack` 后，即可像内置课程一样学习、复习和管理。
+外部课程通过 `.turnapack` 进入 Turna。LibreLingo 等社区课程的 YAML 源在离线工具中转换成 `.turnapack` 后，即可像内置课程一样学习、复习和管理。
+
+包有两个版本：`turnapack/1` 是单个 JSON 文件（无媒体），`turnapack/2` 是带 `media/` 的压缩包。手工制作的纯 JSON 内容可以用 `.json` 扩展名导入，格式契约见[外部课程包](/authoring/course-pack)。
 
 ::: info 没有内置课程商店
 应用不提供在线下载。`.turnapack` 文件需要自行转换（见[外部课程包](/authoring/course-pack)）或从他人处获得，再手动导入。

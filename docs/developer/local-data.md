@@ -30,10 +30,10 @@ Official Anki Collection  authoritative imported-card state
 | 学习进度 | completed Lesson、统计 | 应用事务 |
 | SRS | state、due、review event | 调度事务 |
 | 错题 | interaction snapshot | 错误事件写入 |
-| Official Anki | notes、cards、revlog、scheduler | Official Core |
+| Official Anki | notes、cards、revlog、scheduler | Official Core（独立于 course.db 的库） |
 | AI | 会话、消息、诊断、指标 | AI 工作流 |
 | 设置 | 主题、无障碍、课程 TTS | 本地偏好 |
-| 缓存 | AI cache、预渲染 HTML | 可再生成 |
+| 缓存 | AI 响应缓存、复习看板快照、图片缓存 | 可再生成 |
 
 ## 事务边界
 
@@ -59,9 +59,12 @@ PRAGMA optimize;
 
 允许直接再生成的典型数据：
 
-- Anki 预渲染纯 HTML。
 - AI 响应缓存。
+- 复习看板快照。
+- 运行时图片缓存。
 - 可重新导入的课程投影，但执行前必须保护用户状态。
+
+历史遗留的 Anki 预渲染 HTML 缓存（"智能去解密"）已在 schema v22 被删除、该路径明文放弃，不在上述清单内。
 
 不属于普通缓存：SRS、review history、Official Collection、错题、AI 会话、用户设置。
 

@@ -82,8 +82,11 @@ DOCS_BASE=/custom/docs/ npm run docs:build
 ```bash
 npm test
 npm run build
-npm run preview
+npm run preview        # 只服务主站产物
+npm run docs:preview   # 单独预览文档站
 ```
+
+`npm run preview` 是 Vite preview，不含文档站产物；要看 `/docs/` 需用 `npm run docs:preview`（或先 `npm run build`，再在站点产物中检查 `/docs/`）。
 
 检查根路径、所有专题 HTML、`/docs/`、文档资源、站内链接和返回主页链接。
 

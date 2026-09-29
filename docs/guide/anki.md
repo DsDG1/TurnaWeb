@@ -1,6 +1,16 @@
 # Anki 集成
 
-Turna 的 Android 生产路径内嵌 Official Anki Core（rslib FFI）。`.apkg` 导入后由 Official Collection 持有 note、card、revlog 与正式调度状态。`.colpkg` 当前不属于生产导入合同。
+Turna 内嵌官方 Anki 内核（Rust 编写，经 FFI 调用）。`.apkg` 导入后由 Official Collection 持有 note、card、revlog 与正式调度状态。Android arm64 与 iOS 走同一条生产路径（iOS 为静态链接 rslib + WKWebView 复习器）。`.colpkg` 当前不属于生产导入合同。
+
+::: warning 验收状态
+Official Anki 当前口径是**「验收 NO-GO；迁移中」**。
+
+- Android 写侧链路（导入→账本→视图→删除收敛）曾于 2026-09-02 在真机以 **debug 构建**证明成立；同夜暴露的一个课程装载缺陷已在代码层修复，但**修后未在任何 Android 设备复跑**。
+- iOS 侧于 2026-09-26 完成**模拟器** E2E（真 `.apkg` 导入 + 复习器渲染），非真机。
+- **生产 bundle 的完整用户流从未验证。**
+
+因此本文档不写「迁移完成」，也不写「Android 可正常使用」。两项限制仍开放未定：引擎生命周期耦合可能使物理删除延迟到下次导入；同 GUID 冲突的来源所有权策略尚未定案。
+:::
 
 产品页演示见 [anki.html](../../anki.html)。
 
@@ -19,16 +29,16 @@ Turna 的 Android 生产路径内嵌 Official Anki Core（rslib FFI）。`.apkg`
 
 1. 选择 `.apkg`。
 2. 生成一次导入执行计划。
-3. 检查 notetype 映射与组织预览。
+3. 检查 notetype 映射与预览。
 4. 写入 Official Collection。
 5. 建立课程投影与 source scope。
 6. 通过共享复习入口启动 Official review session。
 
 ## 渲染
 
-- 默认使用 Flutter HTML。
-- 需要 JavaScript、MathJax 或现场解密时才使用移动 WebView。
-- 网络与 JavaScript 分别授权，网络默认完全离线。
+- 保真模板卡默认就经 WebView 渲染（Android / iOS），以保留原模板的 HTML、CSS 与脚本行为。
+- 桌面与 Web 不实例化 WebView，降级为剥离标签的纯文本视图。
+- 卡片网络被无条件阻断，无法通过设置放开；JavaScript 另有独立开关。两者权限不同，执行 JavaScript 不等于开放网络。
 - 渲染失败依次降级，不能让复习停在空白卡。
 
 ## 数据在哪

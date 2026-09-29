@@ -29,10 +29,11 @@
 
 - [ ] Lesson `type` 与 `template` 匹配。
 - [ ] 新 Lesson 使用 canonical content shape。
-- [ ] 先修依赖存在且无环。
+- [ ] 先修依赖存在且无环。**（工具不校验，必须人工过）**
 - [ ] 每 Unit 与 Section 未超过规模上限（见 [课程目录约定](/authoring/course-layout)）。
-- [ ] Interaction 使用已注册 `runtimeType`。
-- [ ] 正确答案实际存在于 `options` 或经归一化匹配。
+- [ ] Interaction 使用已注册 `runtimeType`。**（工具不校验，未知类型只会在运行时降级为占位卡）**
+- [ ] 选择题答案下标 `correctIndex` / `correctIndices` 落在 `options` 范围内。**（工具不校验范围）**
+- [ ] `index.json.version` 相对上次已递增。**（工具不校验）**
 - [ ] 音频 / 资源引用可解析（manifest 全绿）。
 - [ ] 干扰项来自真实易混项或同范围词汇。
 
@@ -42,43 +43,58 @@
 
 ```bash [Windows]
 # 1. 结构校验（必通过，退出码 0）
-python tool/course_cli.py validate --course-dir assets/courses/turkish
+python tool/course_cli.py --course-dir assets/courses/turkish validate
 
 # 2. 内容 lint（error 必须 0；warning 视团队策略）
-python tool/course_cli.py lint --course-dir assets/courses/turkish
+python tool/course_cli.py --course-dir assets/courses/turkish lint
 
 # 3. 内容清单（核对规模变化）
 python tool/export_content_inventory.py
 
 # 4. 音频 manifest
-python tool/course_cli.py audio-manifest --course-dir assets/courses/turkish --output manifest.csv
+python tool/course_cli.py --course-dir assets/courses/turkish audio-manifest --output manifest.csv
 
 # 5. 客户端测试（reseed 行为）
-flutter test
+flutter test --exclude-tags golden
 ```
 
 ```bash [Linux / macOS]
 # 1. 结构校验（必通过，退出码 0）
-python3 tool/course_cli.py validate --course-dir assets/courses/turkish
+python3 tool/course_cli.py --course-dir assets/courses/turkish validate
 
 # 2. 内容 lint（error 必须 0；warning 视团队策略）
-python3 tool/course_cli.py lint --course-dir assets/courses/turkish
+python3 tool/course_cli.py --course-dir assets/courses/turkish lint
 
 # 3. 内容清单（核对规模变化）
 python3 tool/export_content_inventory.py
 
 # 4. 音频 manifest
-python3 tool/course_cli.py audio-manifest --course-dir assets/courses/turkish --output /tmp/manifest.csv
+python3 tool/course_cli.py --course-dir assets/courses/turkish audio-manifest --output /tmp/manifest.csv
 
 # 5. 客户端测试（reseed 行为）
-flutter test
+flutter test --exclude-tags golden
 ```
 
 :::
 
 ::: warning 门禁
-任何**非零**退出码阻断发布。`validate --format json` 的输出可进入 CI 产物（`lint` 仅文本输出，CI 用退出码 / `--strict` 做门禁）。
+任何**非零**退出码阻断发布（含参数用法错误的退出码 2）。`validate --format json` 的输出可进入 CI 产物（`lint` 仅文本输出，CI 用退出码 / `--strict` 做门禁）。
 :::
+
+### 编辑器（`tool/gui`）独立门禁
+
+`tool/gui` 是仓库内的创作者工具，不进 App 本体，但有自己的一组门禁，发布前同样要跑：
+
+```bash
+# 快速档
+python tool/gui/run_gui_tests.py ci
+# 分层与数值 ratchet 契约
+make guard-gui
+# 全量档（CI 跑的量级）
+make test-gui
+```
+
+编辑器侧的改动若没跑这三项，App 侧测试全绿也不能视为可发布。
 
 ## 4. 教师试做
 
@@ -142,7 +158,7 @@ flutter test
 
 ## 8. 发布执行
 
-GUI 工具栏「发布」按钮触发 `PublishDialog`（`tool/gui/src/widgets/publish_dialog.py:39`）。该对话框支持两种模式：
+GUI 工具栏「发布」按钮触发 `PublishDialog`（`tool/gui/src/widgets/publish_dialog.py` 中的 `PublishDialog`）。该对话框支持两种模式：
 
 | 模式 | 入口 | 视窗尺寸 | 适用 |
 | --- | --- | --- | --- |
@@ -199,7 +215,8 @@ GUI 工具栏「发布」按钮触发 `PublishDialog`（`tool/gui/src/widgets/pu
   2. `validate` + `lint` + `audio-manifest` 全绿。
   3. 递增 `index.json.version`（不回退）。
   4. 客户端强制 reseed。
-- 紧急回滚可临时在 `index.json` 标 `disabledSections` 字段（待实现）；当前采用直接回滚到上一个 tag。
+
+紧急回滚目前只能直接回滚到上一个 tag。`index.json` 的 `disabledSections` 字段**尚未实现**，不要当作可用的应急手段。
 
 ## 10. 灰度与监控
 
@@ -215,7 +232,7 @@ GUI 工具栏「发布」按钮触发 `PublishDialog`（`tool/gui/src/widgets/pu
 
 ### AI 辅助发布
 
-`PublishDialog`（`tool/gui/src/widgets/publish_dialog.py:39`）专家模式新增 **「按质量分修复」** 按钮（位于「版本号变更」分组下方），另有按六维质量分定向批量修复的 `QualityCampaignDialog`：
+`PublishDialog`（`tool/gui/src/widgets/publish_dialog.py`）专家模式新增 **「按质量分修复」** 按钮（位于「版本号变更」分组下方），另有按六维质量分定向批量修复的 `QualityCampaignDialog`：
 
 ![质量活动对话框（实际运行截图：按六维质量分选目标节批量修复）](/images/authoring/_real/14-quality-campaign.png)
 

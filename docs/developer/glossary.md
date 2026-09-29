@@ -14,14 +14,14 @@
 | Interaction | Lesson 中最小可执行题目或展示单元 |
 | Lesson | Unit 下的单次学习单元 |
 | Local-first | 核心状态默认在本地，网络是可选能力 |
-| Notetype | Anki note 的字段和卡片模板定义 |
+| Notetype | Anki note 的字段和卡片模板定义；只存在于 Official Collection 与导入映射识别器中 |
 | Official owner | 由 Official Anki Collection 和 scheduler 持有状态的来源 |
 | R / Retrievability | 当前时刻成功提取的估计概率 |
 | reseed | 根据课程内容版本重建数据库课程投影 |
 | Review event | 一次评分及其前后调度状态记录 |
-| runtimeType | Interaction JSON 的变体标识 |
+| runtimeType | Dart 运行时类型。freezed 模型反序列化后是私有实现类（如 `_$FooImpl`），不等于声明的公开接口类型；渲染器分发不能直接用它比较，需先经 `_handlesTypeFor()` 映射 |
 | S / Stability | FSRS 估计的记忆保持时间尺度 |
-| Safe mode | 临时关闭实验、脚本和外部卡片网络的运行时覆盖 |
+| Safe mode | 安全模式：临时禁用模板 JS、外部网络和高风险后台能力；不改学习数据 |
 | Section | 课程最高内容层级，通常对应 CEFR 范围 |
 | Sibling cards | 同一 Anki note 生成的多张 card |
 | Source of truth | 对某类数据具有最终所有权的存储 |

@@ -7,23 +7,25 @@
 ```jsonc
 // vocab.json
 {
-  "version": 12,            // 当前快照值；变更后递增
-  "language": "turkish",
-  "words": [ ... ]          // ← 数组键是 words，不是 items
+  "version": 1,               // 当前快照值；变更后递增
+  "language": "tr",           // ← 是语言代码，不是目录名
+  "words": [ ... ]            // ← 数组键是 words，不是 items
 }
 
 // expressions.json
 {
-  "version": 2,             // 当前快照值；变更后递增
-  "language": "turkish",
-  "expressions": [ ... ]    // ← expressions
+  "version": 4,               // 当前快照值；变更后递增
+  "language": "tr",
+  "expressions": [ ... ]      // ← expressions
 }
 
 // grammar_points.json
 {
-  "grammarPoints": [ ... ]  // ← grammarPoints；本文件没有 version 字段
+  "grammarPoints": [ ... ]    // ← grammarPoints；本文件没有 version 字段
 }
 ```
+
+> 上面的 `version` 是写这份文档时的快照值，**别照抄**——请以 `assets/courses/turkish/` 下的实际文件为准。重播种键只由 `index.version + expressions.version` 组合决定，`vocab.json` 的 `version` 不参与。
 
 重播种键是 `index.version + expressions.version` 的组合；改 grammar_points.json 后也要 bump `index.json.version` 才会触发重播种。
 

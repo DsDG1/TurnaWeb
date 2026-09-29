@@ -24,10 +24,10 @@ flutter pub get
 flutter build apk --debug
 ```
 
-生成代码已提交。只有修改 Freezed、JsonSerializable、AutoRoute 或 Injectable 注解时执行：
+生成代码已提交。只有修改 Freezed、JsonSerializable、AutoRoute、Injectable 或 drift 注解/表定义时执行：
 
 ```bash
-flutter pub run build_runner build --delete-conflicting-outputs
+make gen
 ```
 
 ## 发布 ABI
@@ -43,16 +43,22 @@ flutter build apk \
 
 未包含匹配 native 库时，不发布声称支持其它 ABI 的 fat APK。Official runtime 缺失时 fail closed，不回退到 Legacy scheduler。
 
+::: warning 验收状态
+Official Anki 当前口径是**「验收 NO-GO；迁移中」**。Android 写侧（导入→账本→视图→删除收敛）仅在 2026-09-02 于真机以 **debug 构建**验证过，**生产 bundle 完整用户流尚未验证**；iOS 侧只有模拟器 E2E。不得宣称「迁移完成」或「Android 可正常使用」。权威状态与证据台账见应用仓库 `docs/official-anki-migration/34-cutover-receipt.md`。
+:::
+
 ## 质量命令
 
 ```bash
 flutter analyze
-flutter test
+flutter test --exclude-tags golden
 make test-python
 make ci
 ```
 
-`make ci` 聚合 analyze、Dart 测试、Python 工具测试和 release smoke。
+`make ci` 等价于 `format-check analyze test test-python lint-gui guard-gui test-gui build-release-smoke` 共 8 个目标。
+
+`flutter test --exclude-tags golden` 才是本地绿线；排除 golden 是因为存在已登记的本机失配，已知清单以 `test/BASELINE.md` 为准。
 
 ## 常见错误
 
@@ -72,7 +78,7 @@ python tool/build_release.py --version <version>
 make build-release VERSION=<version>
 ```
 
-版本值由发布流程决定，不复制文档中的示例版本作为新版本。
+版本值由发布流程决定，不复制文档中的示例版本作为新版本。脚本会断言 `<version>` 与 `pubspec.yaml` 的 `version` 一致，不符即退出。
 
 ## 相关文档
 

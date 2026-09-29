@@ -60,7 +60,7 @@ assets/sounds/<lang>/
 ## Manifest 校验
 
 ```bash
-python tool/course_cli.py audio-manifest --course-dir assets/courses/turkish --output manifest.csv
+python tool/course_cli.py --course-dir assets/courses/turkish audio-manifest --output manifest.csv
 ```
 
 只统计「具名听力素材」——词/表达 id 引用与 `anki://` 前缀自动跳过。输出 CSV 列：

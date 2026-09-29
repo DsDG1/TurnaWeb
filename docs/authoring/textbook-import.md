@@ -44,7 +44,7 @@ GUI 工坊（`tool/gui` 的非模态窗口）由「项目库」与「创意画�
 
 ### 课本项目库（TextbookLibraryDialog）
 
-`tool/gui/src/dialogs/textbook_library_dialog.py:39` 实现课本项目库。GUI 工坊启动时若 `workshop/last_project_id` 指向有效项目则直接恢复画布；否则显示项目库。
+`tool/gui/src/dialogs/textbook_library_dialog.py` 中的 `TextbookLibraryDialog` 实现课本项目库。GUI 工坊启动时若 `workshop/last_project_id` 指向有效项目则直接恢复画布；否则显示项目库。
 
 五列清单：
 
@@ -118,8 +118,8 @@ GUI 工坊（`tool/gui` 的非模态窗口）由「项目库」与「创意画�
 
 | 参数 | 默认 | 含义 |
 | --- | --- | --- |
-| `window_chars` | 12000 | 单次抽取字符上限；`0` 关闭 |
-| `overlap_chars` | 800 | 滑窗重叠字符数 |
+| `window_chars` | 8000 | 单次抽取字符上限；`0` 关闭（`reading` 预设覆盖为 10000） |
+| `overlap_chars` | 500 | 滑窗重叠字符数 |
 
 ### 状态灯
 
@@ -232,7 +232,7 @@ GUI 工坊（`tool/gui` 的非模态窗口）由「项目库」与「创意画�
 内存 register > 持久化覆盖 > 内置语言对包 > 内置默认
 ```
 
-实现见 `tool/gui/src/backend/knowledge_prompt.py` 与 `tool/gui/src/backend/ai_prompt_library.py`。
+实现见 `tool/gui/src/backend/knowledge_prompt.py` 与 `tool/gui/src/application/ai_prompt_library.py`。
 
 ## AI 能力
 
@@ -252,7 +252,7 @@ GUI 工坊（`tool/gui` 的非模态窗口）由「项目库」与「创意画�
 | 教材项目 | 任意 | 任意 | 红（多次） | 标红 + 跳过 + 拟人化分析 |
 | 空白 AI 项目 | （无抽取） | 0 | 灰 | 跳过抽取阶段，直接进入生成 |
 
-滑窗参数 `window_chars`（默认 12000）与 `overlap_chars`（默认 800）控制长章节切窗；`0` 关闭滑窗（按章一次性抽取）。失败级联由 `QSettings/textbook/auto_cascade` 控制，默认开。
+滑窗参数 `window_chars`（默认 8000）与 `overlap_chars`（默认 500）控制长章节切窗；`0` 关闭滑窗（按章一次性抽取）。失败级联由 `QSettings/textbook/auto_cascade` 控制，默认开。
 
 ### AI 生成模式状态机
 

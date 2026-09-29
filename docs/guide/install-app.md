@@ -7,25 +7,31 @@
 | 平台 | 状态 | 能力边界 |
 | --- | --- | --- |
 | Android | 主力平台 | 支持课程、SQLite、TTS、Official Anki Core 与正式发布产物 |
-| iOS | 保留支持 | 支持基础课程与 WebView；Official Anki Core 不作同等承诺 |
+| iOS | 保留支持 | 支持基础课程与 WKWebView 复习器；Official Anki 走与 Android 同一条生产路径（rslib 静态链接），当前仅完成模拟器验证 |
 | Web | 有限支持 | 不提供原生 WebView 保真；本地数据库与原生插件能力受浏览器限制 |
 | HarmonyOS / OHOS | 已停止 | 不再生成产品构建，不再增加适配 |
+
+::: warning Official Anki 验收状态
+Official Anki 当前口径是**「验收 NO-GO；迁移中」**。Android 写侧仅在真机以 **debug 构建**验证过，生产 bundle 尚未验证；iOS 侧为模拟器 E2E。不得宣称「迁移完成」或「Android 可正常使用」。
+:::
 
 ## 从源码运行
 
 环境要求：官方 Flutter SDK `>=3.2.3 <4.0.0`。Android 构建使用 JDK 17。
 
 ```bash
-git clone git@gitee.com:dhwdwf3/Varnamalaplus.git
-cd Varnamalaplus
+git clone https://github.com/DsDG1/turna.git
+cd turna
 flutter pub get
 flutter run
 ```
 
-生成文件已经提交到仓库。普通克隆不执行 `build_runner`。仅当 Freezed、JsonSerializable、AutoRoute 或 Injectable 注解发生变化时重新生成：
+> 仓库改名后远端不一致：GitHub 已是 `turna`，gitee 远端仍叫 `dhwdwf3/Varnamalaplus.git`（克隆后 `cd` 进去的目录名是 `Varnamalaplus`，除此之外无区别）。GitHub 通常更新更快。
+
+生成文件已经提交到仓库。普通克隆不执行 `build_runner`。仅当 Freezed、JsonSerializable、AutoRoute、Injectable 或 drift 注解/表定义发生变化时重新生成：
 
 ```bash
-flutter pub run build_runner build --delete-conflicting-outputs
+make gen
 ```
 
 ## Android 构建

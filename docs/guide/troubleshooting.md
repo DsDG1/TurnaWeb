@@ -38,11 +38,11 @@
 
 ### 导入失败
 
-确认文件为 `.apkg`、Official runtime 可用、ABI 匹配、存储足够。`.colpkg` 在当前 Android 生产路径中 fail-closed。
+确认文件为 `.apkg`、Official runtime 可用、ABI 匹配、存储足够。`.colpkg` 在 Android 与 iOS 生产路径中同样 fail-closed。
 
 ### 卡片空白
 
-依次切换自动渲染、Flutter HTML 和纯文本。检查模板字段、媒体、JavaScript、预渲染失败记录。不要直接开放网络作为第一处理步骤。
+检查模板字段、媒体与 JavaScript。不要直接开放网络作为第一处理步骤——卡片网络本就是硬阻断，无法放开。另外注意：「预渲染失败记录」已不存在，预渲染缓存路径早已放弃，不要再找这一项。
 
 ### Official 卡无法复习
 

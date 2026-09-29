@@ -1,6 +1,6 @@
 # 交互题型
 
-Interaction 是课程运行时的最小可执行单元。每种 Interaction 使用 `runtimeType` 选择专用渲染器。新增未注册的 `runtimeType` 会构成数据错误。
+Interaction 是课程运行时的最小可执行单元。渲染器分发不直接比较 `runtimeType`——freezed 生成的是私有实现类（如 `_$ShowWordImpl`），必须先经 `_handlesTypeFor()` 映射到公开接口类型再匹配。写新渲染器时在 `di/renderer_module.dart` 登记即可，无需改分发逻辑。
 
 ## 已定义类型
 
@@ -59,12 +59,19 @@ fail -> Again
 
 ## 内容检查
 
-- `runtimeType` 已在应用模型中存在。
+前四项由工具强制，`course_cli.py` 会报错：
+
 - `id` 在目标作用域内唯一且稳定。
 - 引用的 `wordId`、`expressionId`、`grammarPointId` 存在。
-- 音频题的 `audioAsset` 可解析或具有明确 TTS 降级。
-- 正确答案实际存在于 options 中。
-- 空字符串、重复选项和无解题目被校验器拒绝。
+- 音频题的 `audioAsset` 只出现在听力课中。
+- `stages` 与 `questions` 不同时声明。
+
+以下几项**工具不校验**，需人工把关：
+
+- `runtimeType` 是否已注册——未知类型不会报错，只会在运行时降级为占位 `showWord`。
+- 选择题答案下标 `correctIndex` / `correctIndices` 是否落在 `options` 范围内。
+- 空字符串、重复选项与无解题目。
+- 音频能否真正播放（`audioAsset` 缺失只产生 warning，且其路径解析与磁盘布局不一致）。
 
 ## 相关文档
 

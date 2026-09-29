@@ -64,7 +64,7 @@ export default defineConfig({
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `${docsBase}turna-mark.svg` }],
-    ['meta', { name: 'theme-color', content: '#e8efec', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#dce8e3', media: '(prefers-color-scheme: light)' }],
     ['meta', { name: 'theme-color', content: '#0d1d1c', media: '(prefers-color-scheme: dark)' }],
     ['meta', { name: 'description', content: 'Turna 是一款本地优先、离线可用的开源语言学习应用，当前专注土耳其语。' }],
     ['meta', { property: 'og:title', content: 'Turna 文档' }],
@@ -224,7 +224,7 @@ export default defineConfig({
 
     footer: {
       message: '基于 MIT 协议发布，基于上游 rshrc/Varnamala 构建。',
-      copyright: 'Copyright © 2024-present Varnamalaplus',
+      copyright: 'Copyright © 2024-present Turna',
     },
 
     outline: {

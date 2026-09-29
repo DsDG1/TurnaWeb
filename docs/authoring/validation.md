@@ -11,15 +11,18 @@
 `tool/course_cli.py` 的全部子命令：
 
 ```bash
-python tool/course_cli.py validate  --course-dir assets/courses/turkish           # 结构校验
-python tool/course_cli.py validate  --course-dir assets/courses/turkish --format json  # 机器可读
-python tool/course_cli.py lint      --course-dir assets/courses/turkish           # 内容 lint
-python tool/course_cli.py lint      --course-dir assets/courses/turkish --strict  # warning 也算失败
-python tool/course_cli.py export-csv   --course-dir <dir> --type vocab --output out.csv
-python tool/course_cli.py import-csv   --course-dir <dir> --type vocab --input in.csv [--dry-run]
-python tool/course_cli.py audio-manifest --course-dir <dir> --output manifest.csv
-python tool/course_cli.py diff         --before <dir_a> --after <dir_b>           # 按 id 集合对比
+# 注意：--course-dir 是顶层参数，必须写在子命令之前
+python tool/course_cli.py --course-dir assets/courses/turkish validate                       # 结构校验
+python tool/course_cli.py --course-dir assets/courses/turkish validate --format json         # 机器可读
+python tool/course_cli.py --course-dir assets/courses/turkish lint                           # 内容 lint
+python tool/course_cli.py --course-dir assets/courses/turkish lint --strict                  # warning 也算失败
+python tool/course_cli.py --course-dir <dir> export-csv --type vocab --output out.csv
+python tool/course_cli.py --course-dir <dir> import-csv --type vocab --input in.csv [--dry-run]
+python tool/course_cli.py --course-dir <dir> audio-manifest --output manifest.csv
+python tool/course_cli.py diff --before <dir_a> --after <dir_b>                              # 按 id 集合对比
 ```
+
+把 `--course-dir` 放到子命令之后会触发 argparse 用法错误并以退出码 2 结束。
 
 `export-csv` / `import-csv` 的 `--type` 取 `vocab` / `expressions` / `grammar_points`；`import-csv --dry-run` 只校验不写盘。
 
@@ -33,10 +36,9 @@ Windows 用 `python`；Linux / macOS 一般需要用 `python3` 替代。
 | ---: | --- | --- |
 | `0` | 通过 | 继续 |
 | `1` | 有 error（lint 在 `--strict` 下 warning 也返回 1） | 阻断保存 / 阻断发布 |
+| `2` | 命令行用法错误（如 `--course-dir` 放在子命令之后） | 视为门禁失败，不重试 |
 
-没有更细的退出码分档；调用方根据退出码与 JSON `ok` 字段判定结果，**不**通过解析自然语言日志推断成功。
-
-## JSON 输出 schema
+没有更细的退出码分档；调用方根据退出码与 JSON `ok` 字段判定结果，**不**通过解析自然语言日志推断成功。## JSON 输出 schema
 
 `validate --format json` 的实际输出：
 
@@ -70,29 +72,38 @@ Windows 用 `python`；Linux / macOS 一般需要用 `python3` 替代。
 | --- | --- |
 | 解析 | 所有 JSON 可解析 |
 | 索引 | `index.json` 指向存在的 Section 文件 |
-| 层级 | Section / Unit / Lesson 三段合法，无空层 |
-| 规模 | Unit / Lesson 数量不超过上限 |
-| ID | 全局唯一；同 Lesson 内 interaction ID 不重复 |
-| 先修 | 引用存在；依赖图无环 |
-| 形状 | `type` / `template` / `content` 三者相容 |
-| runtimeType | 已注册 |
-| 资源引用 | `wordId` / `expressionId` / `grammarPointId` / `audioAsset` 全部可解析 |
-| 选项 | `correctAnswer` 出现在 `options` 中或可经归一化匹配 |
-| 版本 | `index.json.version` 严格递增；不复用 |
-| 音频 | 听力课的 `audioAsset` 在 `assets/sounds/<lang>/` 中存在 |
+| 规模 | Unit ≤ 60 / Section、Lesson ≤ 40 / Unit |
+| ID | 词条、表达、语法点、Section、Unit、Lesson 的 id 非空且全局唯一 |
+| 引用 | `wordId` / `expressionId` / `grammarPointId` 不得悬挂 |
+| 音频 | 具名听力素材 `audioAsset` 只能出现在听力课中 |
+| 形状 | `content` 结构与 `template` 相容；`stages` 与 `questions` 不可同时声明 |
 
-## lint 范围（warning 级别）
+::: warning 这些**没有**被检查
+以下常见假设在 `course_cli.py` 中**没有任何实现**，不要以为有门禁兜底：
 
-| 类别 | 检查 |
+- **先修依赖**：既不检查 `prerequisiteLessonIds` / `prerequisiteUnitIds` / `prerequisiteSectionIds` 的引用存在性，也不做依赖图环检测。
+- **未注册的 `runtimeType`**：不做枚举校验。未知类型只在运行时降级为占位 `showWord`（`wordId = "unknown-interaction:<type>"`）。
+- **选择题答案下标**：schema 用整型 `correctIndex` / `correctIndices`（**没有 `correctAnswer` 字段**），且下标是否落在 `options` 范围内不做校验。
+- **`index.json.version` 递增**：不检查，单目录校验也无法判断相对上次的递增。
+- **扁平 `questions`**：不是 error，会被自动归一化包成单个 stage。唯一的 error 是同时声明 `stages` 与 `questions`。
+- **`language` 与目录名一致**：不做检查（且磁盘上 `turkish/` 目录的 `index.json` 里就是 `"language": "tr"`，本就不相等）。
+
+以上几条需靠人工或编辑器自律。
+:::
+
+## lint 范围
+
+`lint` 覆盖面比上表窄得多，只做资源与音频类检查：
+
+| 级别 | 检查 |
 | --- | --- |
-| 命名 | 命名与 ID 模式一致；避免无意义前缀 |
-| 形状 | 新内容使用 canonical；不再引入扁平 `questions` |
-| 资源 | 孤立资源（无 Lesson 引用）；跨表重复条目 |
-| 描述 | 空描述、占位文本、模板套话 |
-| 干扰项 | 选择题选项不足、正确率失衡、随机无关词 |
-| 难度 | 同 stage 内梯度断层；产出题前置识别题 |
-| 听力 | 重播缺失、文本边界过短 |
-| 资源卫生 | 词汇数 ≠ 实际引用数；超长章未切窗 |
+| error | 词条 / 表达缺 term 或 translation；语法点缺标题；语法点引用的 `expressionId` 悬挂 |
+| warning | 语法点未被任何课引用；词条 / 表达 / 语法点存在未被引用的孤立条目；听力音频文件缺失 |
+| warning | `audioAsset` 出现在非听力课中 |
+
+> 命名风格、干扰项质量、难度梯度、听力量感、文本切窗等**没有对应的 lint 探针**。`--strict` 只是把 warning 升级为失败（返回码 1），不会新增检查项。
+>
+> 另外注意音频路径解析按 `assets/sounds/listening/<id>.mp3` 查找，缺少语言层目录；磁盘实际布局是 `assets/sounds/<lang>/listening/`，因此听力课缺失音频的告警可能与磁盘布局不一致。
 
 ### 内容质量 6 维
 
@@ -154,13 +165,13 @@ CI 矩阵对每门语言各跑一次，直接用退出码做门禁：
 ::: code-group
 
 ```bash [Windows]
-python tool/course_cli.py validate --course-dir assets/courses/<lang>
-python tool/course_cli.py lint --strict --course-dir assets/courses/<lang>
+python tool/course_cli.py --course-dir assets/courses/<lang> validate
+python tool/course_cli.py --course-dir assets/courses/<lang> lint --strict
 ```
 
 ```bash [Linux / macOS]
-python3 tool/course_cli.py validate --course-dir assets/courses/<lang>
-python3 tool/course_cli.py lint --strict --course-dir assets/courses/<lang>
+python3 tool/course_cli.py --course-dir assets/courses/<lang> validate
+python3 tool/course_cli.py --course-dir assets/courses/<lang> lint --strict
 ```
 
 :::

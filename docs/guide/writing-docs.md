@@ -7,9 +7,9 @@ Turna 已经有两处现成的内容源：
 | 来源 | 适合变成什么 | 不该原样公开的 |
 | --- | --- | --- |
 | 本仓库专题页（`anki.html`、`fsrs.html`、`ai.html`、`editor.html`、`curriculum.html`） | 功能说明、概念入门 | 纯视觉演示代码 |
-| 应用仓库 `Varnamalaplus/docs/` | 教师指南、课程约定、架构摘要 | ADR、迁移计划、审计报告、施工 playbook |
+| 应用仓库 `turna/docs/` | 教师指南、课程约定、架构摘要 | ADR、迁移计划、审计报告、施工 playbook |
 
-应用仓库里目前大约有 70+ 篇 Markdown。其中大部分是一次性工程文档（`official-anki-migration/`、`*-plan.md`、`decisions/`）。这些对贡献者有用，对产品文档站点有害：会过期、难检索、读起来像工单。
+应用仓库 `docs/` 下 Markdown 已过百篇。其中大部分是一次性工程文档（`official-anki-migration/`、`*-plan.md`、`decisions/`）。这些对贡献者有用，对产品文档站点有害：会过期、难检索、读起来像工单。
 
 ## 先定读者，再开目录
 
@@ -24,19 +24,23 @@ Turna 已经有两处现成的内容源：
 ```text
 docs/
   index.md                 # 文档门户
-  guide/                   # 学习者与访客
+  guide/                   # 学习者与访客（侧栏四组：开始 / 学习系统 / 外部能力 / 运行与维护）
     what-is-turna.md
     getting-started.md
     features.md
     fsrs.md
     anki.md
     …
-  authoring/               # 老师与课程作者
+  authoring/               # 老师与课程作者（侧栏键 /authoring/）
     teacher-guide.md
     course-layout.md
+  developer/               # 开发者（侧栏键 /developer/）
+    architecture.md
+    local-data.md
+    testing.md
 ```
 
-新页面先问：它属于哪一类？然后只改对应 sidebar，不要另起一个平行站点。
+`guide/`、`authoring/`、`developer/` 是三个独立的 sidebar 键（见 `config.mts` 的 `sidebar`），改动某一区的分组只影响该区。
 
 ## 从已有材料改写，不要从零写
 
@@ -49,7 +53,7 @@ docs/
 3. **`docs/authoring/` → `authoring/`**  
    教师指南、课型模板、课程目录约定已经是给人看的，几乎可以直接搬，只需改掉指向源码的相对路径。
 4. **内容清单 → 课程页附录**  
-   `content_inventory_current.md` 适合摘要（Section 数、词汇数），不适合把 148 行词表贴进 VitePress。
+   `content_inventory_current.md` 适合摘要（Section 数、词汇数），不适合把整份词表贴进 VitePress——它是脚本生成的，行数会随内容变动，别在任何页面写死它的行数。
 
 改写时保留：概念、步骤、限制、指向代码或专题页的链接。删掉：日期快照、测试计数、内部 ticket 号、已经做完的迁移阶段。
 
@@ -91,7 +95,7 @@ npm run dev
 
 - 打开 VitePress 本地搜索（本站已启用），标题和正文都能搜到。
 - 同一件事只在一页讲透，其它页只链过去，避免三份互相打架的 FSRS 说明。
-- 侧栏分组保持浅：开始 / 功能 / 课程 / 创作。超过两层读者就不会点。
+- 侧栏分组保持浅：`guide/` 下是 开始 / 学习系统 / 外部能力 / 运行与维护 四组，`authoring/` 与 `developer/` 各一组。超过两层读者就不会点。
 
 ## 和代码同步
 

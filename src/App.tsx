@@ -48,7 +48,7 @@ const features: HomepageFeature[] = [
     icon: 'anki',
     index: '03',
     title: '带上已有的 Anki 牌组',
-    description: '导入已有的学习资料，在统一的课程与复习中继续使用。',
+    description: '导入已有牌组，按课程树推进。复习仍由官方 Anki 调度，不写入内置课程的学习记录。',
     link: './anki.html',
     linkLabel: '了解 Anki 集成',
   },
