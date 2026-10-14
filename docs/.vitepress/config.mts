@@ -213,7 +213,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/DsDG1/turna' },
+      { icon: 'github', link: 'https://github.com/DsDG1/TurnaWeb' },
       {
         icon: {
           svg: '<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333H18.16v7.28c0 2.585-1.794 4.204-4.39 4.204-2.552 0-4.345-1.619-4.345-4.204V5.333h2.204v7.36c0 1.384.887 2.19 2.14 2.19 1.28 0 2.106-.832 2.106-2.19v-7.36z"/></svg>',

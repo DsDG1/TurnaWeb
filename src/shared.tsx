@@ -19,7 +19,7 @@ export type NavItem = {
 
 export const DOCS_HREF = './docs/'
 
-export const GITHUB_HREF = 'https://github.com/DsDG1/turna'
+export const GITHUB_HREF = 'https://github.com/DsDG1/TurnaWeb'
 export const GITEE_HREF = 'https://gitee.com/dhwdwf3/turna-web'
 
 export function siteNavigation(page: 'home' | 'curriculum' | 'other' = 'other'): readonly NavItem[] {
